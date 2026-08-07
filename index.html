@@ -66,10 +66,45 @@ em.i{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:0
 /* the wordmark: one letter, one typeface — "In Common" */
 .mark{display:inline-flex;align-items:baseline;line-height:.86;white-space:nowrap}
 .mark i{font-style:normal;display:inline-block;will-change:transform}
-.mark .l1{font-family:var(--serif);letter-spacing:.05em}
-.mark .l2{font-family:var(--sans);font-weight:400;letter-spacing:.09em}
-.mark .l3{font-family:var(--mono);font-weight:300;letter-spacing:.01em}
-.mark .l4{font-family:var(--sans);font-weight:200}
+.mark .l1{font-family:"Instrument Serif",Georgia,"Times New Roman",serif;letter-spacing:.05em}
+.mark .l2{font-family:"Inter Tight","Helvetica Neue",Arial,sans-serif;font-weight:400;letter-spacing:.09em}
+.mark .l3{font-family:"Martian Mono",ui-monospace,Menlo,monospace;font-weight:300;letter-spacing:.01em}
+.mark .l4{font-family:"Inter Tight","Helvetica Neue",Arial,sans-serif;font-weight:200}
+
+/* ── scripts: cirillico e CJK usano stack di sistema ──── */
+html[lang="ru"]{--mono:"Inter Tight",ui-monospace,Menlo,monospace;
+  --serif:Georgia,"Times New Roman",serif}
+html[lang="ko"]{--sans:"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  --mono:var(--sans);--serif:var(--sans)}
+html[lang="ja"]{--sans:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",system-ui,sans-serif;
+  --mono:var(--sans);--serif:var(--sans)}
+html[lang="zh"]{--sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+  --mono:var(--sans);--serif:var(--sans)}
+html[lang="ko"] .eyebrow,html[lang="ja"] .eyebrow,html[lang="zh"] .eyebrow,
+html[lang="ko"] .mono,html[lang="ja"] .mono,html[lang="zh"] .mono,
+html[lang="ko"] .f span,html[lang="ja"] .f span,html[lang="zh"] .f span,
+html[lang="ko"] .steps b,html[lang="ja"] .steps b,html[lang="zh"] .steps b{letter-spacing:.05em}
+html[lang="ru"] .eyebrow,html[lang="ru"] .mono{letter-spacing:.14em}
+html[lang="ko"] .display,html[lang="ja"] .display,html[lang="zh"] .display{letter-spacing:0;line-height:1.06}
+html[lang="ko"] .h2,html[lang="ja"] .h2,html[lang="zh"] .h2{letter-spacing:0;line-height:1.24}
+html[lang="ko"] .hero-lines p,html[lang="ja"] .hero-lines p,html[lang="zh"] .hero-lines p{letter-spacing:.1em}
+
+/* ── language switch ─────────────────────────────────── */
+.lang{position:relative}
+.langmenu{position:absolute;right:0;top:calc(100% + 8px);min-width:150px;
+  background:var(--bg);border:1px solid var(--line);padding:6px;
+  opacity:0;visibility:hidden;transform:translateY(-6px);
+  transition:opacity .35s var(--ease),transform .35s var(--slow),visibility .35s}
+.langmenu.on{opacity:1;visibility:visible;transform:none}
+.langmenu button{display:block;width:100%;text-align:left;padding:9px 12px;cursor:pointer;
+  font-size:13px;color:var(--dim);transition:background .3s,color .3s}
+.langmenu button:hover,.langmenu button[aria-current="true"]{background:var(--surface);color:var(--text)}
+.clock{color:var(--faint);margin-left:14px}
+@media(max-width:980px){.clock{display:none}}
+#sheet .langrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+#sheet .langrow button{font-size:13px;padding:8px 14px;border:1px solid var(--line);
+  border-radius:99px;cursor:pointer;color:var(--dim)}
+#sheet .langrow button[aria-current="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
 
 /* ── film grain + global overlays ─────────────────────── */
 .grain{position:fixed;inset:-60%;z-index:400;pointer-events:none;opacity:.17;
@@ -108,7 +143,7 @@ em.i{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:0
 
 /* ── nav ──────────────────────────────────────────────── */
 .nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;
-  justify-content:space-between;gap:14px;padding:16px var(--gut);
+  justify-content:space-between;gap:14px;padding:12px var(--gut);
   transform:translateY(-110%);transition:transform .7s var(--slow),background .6s,border-color .6s;
   border-bottom:1px solid transparent}
 .nav.show{transform:none}
@@ -161,17 +196,16 @@ body.menu #sheet a:nth-child(5){transition-delay:.24s}
    radial-gradient(70% 45% at 18% 12%,rgba(255,214,168,.14),transparent 70%),
    radial-gradient(60% 55% at 88% 82%,rgba(58,24,10,.28),transparent 72%)}
 .frame{position:absolute;width:min(46vw,520px);height:min(62vh,600px);overflow:hidden;
-  will-change:transform;background:#9CC4DC;box-shadow:0 0 0 1px rgba(60,30,16,.35),
+  will-change:width,height;background:#6FB2E4;box-shadow:0 0 0 1px rgba(60,30,16,.35),
   0 30px 80px rgba(50,22,10,.45)}
 @media(max-width:860px){.frame{width:74vw;height:56vh}}
-.frame .inner{position:absolute;inset:-2px;background-size:cover;background-position:center;
-  will-change:transform}
+.frame .inner{position:absolute;inset:0;background-size:cover;background-position:center}
 .frame .tint{position:absolute;inset:0;pointer-events:none;background:
-  radial-gradient(120% 90% at 50% 40%,transparent 35%,rgba(78,38,18,.55) 100%)}
+  radial-gradient(120% 90% at 50% 40%,transparent 46%,rgba(78,38,18,.4) 100%)}
 .frame .clouds{position:absolute;left:0;right:0;background-repeat:repeat-x;
   will-change:background-position;pointer-events:none}
-.frame .c1{top:4%;height:56%;background-size:auto 100%;opacity:.92}
-.frame .c2{top:38%;height:40%;background-size:auto 100%;opacity:.6}
+.frame .c1{top:8%;height:42%;background-size:auto 100%;opacity:.62}
+.frame .c2{top:47%;height:26%;background-size:auto 100%;opacity:.34}
 .frame .panes{position:absolute;inset:0;pointer-events:none}
 .frame .panes i{position:absolute;background:rgba(62,32,16,.5);
   box-shadow:0 1px 0 rgba(255,235,205,.25)}
@@ -401,13 +435,25 @@ footer{background:var(--surface);padding:clamp(50px,8vh,90px) var(--gut) 26px;po
 <div id="peek" aria-hidden="true"></div>
 
 <header class="nav" id="nav">
-  <a href="#top" class="mark" data-cursor="Top" aria-label="URBY home"><i class="l1">U</i><i class="l2">R</i><i class="l3">B</i><i class="l4">Y</i></a>
+  <div style="display:flex;align-items:center">
+    <a href="#top" class="mark" data-cursor="Top" aria-label="URBY home"><i class="l1">U</i><i class="l2">R</i><i class="l3">B</i><i class="l4">Y</i></a>
+    <span class="clock mono" id="clock"></span>
+  </div>
   <nav class="links" aria-label="Primary">
     <a href="#common">In common</a><a href="#rooms">Rooms</a>
     <a href="#kitchen">Kitchen</a><a href="#look">Look around</a><a href="#visit">Find us</a>
   </nav>
   <div class="right">
-    <button class="btn-pill hide-s" id="mode" aria-pressed="false"><span class="d"></span><span id="modeT">Terracotta</span></button>
+    <div class="lang">
+      <button class="btn-pill" id="langBtn" aria-expanded="false" aria-haspopup="true">EN</button>
+      <div class="langmenu" id="langMenu" role="menu">
+        <button data-l="en" aria-current="true">English</button>
+        <button data-l="ru">Русский</button>
+        <button data-l="ko">한국어</button>
+        <button data-l="ja">日本語</button>
+        <button data-l="zh">中文</button>
+      </div>
+    </div>
     <button class="btn-pill solid" data-book>Book a stay</button>
     <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i><i></i></button>
   </div>
@@ -417,8 +463,12 @@ footer{background:var(--surface);padding:clamp(50px,8vh,90px) var(--gut) 26px;po
   <a href="#common">In common</a><a href="#rooms">Rooms</a><a href="#kitchen">Kitchen</a>
   <a href="#look">Look around</a><a href="#visit">Find us</a>
   <div class="sf">
-    <button class="btn-pill" id="mode2"><span class="d"></span>Change the light</button>
+    <button class="btn-pill" id="mode" aria-pressed="false"><span class="d"></span><span id="modeT">Terracotta</span></button>
     <button class="btn-pill solid" data-book>Book a stay</button>
+  </div>
+  <div class="langrow" id="langRow">
+    <button data-l="en" aria-current="true">English</button><button data-l="ru">Русский</button>
+    <button data-l="ko">한국어</button><button data-l="ja">日本語</button><button data-l="zh">中文</button>
   </div>
 </div>
 
@@ -461,7 +511,7 @@ footer{background:var(--surface);padding:clamp(50px,8vh,90px) var(--gut) 26px;po
   <div class="float f4" data-sp="-.2"></div>
   <div class="txt">
     <span class="eyebrow">In common</span>
-    <p class="h2 rd" data-read style="margin-top:22px">Every element here is a blend of cultures and stories that live side by side. Different letters, one word. Different people, <em class="i">one table.</em></p>
+    <p class="h2 rd" data-read data-html="creed" style="margin-top:22px">Every element here is a blend of cultures and stories that live side by side. Different letters, one word. Different people, <em class="i">one table.</em></p>
   </div>
 </section>
 
@@ -491,7 +541,7 @@ footer{background:var(--surface);padding:clamp(50px,8vh,90px) var(--gut) 26px;po
       <article class="slide intro">
         <div>
           <span class="eyebrow">02 — Rooms</span>
-          <h2 class="display" style="margin:18px 0 14px">Eleven<br>rooms,<br><em class="i" style="text-transform:none">no two alike</em></h2>
+          <h2 class="display" data-html="roomsTitle" style="margin:18px 0 14px">Eleven<br>rooms,<br><em class="i" style="text-transform:none">no two alike</em></h2>
           <p class="body" style="max-width:34ch;margin:0 auto">Keep scrolling — the rooms move sideways.</p>
         </div>
       </article>
@@ -635,7 +685,7 @@ footer{background:var(--surface);padding:clamp(50px,8vh,90px) var(--gut) 26px;po
         <a href="#kitchen"><span>Book a table</span><span class="s2">Dinner from 18:30</span></a>
         <a href="mailto:hello@urby.com"><span>hello@urby.com</span><span class="s2">Email</span></a>
         <a href="tel:+66760000000"><span>+66 76 000 000</span><span class="s2">Phone</span></a>
-        <a href="https://instagram.com" target="_blank" rel="noopener"><span>@urby</span><span class="s2">Instagram</span></a>
+        <a href="https://www.instagram.com/urbyphuket" target="_blank" rel="noopener"><span>@urbyphuket</span><span class="s2">Instagram</span></a>
       </div>
     </div>
   </div>
@@ -661,7 +711,7 @@ footer{background:var(--surface);padding:clamp(50px,8vh,90px) var(--gut) 26px;po
   <div class="bin">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px">
       <div><span class="eyebrow">Direct booking</span>
-        <h2 class="display" style="margin-top:12px">Stay<br>with us</h2></div>
+        <h2 class="display" data-html="stay" style="margin-top:12px">Stay<br>with us</h2></div>
       <button class="btn-pill" id="bookX">Close</button>
     </div>
     <div class="steps">
@@ -751,52 +801,77 @@ function field(w,h,seed,palName,dark){
   x.fillStyle=v;x.fillRect(0,0,w,h);
   return c.toDataURL("image/jpeg",.82);
 }
+function phuketHour(){const d=new Date();return (d.getUTCHours()+d.getUTCMinutes()/60+7)%24;}
+
+/* cielo: solo gradiente e luce. Le nuvole stanno su strati separati. */
 function sky(w,h){
   const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d");
   const g=x.createLinearGradient(0,0,0,h);
-  g.addColorStop(0,"#4E8FBE");g.addColorStop(.38,"#8FBDD9");
-  g.addColorStop(.72,"#C9E0EE");g.addColorStop(1,"#F0E3CD");
+  g.addColorStop(0,"#1C6BC4");g.addColorStop(.26,"#3B8ED6");
+  g.addColorStop(.54,"#6FB2E4");g.addColorStop(.78,"#A8D0EC");
+  g.addColorStop(.93,"#D6E7F2");g.addColorStop(1,"#E9E7DA");
   x.fillStyle=g;x.fillRect(0,0,w,h);
-  const sun=x.createRadialGradient(w*.74,h*.2,0,w*.74,h*.2,w*.6);
-  sun.addColorStop(0,"rgba(255,244,222,.85)");sun.addColorStop(.35,"rgba(255,226,186,.25)");
-  sun.addColorStop(1,"rgba(255,255,255,0)");
-  x.fillStyle=sun;x.fillRect(0,0,w,h);
-  return c.toDataURL("image/jpeg",.9);
+  const sx=w*.72,sy=h*.14;
+  const halo=x.createRadialGradient(sx,sy,0,sx,sy,w*.55);
+  halo.addColorStop(0,"rgba(255,252,238,.62)");
+  halo.addColorStop(.18,"rgba(255,248,226,.26)");
+  halo.addColorStop(.5,"rgba(255,246,224,.07)");
+  halo.addColorStop(1,"rgba(255,255,255,0)");
+  x.fillStyle=halo;x.fillRect(0,0,w,h);
+  const haze=x.createLinearGradient(0,h*.6,0,h);
+  haze.addColorStop(0,"rgba(255,250,238,0)");haze.addColorStop(1,"rgba(255,248,232,.3)");
+  x.fillStyle=haze;x.fillRect(0,h*.6,w,h*.4);
+  return c.toDataURL("image/jpeg",.92);
 }
-function clouds(w,h,seed,soft){
-  const r=rng(seed*104729+7);
-  const sm=document.createElement("canvas");sm.width=44;sm.height=Math.round(44*h/w);
-  const a=sm.getContext("2d");
-  for(let i=0;i<16;i++){
-    a.globalAlpha=(.3+r()*.6)*soft;
-    a.fillStyle="#FFFFFF";
-    const cx=r()*sm.width,cy=sm.height*(.2+r()*.6),rad=sm.width*(.05+r()*.13);
-    for(let k=0;k<4;k++){
-      a.beginPath();
-      a.ellipse(cx+(r()-.5)*rad*2.6,cy+(r()-.5)*rad*.7,rad*(.6+r()*.9),rad*(.35+r()*.4),0,0,6.283);
-      a.fill();
+
+/* nuvole: rumore frattale a più ottave, soglia alta = poca nuvola, molto azzurro.
+   Il reticolo è periodico in x, così la ripetizione orizzontale non ha giunte. */
+function clouds(w,h,seed,thresh,soft){
+  const gw=190,gh=Math.max(40,Math.round(190*h/w));
+  const r=rng(seed*7717+31);
+  const octs=[[3,.52],[6,.26],[12,.14],[24,.08]];
+  const grids=octs.map(o=>{
+    const n=o[0],a=new Float32Array(n*(n+1));
+    for(let i=0;i<a.length;i++)a[i]=r();
+    return a;
+  });
+  const sm=t=>t*t*(3-2*t);
+  function samp(a,n,u,v){
+    const gx=u*n,gy=v*n;
+    const i0=Math.floor(gx)%n,i1=(i0+1)%n;
+    let j0=Math.floor(gy);if(j0>n-1)j0=n-1;const j1=Math.min(j0+1,n);
+    const fx=sm(gx-Math.floor(gx)),fy=sm(gy-Math.floor(gy));
+    const a00=a[j0*n+i0],a10=a[j0*n+i1],a01=a[j1*n+i0],a11=a[j1*n+i1];
+    return (a00*(1-fx)+a10*fx)*(1-fy)+(a01*(1-fx)+a11*fx)*fy;
+  }
+  const cv=document.createElement("canvas");cv.width=gw;cv.height=gh;
+  const cx=cv.getContext("2d"),img=cx.createImageData(gw,gh),d=img.data;
+  for(let j=0;j<gh;j++){
+    const v=j/gh;
+    const band=Math.min(1,Math.sin(Math.PI*Math.min(1,Math.max(0,v)))*1.35);
+    for(let i=0;i<gw;i++){
+      const u=i/gw;
+      let n=0;
+      for(let k=0;k<octs.length;k++)n+=octs[k][1]*samp(grids[k],octs[k][0],u,v*.85+.05);
+      const t=(n-thresh)/.26;
+      let al=t<=0?0:t>=1?1:sm(t);
+      al*=band*soft;
+      const p=(j*gw+i)*4;
+      d[p]=252;d[p+1]=253;d[p+2]=255;d[p+3]=Math.round(al*255);
     }
   }
-  const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d");
+  cx.putImageData(img,0,0);
+  const c=document.createElement("canvas");c.width=w;c.height=h;
+  const x=c.getContext("2d");
   x.imageSmoothingEnabled=true;x.imageSmoothingQuality="high";
-  x.drawImage(sm,0,0,w,h);
-  x.globalCompositeOperation="destination-out";
-  const fade=(x0,x1)=>{const g=x.createLinearGradient(x0,0,x1,0);
-    g.addColorStop(0,"rgba(0,0,0,1)");g.addColorStop(1,"rgba(0,0,0,0)");
-    x.fillStyle=g;x.fillRect(Math.min(x0,x1),0,Math.abs(x1-x0),h);};
-  fade(0,w*.14);fade(w,w*.86);
-  const vg=x.createLinearGradient(0,0,0,h);
-  vg.addColorStop(0,"rgba(0,0,0,.55)");vg.addColorStop(.35,"rgba(0,0,0,0)");
-  vg.addColorStop(.75,"rgba(0,0,0,0)");vg.addColorStop(1,"rgba(0,0,0,.7)");
-  x.fillStyle=vg;x.fillRect(0,0,w,h);
-  x.globalCompositeOperation="source-over";
+  x.drawImage(cv,0,0,w,h);
   return c.toDataURL("image/png");
 }
 const F={};
 function buildFields(){
-  F.hero=sky(1400,980);
-  F.cl1=clouds(1200,520,7,1);
-  F.cl2=clouds(900,420,9,.75);
+  F.hero=sky(1500,1000);
+  F.cl1=clouds(1600,560,7,.56,.95);
+  F.cl2=clouds(1200,420,23,.52,.65);
   F.floats=[field(420,560,11,"linen"),field(420,420,12,"sky"),
             field(420,540,13,"terra",true),field(420,560,14,"pine",true)];
   F.rooms={nook:field(760,980,21,"linen"),corner:field(760,980,22,"sky"),
@@ -872,21 +947,27 @@ $$('a[href^="#"]').forEach(a=>a.addEventListener("click",e=>{
 }));
 
 /* ══════════ word-by-word reader ══════════ */
-$$("[data-read]").forEach(el=>{
-  const walk=node=>{
-    [...node.childNodes].forEach(ch=>{
-      if(ch.nodeType===3){
-        const frag=document.createDocumentFragment();
-        ch.textContent.split(/(\s+)/).forEach(w=>{
-          if(!w.trim()){frag.appendChild(document.createTextNode(w));return;}
-          const b=document.createElement("b");b.textContent=w;frag.appendChild(b);
-        });
-        node.replaceChild(frag,ch);
-      }else if(ch.nodeType===1)walk(ch);
-    });
-  };
-  walk(el);
-});
+const READ=$$("[data-read]");
+function splitWords(){
+  READ.forEach(el=>{
+    const walk=node=>{
+      [...node.childNodes].forEach(ch=>{
+        if(ch.nodeType===3){
+          const frag=document.createDocumentFragment();
+          ch.textContent.split(/(\s+)/).forEach(w=>{
+            if(!w.trim()){frag.appendChild(document.createTextNode(w));return;}
+            const b=document.createElement("b");b.textContent=w;frag.appendChild(b);
+          });
+          node.replaceChild(frag,ch);
+        }else if(ch.nodeType===1&&ch.tagName!=="B")walk(ch);
+      });
+    };
+    walk(el);
+  });
+}
+let readers=[];
+function rebuildReaders(){readers=READ.map(el=>({el,w:$$("b",el)}));}
+splitWords();rebuildReaders();
 
 /* ══════════ reveals ══════════ */
 const io=new IntersectionObserver(es=>es.forEach(e=>{
@@ -906,6 +987,185 @@ if(!TOUCH){
   });
 }
 
+
+/* ══════════ languages ══════════ */
+const T={
+"In common":["Вместе","함께","共に","共处"],
+"Rooms":["Номера","객실","客室","客房"],
+"Kitchen":["Кухня","주방","キッチン","厨房"],
+"Look around":["Осмотреться","둘러보기","見てまわる","随便看看"],
+"Find us":["Как добраться","오시는 길","アクセス","找到我们"],
+"Book a stay":["Забронировать","숙박 예약","宿泊を予約","预订客房"],
+"Book a table":["Забронировать стол","테이블 예약","テーブルを予約","预订餐位"],
+"Close":["Закрыть","닫기","閉じる","关闭"],
+"Back to the site":["Вернуться на сайт","사이트로 돌아가기","サイトに戻る","返回网站"],
+"Terracotta":["Терракота","테라코타","テラコッタ","赤陶"],
+"Daylight":["Дневной свет","데이라이트","デイライト","日光"],
+"Neighbourhood hotel & kitchen — Thalang, Phuket":["Отель и кухня по соседству — Тхаланг, Пхукет","동네의 호텔 & 키친 — 탈랑, 푸껫","街のホテル＆キッチン — タラン、プーケット","街区里的酒店与厨房 — 塔朗，普吉"],
+"Eleven rooms upstairs, one long table downstairs, and a door that stays open from the first loaf to the last pour.":["Одиннадцать номеров наверху, один длинный стол внизу и дверь, открытая от первой буханки до последнего бокала.","위층엔 열한 개의 객실, 아래층엔 하나의 긴 테이블, 그리고 첫 빵부터 마지막 잔까지 열려 있는 문.","上階に11の客室、下階にひとつの長いテーブル。最初のパンから最後の一杯まで、扉は開いています。","楼上十一间客房，楼下一张长桌，从第一炉面包到最后一杯酒，门始终敞开。"],
+"Scroll":["Листайте","스크롤","スクロール","向下滚动"],
+"01 — The house":["01 — Дом","01 — 집","01 — 家","01 — 这栋房子"],
+"Est. 2025":["Осн. 2025","2025년 시작","2025年創業","始于 2025"],
+"02 — Rooms":["02 — Номера","02 — 객실","02 — 客室","02 — 客房"],
+"03 — Kitchen":["03 — Кухня","03 — 주방","03 — キッチン","03 — 厨房"],
+"07:00 — 23:00, seven days":["07:00 — 23:00, семь дней","07:00 — 23:00, 연중무휴","07:00 — 23:00、年中無休","07:00 — 23:00，全周营业"],
+"04 — Look around":["04 — Осмотреться","04 — 둘러보기","04 — 見てまわる","04 — 随便看看"],
+"05 — Find us":["05 — Как добраться","05 — 오시는 길","05 — アクセス","05 — 找到我们"],
+"A bakery counter":["Пекарня на четырёх табуретах,","빵집 카운터 하나가","一台のベーカリーカウンターが","一个面包吧台，"],
+"that grew a roof.":["которая обрела крышу.","지붕을 갖게 되었습니다.","屋根を持つ家になった。","后来长出了屋顶。"],
+"URBY started with four stools, a record player and a sourdough starter someone carried over from Chiang Mai. It grew into a house: rooms above, a kitchen below, a courtyard where guests and neighbours end up on the same bench without planning to.":["URBY начинался с четырёх табуретов, проигрывателя и закваски, привезённой из Чиангмая. Он вырос в дом: номера наверху, кухня внизу и двор, где гости и соседи неожиданно оказываются на одной скамейке.","URBY는 스툴 네 개, 턴테이블 하나, 그리고 치앙마이에서 가져온 사워도우 스타터로 시작했습니다. 그것이 한 채의 집이 되었습니다. 위층엔 객실, 아래층엔 주방, 그리고 손님과 이웃이 어느새 같은 벤치에 앉게 되는 마당.","URBYは4脚のスツールとレコードプレーヤー、チェンマイから運ばれたサワードウ種から始まりました。やがて一軒の家になりました。上階に客室、下階にキッチン、そして客も近所の人も気づけば同じベンチに座っている中庭。","URBY 从四把凳子、一台唱机和一份从清迈带来的酸面团酵头开始。后来它长成了一栋房子：楼上是客房，楼下是厨房，中庭里客人和邻居不知不觉坐到了同一条长凳上。"],
+"We cook what the morning market gives us, bake everything in house, and keep the lights low enough that nobody checks the time. Stay a night or stay for a coffee — the welcome is identical.":["Мы готовим то, что даёт утренний рынок, печём всё сами и держим свет достаточно низким, чтобы никто не смотрел на часы. Останьтесь на ночь или на чашку кофе — приём одинаковый.","아침 시장이 주는 것으로 요리하고, 모든 것을 직접 굽고, 아무도 시계를 보지 않을 만큼 조명을 낮춥니다. 하룻밤을 묵든 커피 한 잔을 마시든 환대는 같습니다.","朝の市場が与えてくれるものを料理し、すべてを自家製で焼き、誰も時計を見ないくらいに灯りを落としています。一泊でも、コーヒー一杯でも、迎え方は同じです。","我们用早市给的食材做菜，所有东西都在店里做，灯光调得低到没人会看时间。住一晚，或只喝一杯咖啡 —— 招待完全一样。"],
+"Eleven rooms":["Одиннадцать номеров","열한 개의 객실","11の客室","十一间客房"],
+"No two alike":["Все разные","모두 다릅니다","どれも同じではない","没有两间相同"],
+"Kitchen open 07:00 — 23:00":["Кухня работает 07:00 — 23:00","주방 07:00 — 23:00","キッチン 07:00 — 23:00","厨房 07:00 — 23:00"],
+"Seven days":["Семь дней в неделю","연중무휴","年中無休","全周营业"],
+"Layan beach":["Пляж Лаян","라얀 비치","ラヤンビーチ","拉扬海滩"],
+"9 min by scooter":["9 минут на скутере","스쿠터로 9분","スクーターで9分","摩托车 9 分钟"],
+"Keep scrolling — the rooms move sideways.":["Листайте дальше — номера движутся вбок.","계속 스크롤하세요 — 객실이 옆으로 흘러갑니다.","スクロールを続けてください — 客室が横に流れます。","继续滚动 —— 客房会横向移动。"],
+"22 m² · courtyard side":["22 м² · окна во двор","22 m² · 안뜰 쪽","22 m² · 中庭側","22 m² · 面向中庭"],
+"32 m² · morning light":["32 м² · утренний свет","32 m² · 아침 햇살","32 m² · 朝の光","32 m² · 晨光"],
+"44 m² · under the roof":["44 м² · под крышей","44 m² · 지붕 아래","44 m² · 屋根の下","44 m² · 屋顶之下"],
+"58 m² · private terrace":["58 м² · своя терраса","58 m² · 프라이빗 테라스","58 m² · 専用テラス","58 m² · 私人露台"],
+"Queen bed and a window seat deep enough to sleep in":["Кровать queen и подоконник, на котором можно спать","퀸 침대와 잠들 수 있을 만큼 깊은 창가 좌석","クイーンベッドと、眠れるほど深い窓辺の席","一张大床，和深到能睡觉的窗台座"],
+"Rain shower, house soap, linen from the north":["Тропический душ, своё мыло, лён с севера","레인 샤워, 하우스 비누, 북부산 리넨","レインシャワー、自家製ソープ、北部のリネン","雨淋花洒、自制香皂、北部亚麻"],
+"Quietest room in the house after 22:00":["Самый тихий номер после 22:00","22시 이후 가장 조용한 방","22時以降、家で一番静かな部屋","22 点后全屋最安静的房间"],
+"King bed, two windows, sun from 07:00":["Кровать king, два окна, солнце с 07:00","킹 침대, 창 두 개, 7시부터 드는 햇살","キングベッド、二つの窓、7時からの陽射し","特大床、两扇窗、7 点开始的阳光"],
+"Reading chair, small desk, bath and shower":["Кресло для чтения, стол, ванна и душ","리딩 체어, 작은 책상, 욕조와 샤워","読書椅子、小さな机、バスタブとシャワー","阅读椅、小书桌、浴缸与淋浴"],
+"Looks over the mango tree and the bakery door":["Вид на манговое дерево и дверь пекарни","망고나무와 빵집 문이 내려다보입니다","マンゴーの木とベーカリーの扉を望む","望向芒果树和面包房的门"],
+"Mezzanine, king bed and a daybed for a third":["Мезонин, кровать king и кушетка для третьего","메자닌, 킹 침대와 한 사람을 위한 데이베드","メザニン、キングベッドと三人目のデイベッド","夹层、特大床和给第三人的日床"],
+"Record player, a crate of vinyl, a small bar":["Проигрыватель, ящик винила, маленький бар","턴테이블, 바이닐 한 상자, 작은 바","レコードプレーヤー、レコード一箱、小さなバー","唱机、一箱黑胶、一个小吧台"],
+"Rafters, skylight, rain you can hear":["Балки, световой люк, слышный дождь","서까래, 천창, 들리는 빗소리","梁、天窓、聞こえる雨音","露梁、天窗，听得见的雨"],
+"Outdoor bath, table for six, hammock corner":["Ванна под открытым небом, стол на шестерых, гамак","야외 욕조, 6인 테이블, 해먹 코너","屋外バス、6人のテーブル、ハンモックの一角","户外浴缸、六人餐桌、吊床角落"],
+"King bed, separate sitting room":["Кровать king, отдельная гостиная","킹 침대, 별도의 거실","キングベッド、独立したリビング","特大床、独立起居室"],
+"The room people book the whole floor for":["Ради него бронируют весь этаж","사람들이 층 전체를 예약하게 만드는 방","この部屋のためにフロアごと予約される","让人愿意包下整层的房间"],
+"per night · breakfast in":["за ночь · завтрак включён","1박 · 조식 포함","1泊 · 朝食込み","每晚 · 含早餐"],
+"Reserve":["Забронировать","예약","予約","预订"],
+"Everyday plates,":["Каждодневные блюда,","매일의 요리,","日々の一皿、","家常的菜，"],
+"cooked in house.":["приготовленные у нас.","모두 직접 만듭니다.","すべて自家製。","都在店里做。"],
+"Sourdough started here, yoghurt cultured here, ice cream churned here. The menu moves with the market — this is where it stands today.":["Закваска наша, йогурт наш, мороженое взбиваем сами. Меню меняется вместе с рынком — вот каким оно стало сегодня.","사워도우도, 요거트도, 아이스크림도 모두 이곳에서 만듭니다. 메뉴는 시장을 따라 바뀝니다 — 오늘은 이렇습니다.","サワードウも、ヨーグルトも、アイスクリームもここで作ります。メニューは市場とともに変わります — 今日はこの通りです。","酸面团、酸奶、冰淇淋都在这里做。菜单随市场变化 —— 这是今天的样子。"],
+"Date":["Дата","날짜","日付","日期"],
+"Time":["Время","시간","時間","时间"],
+"People":["Гостей","인원","人数","人数"],
+"Name":["Имя","이름","お名前","姓名"],
+"Anything we should know":["Что нам стоит знать","알아야 할 사항","何かご要望は","有什么需要我们知道的"],
+"Request the table":["Отправить запрос","테이블 요청하기","テーブルをリクエスト","提交订位请求"],
+"Counter seats are kept for walk-ins every night.":["Места у стойки каждый вечер оставляем для гостей без брони.","카운터 좌석은 매일 밤 워크인을 위해 남겨 둡니다.","カウンター席は毎晩、予約なしのお客様のために空けています。","每晚都会为无预约的客人留出吧台座位。"],
+"Morning":["Утро","모닝","モーニング","早餐"],
+"Snacks & sides":["Закуски и гарниры","스낵 & 사이드","スナック＆サイド","小食与配菜"],
+"Cocktails":["Коктейли","칵테일","カクテル","鸡尾酒"],
+"Today only":["Только сегодня","오늘의 메뉴","本日のみ","仅限今日"],
+"Prices in Thai baht, service included. Tell us about allergies — the kitchen keeps a full ingredient list.":["Цены в батах, обслуживание включено. Расскажите об аллергиях — на кухне есть полный список ингредиентов.","가격은 태국 바트, 서비스료 포함. 알레르기가 있다면 알려 주세요 — 주방에 전체 원재료 목록이 있습니다.","価格はタイバーツ、サービス料込み。アレルギーはお知らせください — 厨房に全原材料リストがあります。","价格为泰铢，已含服务费。有过敏请告诉我们 —— 厨房备有完整配料表。"],
+"Bakery opens":["Пекарня открывается","베이커리 오픈","ベーカリー開店","面包房开门"],
+"Loaves out of the oven, first filter coffee on the counter.":["Хлеб из печи, первый фильтр-кофе на стойке.","갓 구운 빵, 카운터 위 첫 필터 커피.","焼きたてのパン、カウンターに最初のフィルターコーヒー。","面包出炉，吧台上第一杯滤泡咖啡。"],
+"Breakfast":["Завтрак","조식","朝食","早餐"],
+"Yoghurt cream, eggs, navy beans on toast. Included if you're staying.":["Йогуртовый крем, яйца, фасоль на тосте. Для гостей отеля включено.","요거트 크림, 달걀, 콩 토스트. 투숙객은 포함입니다.","ヨーグルトクリーム、卵、豆のトースト。ご宿泊の方は込みです。","酸奶奶油、鸡蛋、白豆吐司。住店客人已含。"],
+"All-day plates":["Блюда весь день","올데이 플레이트","オールデイの一皿","全天供应"],
+"The quiet hours. Long lunches, slow work, the fan on low.":["Тихие часы. Долгие обеды, спокойная работа, вентилятор на минимуме.","조용한 시간. 긴 점심, 느린 작업, 낮게 도는 선풍기.","静かな時間。長い昼食、ゆっくりの仕事、弱く回る扇風機。","安静的时段。漫长的午餐、慢慢的工作、开到最小的风扇。"],
+"Records & aperitivo":["Пластинки и аперитив","레코드 & 아페리티보","レコードとアペリティーボ","黑胶与餐前酒"],
+"Someone picks a side, the bar starts pouring.":["Кто-то ставит сторону пластинки, бар начинает разливать.","누군가 한 면을 고르면, 바가 잔을 채우기 시작합니다.","誰かがA面を選び、バーが注ぎ始めます。","有人挑一面唱片，吧台开始倒酒。"],
+"Dinner in common":["Общий ужин","함께하는 저녁","みんなの夕食","共享晚餐"],
+"Small plates meant for the middle of the table.":["Небольшие блюда — для середины стола.","테이블 가운데 두고 나누는 작은 접시들.","テーブルの真ん中に置く小皿料理。","放在桌子中间分享的小盘菜。"],
+"Last pour":["Последний бокал","마지막 잔","ラストオーダー","最后一杯"],
+"Unless it's a good night. Then the counter stays open.":["Если вечер удался — стойка работает дольше.","좋은 밤이라면, 카운터는 계속 열려 있습니다.","いい夜なら、カウンターはまだ開いています。","如果夜色不错，吧台会继续开着。"],
+"Fifteen minutes from the airport, nine from Layan beach. Parking in the courtyard, scooters at the gate, dogs welcome on the terrace.":["Пятнадцать минут от аэропорта, девять — от пляжа Лаян. Парковка во дворе, скутеры у ворот, собакам рады на террасе.","공항에서 15분, 라얀 비치에서 9분. 안뜰 주차, 정문 앞 스쿠터, 테라스에는 반려견도 환영합니다.","空港から15分、ラヤンビーチから9分。中庭に駐車場、門にスクーター、テラスは犬も歓迎です。","距机场十五分钟，距拉扬海滩九分钟。中庭停车，门口有摩托车，露台欢迎带狗。"],
+"Direct rate":["Прямой тариф","다이렉트 요금","公式料金","官网直订价"],
+"Dinner from 18:30":["Ужин с 18:30","저녁 18:30부터","ディナー18:30から","晚餐 18:30 起"],
+"Email":["Почта","이메일","メール","邮件"],
+"Phone":["Телефон","전화","電話","电话"],
+"Neighbourhood hotel & kitchen":["Отель и кухня по соседству","동네의 호텔 & 키친","街のホテル＆キッチン","街区里的酒店与厨房"],
+"Thalang · Phuket":["Тхаланг · Пхукет","탈랑 · 푸껫","タラン · プーケット","塔朗 · 普吉"],
+"Direct booking":["Прямое бронирование","다이렉트 예약","公式予約","官网直订"],
+"Dates":["Даты","날짜","日程","日期"],
+"Room":["Номер","객실","客室","客房"],
+"Details":["Данные","정보","詳細","详情"],
+"Confirm":["Подтверждение","확인","確認","确认"],
+"Arrive":["Заезд","체크인","チェックイン","入住"],
+"Leave":["Выезд","체크아웃","チェックアウト","退房"],
+"Guests":["Гостей","인원","人数","人数"],
+"Check-in from 14:00, check-out by 11:00. Late arrivals are fine — someone is always at the counter.":["Заезд с 14:00, выезд до 11:00. Поздний приезд — не проблема, кто-то всегда на стойке.","체크인 14:00부터, 체크아웃 11:00까지. 늦은 도착도 괜찮습니다 — 카운터에는 늘 누군가 있습니다.","チェックインは14:00から、チェックアウトは11:00まで。遅いご到着も大丈夫です — カウンターには必ず誰かいます。","14:00 后入住，11:00 前退房。晚到也没关系 —— 吧台总有人在。"],
+"Choose a room":["Выбрать номер","객실 선택","客室を選ぶ","选择客房"],
+"Back":["Назад","이전","戻る","返回"],
+"Continue":["Дальше","계속","次へ","继续"],
+"Review":["Проверить","확인하기","内容を確認","查看明细"],
+"Add to the stay":["Добавить к проживанию","추가 옵션","滞在に追加","为住宿添加"],
+"Airport transfer":["Трансфер из аэропорта","공항 픽업","空港送迎","机场接送"],
+"Scooter":["Скутер","스쿠터","スクーター","摩托车"],
+"Confirm request":["Отправить запрос","예약 요청","リクエストを送信","提交预订请求"],
+"No card needed now. We reply within 12 hours to hold the room.":["Карта сейчас не нужна. Ответим в течение 12 часов и придержим номер.","지금은 카드가 필요 없습니다. 12시간 안에 답장드리고 객실을 잡아 둡니다.","今はカード不要です。12時間以内にお返事し、お部屋をお取りします。","现在无需信用卡。我们会在 12 小时内回复并为你保留房间。"],
+"See you soon.":["До скорой встречи.","곧 뵙겠습니다.","またお会いしましょう。","我们很快见。"],
+"Total, taxes in":["Итого, с налогами","총액, 세금 포함","合計（税込）","合计，含税"],
+"Nights":["Ночей","숙박","泊数","晚数"],
+"nights":["ноч.","박","泊","晚"],
+"guests":["гостей","명","名","位"],
+"Breakfast in common":["Общий завтрак","조식 포함","朝食付き","含早餐"],
+"included":["включено","포함","込み","已包含"],
+"Reference":["Номер брони","예약 번호","予約番号","预订编号"],
+"Confirmation to":["Подтверждение на","확인 메일","確認メール送信先","确认函送至"],
+"Who's coming?":["Кто придёт?","누가 오시나요?","どなたが来られますか","谁来用餐？"],
+"Allergies, birthdays, a quiet corner":["Аллергии, дни рождения, тихий угол","알레르기, 생일, 조용한 자리","アレルギー、誕生日、静かな席","过敏、生日、安静的角落"],
+"First and last":["Имя и фамилия","성과 이름","姓名","姓与名"],
+"We need a name and a working email to hold the room.":["Нужны имя и рабочая почта, чтобы придержать номер.","객실을 잡아 두려면 이름과 사용 중인 이메일이 필요합니다.","お部屋を確保するには、お名前と有効なメールアドレスが必要です。","为你保留房间需要姓名和有效邮箱。"],
+"Add a name so we know who to look for.":["Укажите имя, чтобы мы знали, кого встречать.","누구를 기다리면 되는지 이름을 알려 주세요.","お名前をご記入ください。","请留下姓名，我们好认人。"],
+"Pick a date for the table.":["Выберите дату.","날짜를 선택해 주세요.","日付を選んでください。","请选择日期。"],
+"The leaving date has to come after the arrival date.":["Дата выезда должна быть позже даты заезда.","체크아웃 날짜는 체크인 이후여야 합니다.","チェックアウトはチェックイン後の日付にしてください。","退房日期必须晚于入住日期。"],
+"Table requested. We confirm by email today.":["Запрос отправлен. Подтвердим по почте сегодня.","요청이 접수되었습니다. 오늘 이메일로 확인드립니다.","リクエストを受け付けました。本日メールでご連絡します。","已收到请求，我们今天会用邮件确认。"]
+};
+const HTMLS={
+ creed:{
+  ru:'Каждая деталь здесь — смесь культур и историй, живущих бок о бок. Разные буквы — одно слово. Разные люди — <em class="i">один стол.</em>',
+  ko:'이곳의 모든 것은 나란히 살아가는 문화와 이야기의 조합입니다. 다른 글자들, 하나의 단어. 다른 사람들, <em class="i">하나의 테이블.</em>',
+  ja:'ここにあるすべては、隣り合って生きる文化と物語の混ざり合いです。異なる文字で、ひとつの言葉。異なる人々で、<em class="i">ひとつのテーブル。</em>',
+  zh:'这里的每一处，都是并肩而居的文化与故事的交融。不同的字母，同一个词。不同的人，<em class="i">同一张桌子。</em>'},
+ roomsTitle:{
+  ru:'Одиннадцать<br>номеров,<br><em class="i" style="text-transform:none">все разные</em>',
+  ko:'열한 개의<br>객실,<br><em class="i" style="text-transform:none">같은 방은 없습니다</em>',
+  ja:'11の<br>客室、<br><em class="i" style="text-transform:none">どれも同じではない</em>',
+  zh:'十一间<br>客房，<br><em class="i" style="text-transform:none">没有两间相同</em>'},
+ stay:{ru:'Оставайтесь<br>у нас',ko:'저희 집에<br>머무세요',ja:'泊まりに<br>来てください',zh:'住下来<br>吧'}
+};
+const LANGS=["en","ru","ko","ja","zh"],CODE={en:"EN",ru:"RU",ko:"KO",ja:"JA",zh:"ZH"};
+const I18N={en:{},ru:{},ko:{},ja:{},zh:{}};
+Object.keys(T).forEach(k=>["ru","ko","ja","zh"].forEach((l,i)=>{I18N[l][k]=T[k][i];}));
+let lang="en";
+const tr=s2=>(I18N[lang]&&I18N[lang][s2])||s2;
+const SNAP=[],PH=[];
+document.querySelectorAll("a,button,p,span,h1,h2,h3,h4,li,strong,small,option,dt,dd,label,figcaption")
+ .forEach(el=>{
+   if(el.closest("#load"))return;
+   if(el.children.length===0){
+     const t=el.textContent.trim();
+     if(t&&t.length<400)SNAP.push({el,en:t});
+   }
+   if(el.placeholder)PH.push({el,en:el.placeholder});
+ });
+$$("[data-html]").forEach(el=>{HTMLS[el.dataset.html].en=el.innerHTML;});
+function applyLang(l){
+  lang=l;document.documentElement.lang=l;
+  SNAP.forEach(n=>{const v=I18N[l][n.en];n.el.textContent=v||n.en;});
+  PH.forEach(n=>{const v=I18N[l][n.en];n.el.placeholder=v||n.en;});
+  $$("[data-html]").forEach(el=>{el.innerHTML=HTMLS[el.dataset.html][l]||HTMLS[el.dataset.html].en;});
+  $("#langBtn").textContent=CODE[l];
+  $$("[data-l]").forEach(b=>b.setAttribute("aria-current",b.dataset.l===l));
+  if(typeof renderMenu==="function"){const t=$('.tabs button[aria-selected="true"]');if(t)renderMenu(t.dataset.tab);}
+  splitWords();rebuildReaders();clockTick();
+}
+$("#langBtn").addEventListener("click",e=>{
+  e.stopPropagation();$("#langMenu").classList.toggle("on");
+  $("#langBtn").setAttribute("aria-expanded",$("#langMenu").classList.contains("on"));
+});
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-l]");
+  if(b){applyLang(b.dataset.l);document.body.classList.remove("menu","lock");}
+  if(!e.target.closest(".lang"))$("#langMenu").classList.remove("on");
+});
+
+/* ══════════ the clock in Thalang ══════════ */
+function clockTick(){
+  const h=phuketHour(),hh=Math.floor(h),mm=Math.floor((h-hh)*60);
+  $("#clock").textContent=`Thalang ${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}`;
+}
+setInterval(clockTick,20000);
+
 /* ══════════ nav / menu / mode ══════════ */
 const nav=$("#nav"),burger=$("#burger");
 burger.addEventListener("click",()=>{
@@ -915,10 +1175,9 @@ burger.addEventListener("click",()=>{
 });
 let mode="dinner";
 const setMode=m=>{mode=m;document.documentElement.setAttribute("data-mode",m);
-  $("#modeT").textContent=m==="dinner"?"Terracotta":"Daylight";
+  const t=$("#modeT");if(t)t.textContent=(I18N[lang]&&I18N[lang][m==="dinner"?"Terracotta":"Daylight"])||(m==="dinner"?"Terracotta":"Daylight");
   $("#mode").setAttribute("aria-pressed",m==="daylight");};
 $("#mode").addEventListener("click",()=>setMode(mode==="dinner"?"daylight":"dinner"));
-$("#mode2").addEventListener("click",()=>setMode(mode==="dinner"?"daylight":"dinner"));
 
 /* ══════════ menu + peek ══════════ */
 const MENU={
@@ -1001,11 +1260,11 @@ $("#bOut").value=iso(new Date(now.getTime()+864e6));
 $("#bIn").min=iso(now);
 $("#tSend").addEventListener("click",()=>{
   const m=$("#tMsg");m.className="msg";
-  if(!$("#tName").value.trim()){m.classList.add("err");m.textContent="Add a name so we know who to look for.";return;}
-  if(!$("#tDate").value){m.classList.add("err");m.textContent="Pick a date for the table.";return;}
+  if(!$("#tName").value.trim()){m.classList.add("err");m.textContent=tr("Add a name so we know who to look for.");return;}
+  if(!$("#tDate").value){m.classList.add("err");m.textContent=tr("Pick a date for the table.");return;}
   const d=new Date($("#tDate").value).toLocaleDateString("en-GB",{day:"numeric",month:"long"});
   m.classList.add("ok");
-  m.textContent=`Table for ${$("#tPeople").value} requested on ${d} at ${$("#tTime").value}. We confirm by email today.`;
+  m.textContent=`${$("#tPeople").value} · ${d} · ${$("#tTime").value} — ${tr("Table requested. We confirm by email today.")}`;
 });
 
 /* ══════════ booking ══════════ */
@@ -1030,7 +1289,7 @@ const nights=()=>{const a=new Date($("#bIn").value),b=new Date($("#bOut").value)
   const n=Math.round((b-a)/864e5);return isNaN(n)?0:n;};
 function step(k){
   if(k===2&&nights()<1){const m=$("#dMsg");m.className="msg err";
-    m.textContent="The leaving date has to come after the arrival date.";return;}
+    m.textContent=tr("The leaving date has to come after the arrival date.");return;}
   if(k===4)sum();
   $$(".step").forEach(s=>s.classList.toggle("on",s.dataset.step==String(k)));
   $$(".steps b").forEach(s=>s.classList.toggle("on",+s.dataset.s<=k));
@@ -1041,21 +1300,21 @@ function sum(){
   const r=ROOMS[st.room],nN=nights(),g=$("#bGuests").value;
   const f=s=>new Date(s).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});
   let total=r.price*nN;
-  const rows=[["Room",r.name],["Dates",`${f($("#bIn").value)} → ${f($("#bOut").value)}`],
-    ["Nights",`${nN} · ${g} guests`],[`${baht(r.price)} × ${nN} nights`,baht(r.price*nN)]];
+  const rows=[[tr("Room"),r.name],[tr("Dates"),`${f($("#bIn").value)} → ${f($("#bOut").value)}`],
+    [tr("Nights"),`${nN} · ${g} ${tr("guests")}`],[`${baht(r.price)} × ${nN} ${tr("nights")}`,baht(r.price*nN)]];
   st.extras.forEach(e=>{total+=e.price;rows.push([e.label,baht(e.price)]);});
-  rows.push(["Breakfast in common","included"]);
+  rows.push([tr("Breakfast in common"),tr("included")]);
   $("#sum").innerHTML=rows.map(r2=>`<div class="l"><span>${r2[0]}</span><span>${r2[1]}</span></div>`).join("")
-    +`<div class="tot"><span class="eyebrow">Total, taxes in</span><b>${baht(total)}</b></div>`;
+    +`<div class="tot"><span class="eyebrow">${tr("Total, taxes in")}</span><b>${baht(total)}</b></div>`;
 }
 $("#confirm").addEventListener("click",()=>{
   const m=$("#bMsg");m.className="msg";
   if(!$("#bName").value.trim()||!$("#bMail").value.includes("@")){
-    m.classList.add("err");m.textContent="We need a name and a working email to hold the room.";step(3);return;}
+    m.classList.add("err");m.textContent=tr("We need a name and a working email to hold the room.");step(3);return;}
   const ref="URBY-"+Math.random().toString(36).slice(2,6).toUpperCase();
   $("#done").innerHTML=$("#sum").innerHTML+
-    `<div class="l" style="margin-top:12px"><span>Reference</span><span>${ref}</span></div>
-     <div class="l"><span>Confirmation to</span><span>${$("#bMail").value}</span></div>`;
+    `<div class="l" style="margin-top:12px"><span>${tr("Reference")}</span><span>${ref}</span></div>
+     <div class="l"><span>${tr("Confirmation to")}</span><span>${$("#bMail").value}</span></div>`;
   step(5);
 });
 function openBook(room){
@@ -1077,16 +1336,21 @@ const frame=$("#frame"),frameImg=$("#frameImg"),heroMark=$("#heroMark"),
   roomBar=$("#roomBar"),roomNo=$("#roomNo"),ribbon=$("#ribbon"),
   bandA=$("#bandA"),bandB=$("#bandB"),fmark=$("#fmark");
 let y=scrollY,ly=y,vel=0,mq=0,mqDir=1;
-const readers=$$("[data-read]").map(el=>({el,w:$$("b",el)}));
+
 
 function frameOf(el){
   const r=el.getBoundingClientRect();
   return {top:r.top,h:r.height,center:r.top+r.height/2};
 }
-let t0=performance.now();
+let fw0=0,fh0=0;
+function frameBase(){
+  fw0=innerWidth<=860?innerWidth*.74:Math.min(innerWidth*.46,520);
+  fh0=innerHeight*(innerWidth<=860?.56:.62);
+  if(innerWidth>860)fh0=Math.min(fh0,600);
+}
+frameBase();
 function tick(){
   requestAnimationFrame(tick);
-  const tNow=(performance.now()-t0)/1000;
 
   if(SS.on&&!document.body.classList.contains("lock")){
     SS.c=lerp(SS.c,SS.t,.088);
@@ -1108,24 +1372,27 @@ function tick(){
   if(hr.bottom>0&&hr.top<innerHeight){
     const p=clamp(-hr.top/(hr.height-innerHeight),0,1);
     const e=p*p;
-    const fw=frame.offsetWidth||1,fh=frame.offsetHeight||1;
-    const sx=1+(innerWidth/fw-1)*e, sy=1+(innerHeight/fh-1)*e;
-    frame.style.transform=`translateY(${-p*40}px) scale(${sx},${sy})`;
-    frameImg.style.transform=`scale(${1/sx*1.08},${1/sy*1.08}) translateY(${p*4}%)`;
+    const W=fw0+(innerWidth-fw0)*e, H=fh0+(innerHeight-fh0)*e;
+    frame.style.width=W+"px";frame.style.height=H+"px";
+    frame.style.transform=`translateY(${-p*34}px)`;
     tint.style.opacity=String(clamp(1-p*1.5,0,1));
     panes.style.opacity=String(clamp(1-p*2.6,0,1));
-    cl1.style.backgroundPositionX=(-tNow*11-p*260)+"px";
-    cl2.style.backgroundPositionX=(-tNow*24-p*520)+"px";
-    cl1.style.opacity=String(.92-p*.18);
+    cl1.style.backgroundPositionX=(-p*300)+"px";
+    cl2.style.backgroundPositionX=(-p*620)+"px";
+    cl1.style.opacity=String(.62-p*.14);
     const spread=innerWidth*.13;
     letters.forEach((L,i)=>{L.style.transform=`translateX(${(i-1.5)*p*spread}px)`;});
     heroMark.style.transform=`scale(${1+p*.85})`;
     heroMark.style.opacity=String(clamp(1-p*1.25,0,1));
     lines.style.opacity=String(clamp(1-p*2.4,0,1));
     lines.style.transform=`translateY(${-p*60}px)`;
-    nav.classList.toggle("show",p>.5);
-  }else nav.classList.add("show");
-  nav.classList.toggle("solid",y>innerHeight*.9);
+  }
+  /* la barra entra solo a hero finito, e si ritira quando scendi */
+  const heroDone=y>heroTrack.offsetHeight-innerHeight*.45;
+  if(!heroDone)nav.classList.remove("show");
+  else if(vel>3)nav.classList.remove("show");
+  else if(vel<-3||Math.abs(vel)<.6)nav.classList.add("show");
+  nav.classList.toggle("solid",heroDone);
 
   /* marquee: speed and direction follow the scroll */
   mqDir=vel>1?1:vel<-1?-1:mqDir;
@@ -1190,7 +1457,9 @@ function tick(){
 }
 tick();
 
-addEventListener("resize",()=>{SS.t=clamp(SS.t,0,limit());});
+addEventListener("resize",()=>{SS.t=clamp(SS.t,0,limit());frameBase();});
+const nl=(navigator.language||"en").slice(0,2).toLowerCase();
+applyLang(LANGS.indexOf(nl)>-1?nl:"en");
 })();
 </script>
 </body>
