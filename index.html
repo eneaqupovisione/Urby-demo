@@ -316,8 +316,7 @@ body.menu #sheet a:nth-child(5){transition-delay:.24s}
 @media(max-width:860px){.float{opacity:.5}.float.f2,.float.f4{display:none}}
 
 /* ═══════════════ rooms — horizontal takeover ═══════════════ */
-/* 50vh in più in testa: respiro dopo il reveal, prima che parta il binario */
-.rooms-track{height:570vh;position:relative}
+.rooms-track{height:520vh;position:relative}
 .rooms-stage{position:sticky;top:0;height:100svh;overflow:hidden;background:var(--surface)}
 .rooms-rail{display:flex;height:100%;width:max-content;will-change:transform}
 .slide{width:100vw;height:100svh;position:relative;display:grid;
@@ -399,28 +398,6 @@ html[data-mode="dinner"] .f input::-webkit-calendar-picker-indicator{filter:inve
 .hour strong{font-family:var(--sans);font-weight:300;font-size:19px}
 .hour p{font-size:13px;color:var(--faint);line-height:1.55;max-width:30ch}
 
-#canopyFix{position:fixed;inset:0;z-index:40;pointer-events:none;opacity:0;will-change:opacity}
-/* il velo del sipario: NON un fondale scuro, ma il colore del sito.
-   Serve solo a impedire che la scena successiva si affacci prima del reveal. */
-#canopyFix .drape{position:absolute;inset:0;z-index:0;opacity:0;will-change:opacity;
-  background:
-    radial-gradient(125% 85% at 50% 44%,rgba(0,0,0,0),rgba(0,0,0,.26)),
-    rgb(var(--veil))}
-/* respiro fra la presentazione e le camere: qui scatta il sipario */
-.scene-gap{height:45vh;background:var(--bg);position:relative;z-index:2}
-/* la scena 2 resta muta finché il sipario non si è riaperto almeno al 60% */
-.slide.intro>div{opacity:0;transform:translateY(30px);
-  transition:opacity 1.2s var(--ease),transform 1.3s var(--slow)}
-body.scene2 .slide.intro>div{opacity:1;transform:none}
-/* posizione e dimensione le decide il JS in pixel misurati: solo così la
-   chiusura è garantita su qualunque schermo. Qui niente offset a occhio. */
-.mass{position:absolute;left:0;top:-26%;height:152%;pointer-events:none;will-change:transform}
-.mass svg{height:100%;width:auto;display:block;overflow:visible}
-.mass.r svg{transform:scaleX(-1)}
-.m3{filter:blur(2.5px);opacity:.5;z-index:1}
-.m2{filter:blur(.8px);opacity:.85;z-index:3}
-.m1{z-index:5}
-#canopyFix .m1{z-index:5}
 
 /* ═══════════════ gallery bands ═══════════════ */
 .bands{padding:clamp(50px,9vh,110px) 0;overflow:hidden}
@@ -670,12 +647,6 @@ footer{background:var(--surface);padding:clamp(50px,8vh,90px) var(--gut) 26px;po
 </div>
 
 <div class="grain" aria-hidden="true"></div>
-<div id="canopyFix" aria-hidden="true">
-  <div class="drape" id="drape"></div>
-  <div class="mass m3 l" id="m3l"></div><div class="mass m3 r" id="m3r"></div>
-  <div class="mass m2 l" id="m2l"></div><div class="mass m2 r" id="m2r"></div>
-  <div class="mass m1 l" id="m1l"></div><div class="mass m1 r" id="m1r"></div>
-</div>
 <div id="cur" aria-hidden="true"><span></span></div>
 <button class="btn-pill snd-dock" data-sound aria-pressed="false" aria-label="Sound on or off">
   <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>Sound</button>
@@ -784,7 +755,42 @@ footer{background:var(--surface);padding:clamp(50px,8vh,90px) var(--gut) 26px;po
   </div>
 </section>
 
-<div class="scene-gap" aria-hidden="true"></div>
+<!-- ══════════ MAPPA ══════════ -->
+<section class="map-track" id="mapTrack">
+  <div class="map-stage">
+
+    <div class="map-card">
+      <span class="eyebrow">02 — Find us</span>
+      <div id="dests"></div>
+    </div>
+
+    <div class="map-wrap">
+      <svg id="map" viewBox="0 0 560 940" fill="none" aria-label="Mappa di Phuket">
+        <!-- gView è la camera: scala e trasla. I punti stanno fuori, così
+             etichette e pallini non si ingrandiscono con lo zoom. -->
+        <g id="gView">
+          <g id="gLand"></g>
+          <g id="gGrid"></g>
+          <g id="gLegs"></g>
+        </g>
+        <!-- i segnaposto per ultimi: le etichette stanno sopra a tutto -->
+        <g id="gTrav"></g>
+        <g id="gPts"></g>
+      </svg>
+    </div>
+
+    <div class="finale" id="finale">
+      <p class="a">Relax.</p>
+      <p class="b">You can go anywhere.</p>
+    </div>
+
+    <div class="hud">
+      <span class="mono" id="hudA">URBY</span>
+      <div class="bar"><i id="hudBar"></i></div>
+      <span class="mono" id="hudB">Everywhere</span>
+    </div>
+  </div>
+</section>
 
 <!-- ══════════ ROOMS — horizontal takeover ══════════ -->
 <section class="rooms-track" id="rooms">
@@ -793,7 +799,7 @@ footer{background:var(--surface);padding:clamp(50px,8vh,90px) var(--gut) 26px;po
 
       <article class="slide intro">
         <div>
-          <span class="eyebrow">02 — Rooms</span>
+          <span class="eyebrow">03 — Rooms</span>
           <h2 class="display" data-html="roomsTitle" style="margin:18px 0 14px">Eleven<br>rooms,<br><em class="i" style="text-transform:none">no two alike</em></h2>
           <p class="body" style="max-width:34ch;margin:0 auto">Keep scrolling — the rooms move sideways.</p>
         </div>
@@ -862,7 +868,7 @@ footer{background:var(--surface);padding:clamp(50px,8vh,90px) var(--gut) 26px;po
 
 <!-- ══════════ KITCHEN ══════════ -->
 <section class="sec tint pad" id="kitchen">
-  <div class="head"><span class="eyebrow">03 — Kitchen</span><span class="mono">07:00 — 23:00, seven days</span></div>
+  <div class="head"><span class="eyebrow">04 — Kitchen</span><span class="mono">07:00 — 23:00, seven days</span></div>
   <div class="kit">
     <div>
       <h2 class="h2"><span class="up"><span>Everyday plates,</span></span><span class="up"><span>cooked in house.</span></span></h2>
@@ -916,49 +922,12 @@ footer{background:var(--surface);padding:clamp(50px,8vh,90px) var(--gut) 26px;po
 <section class="sec bands" id="look">
   <div class="pad" style="padding-top:0;padding-bottom:clamp(30px,5vh,60px)">
     <div class="head" style="margin-bottom:0">
-      <span class="eyebrow">04 — Look around</span>
+      <span class="eyebrow">05 — Look around</span>
       <span class="mono">Crafted origins / Everyday plates / Life in motion</span>
     </div>
   </div>
   <div class="band" id="bandA"></div>
   <div class="band" id="bandB"></div>
-</section>
-
-<!-- ══════════ MAPPA ══════════ -->
-<section class="map-track" id="mapTrack">
-  <div class="map-stage">
-
-    <div class="map-card">
-      <span class="eyebrow">05 — Find us</span>
-      <div id="dests"></div>
-    </div>
-
-    <div class="map-wrap">
-      <svg id="map" viewBox="0 0 560 940" fill="none" aria-label="Mappa di Phuket">
-        <!-- gView è la camera: scala e trasla. I punti stanno fuori, così
-             etichette e pallini non si ingrandiscono con lo zoom. -->
-        <g id="gView">
-          <g id="gLand"></g>
-          <g id="gGrid"></g>
-          <g id="gLegs"></g>
-        </g>
-        <!-- i segnaposto per ultimi: le etichette stanno sopra a tutto -->
-        <g id="gTrav"></g>
-        <g id="gPts"></g>
-      </svg>
-    </div>
-
-    <div class="finale" id="finale">
-      <p class="a">Relax.</p>
-      <p class="b">You can go anywhere.</p>
-    </div>
-
-    <div class="hud">
-      <span class="mono" id="hudA">URBY</span>
-      <div class="bar"><i id="hudBar"></i></div>
-      <span class="mono" id="hudB">Everywhere</span>
-    </div>
-  </div>
 </section>
 
 <!-- ══════════ VISIT ══════════ -->
@@ -1359,209 +1328,6 @@ function paintFields(){
 const MQ=["In common","Casual refinement","House made","Neighbourhood escape"];
 $("#marqRow").innerHTML=[...MQ,...MQ,...MQ,...MQ].map(t=>`<span>${t}</span>`).join("");
 
-/* ══════════ the canopy: procedural tropical leaves ══════════ */
-const GREENS=["#22371F","#2E4A2B","#3C6238","#4E7A45","#658F55","#7DA265"];
-const ACCENT=["#C88055","#A8622F","#CBB19A","#8FA36B"];
-function centerX(t,L,bend){return bend*L*Math.sin(Math.PI*t*.92)*.34;}
-function halfW(t,L,W,lobes,depth,waist){
-  let hw=W*Math.pow(Math.sin(Math.PI*Math.pow(t,waist)),.92);
-  if(lobes>0)hw*=1-depth*Math.pow(Math.abs(Math.sin(lobes*Math.PI*t)),8);
-  return hw;
-}
-function leafPath(L,W,lobes,depth,bend,waist){
-  const N=140,R=[],Lf=[];
-  for(let i=0;i<=N;i++){
-    const t=i/N,cx=centerX(t,L,bend),hw=halfW(t,L,W,lobes,depth,waist);
-    R.push([cx+hw,t*L]);Lf.push([cx-hw,t*L]);
-  }
-  return "M"+R.map(p=>p[0].toFixed(1)+","+p[1].toFixed(1)).join("L")
-        +"L"+Lf.reverse().map(p=>p[0].toFixed(1)+","+p[1].toFixed(1)).join("L")+"Z";
-}
-/* fenestrature: fessure vere che bucano la lamina (fill-rule evenodd) */
-function slits(L,W,bend,waist,n,r){
-  let d="";
-  for(let k=0;k<n;k++){
-    const t=.16+(k/(n-1))*.66,side=k%2?1:-1;
-    const cx=centerX(t,L,bend),hw=halfW(t,L,W,0,0,waist);
-    if(hw<8)continue;
-    const ax=cx+side*hw*.13,ay=t*L;
-    const bx=cx+side*hw*(.94+r()*.12),by=t*L+L*(.05+r()*.02);
-    const dx=bx-ax,dy=by-ay,len=Math.hypot(dx,dy)||1;
-    const nx=-dy/len,ny=dx/len,th=L*(.024+r()*.012);
-    const P=(x,y)=>x.toFixed(1)+","+y.toFixed(1);
-    d+="M"+P(ax+nx*th*.35,ay+ny*th*.35)
-      +"L"+P(bx+nx*th*.5,by+ny*th*.5)
-      +"L"+P(bx+dx/len*th*.5,by+dy/len*th*.5)
-      +"L"+P(bx-nx*th*.5,by-ny*th*.5)
-      +"L"+P(ax-nx*th*.35,ay-ny*th*.35)
-      +"L"+P(ax-dx/len*th*.3,ay-dy/len*th*.3)+"Z";
-  }
-  return d;
-}
-function blade(cfg,r){
-  const {L,W,lobes,depth,bend,waist,fenestra,fan}=cfg;
-  if(fan){                                   /* palma a ventaglio */
-    let d="";
-    const segs=9;
-    for(let i=0;i<segs;i++){
-      const a=(-1+2*i/(segs-1))*.72;
-      const li=L*(.72+.28*Math.cos(a*1.15));
-      const seg=leafPath(li,W*.3,0,0,bend*.4,.44);
-      d+=seg.replace(/([-\d.]+),([-\d.]+)/g,(m,x,y)=>{
-        const X=+x,Y=+y;
-        return (X*Math.cos(a)-Y*Math.sin(a)).toFixed(1)+","+(X*Math.sin(a)+Y*Math.cos(a)).toFixed(1);
-      });
-    }
-    return d;
-  }
-  let d=leafPath(L,W,lobes,depth,bend,waist);
-  if(fenestra)d+=slits(L,W,bend,waist,fenestra,r);
-  return d;
-}
-function leafNode(cfg,r){
-  const {L,W,lobes,depth,bend,waist,stem,fill,dark,fan,fenestra}=cfg;
-  const d=blade(cfg,r);
-  /* nervatura centrale che segue davvero la lamina */
-  const rib=[];
-  for(let i=0;i<=24;i++){const t=i/24*.94;rib.push(centerX(t,L,bend).toFixed(1)+","+(t*L).toFixed(1));}
-  const veins=[];
-  if(!fan)for(let k=1;k<=6;k++){
-    const t=.16+k*.11;
-    const cx=centerX(t,L,bend),hw=halfW(t,L,W,lobes,depth,waist)*.66;
-    if(hw<3)continue;
-    veins.push(`<path d="M${cx.toFixed(1)},${(t*L).toFixed(1)}L${(cx+hw).toFixed(1)},${((t+.1)*L).toFixed(1)}"/>`,
-               `<path d="M${cx.toFixed(1)},${(t*L).toFixed(1)}L${(cx-hw).toFixed(1)},${((t+.1)*L).toFixed(1)}"/>`);
-  }
-  return `<g transform="translate(${(cfg.x||0).toFixed(0)},${(cfg.y||0).toFixed(0)}) rotate(${(cfg.rot||0).toFixed(1)})">
-      <path d="M0,0 C${((r()-.5)*26).toFixed(1)},${(stem*.42).toFixed(0)} ${(bend*22).toFixed(1)},${(stem*.72).toFixed(0)} ${(bend*10).toFixed(1)},${stem}"
-        stroke="${dark}" stroke-width="${(1.4+W*.008).toFixed(1)}" stroke-linecap="round" opacity=".8"/>
-      <g transform="translate(${(bend*10).toFixed(1)},${stem})">
-        ${fenestra?"":`<path d="${d}" fill="${dark}" fill-rule="evenodd" transform="translate(3,4)" opacity=".3"/>`}
-        <path d="${d}" fill="${fill}" fill-rule="evenodd"/>
-        <g stroke="${dark}" stroke-width="1" opacity=".16" stroke-linecap="round" fill="none">
-          <path d="M${rib.join("L")}"/>
-          ${veins.join("")}
-        </g>
-      </g>
-    </g>`;
-}
-const LEAF_KINDS=[
-  {k:"monstera",lobes:0,depth:0,waist:.5,fenestra:7,wide:1.4},
-  {k:"fern",    lobes:13,depth:.94,waist:.5,wide:.62},
-  {k:"banana",  lobes:0, depth:0, waist:.7,wide:1.05},
-  {k:"palm",    fan:1,   lobes:0,depth:0,waist:.5,wide:.9},
-  {k:"rubber",  lobes:0, depth:0, waist:.5,wide:.9}
-];
-const LAYER={
-  1:{cl:7,per:[12,16],pal:["#1C2E1A","#22371F","#2A4322"],L:[140,250],w:[.36,.62],stem:[16,50]},
-  2:{cl:8,per:[12,17],pal:["#2E4A2B","#375A32","#3F6A3A"],L:[100,185],w:[.34,.58],stem:[14,42]},
-  3:{cl:9,per:[12,17],pal:["#5C8050","#688F58","#77996A"],L:[74,140],w:[.32,.54],stem:[10,30]}
-};
-const VW=820,VH=1200;
-function bush(layer,seed){
-  const cfg=LAYER[layer],r=rng(seed);
-  const items=[];
-  for(let c=0;c<cfg.cl;c++){
-    const cy=-140+((c+.5)/cfg.cl)*(VH+280)+(r()-.5)*180;
-    const cx=-150+Math.pow(r(),1.4)*400;          /* i cespugli nascono dal bordo */
-    const per=cfg.per[0]+Math.floor(r()*(cfg.per[1]-cfg.per[0]));
-    for(let i=0;i<per;i++){
-      const spread=Math.pow(r(),1.35);            /* fitto al centro del cespuglio */
-      const ang=r()*Math.PI*2;
-      const x=cx+Math.cos(ang)*spread*300+spread*90;
-      const y=cy+Math.sin(ang)*spread*190;
-      const kind=LEAF_KINDS[Math.floor(r()*LEAF_KINDS.length)];
-      const fade=1-Math.max(0,x/VW)*.5;
-      const L=(cfg.L[0]+r()*(cfg.L[1]-cfg.L[0]))*fade;
-      const W=L*(cfg.w[0]+r()*(cfg.w[1]-cfg.w[0]))*.5*(kind.wide||1)*(kind.k==="fern"?.6:1);
-      items.push({d:x,cfg:{L,W,lobes:kind.lobes,depth:kind.depth,waist:kind.waist,
-        fenestra:kind.fenestra,fan:kind.fan,bend:(r()-.5)*1.4,
-        stem:cfg.stem[0]+r()*(cfg.stem[1]-cfg.stem[0]),
-        fill:cfg.pal[Math.floor(r()*cfg.pal.length)],
-        dark:LAYER[Math.max(1,layer-1)].pal[0],
-        x,y,rot:-100+(r()-.5)*100},r});
-    }
-  }
-  items.sort((a,b)=>b.d-a.d);                     /* le più interne dietro */
-  return `<svg viewBox="0 0 ${VW} ${VH}" fill="none" xmlns="http://www.w3.org/2000/svg"
-    preserveAspectRatio="xMinYMid slice">${items.map(it=>leafNode(it.cfg,it.r)).join("")}</svg>`;
-}
-const masses=[];
-function buildJungle(){
-  [["m1",1,101],["m2",2,202],["m3",3,303]].forEach(([cls,layer,seed])=>{
-    /* stesso seme per i due lati: con lo scaleX(-1) sulla destra il sipario
-       si chiude perfettamente simmetrico, invece di sembrare due cespugli
-       diversi orientati per sbaglio */
-    const svgL=bush(layer,seed),svgR=svgL;
-    const l=$("#"+cls+"l"),rr=$("#"+cls+"r");
-    if(!l||!rr)return;
-    l.innerHTML=svgL;rr.innerHTML=svgR;
-    const lift=layer===1?-7:layer===2?-4:-1.5;   /* respiro verticale a metà traversata */
-    const lag=layer===1?0:layer===2?-.06:-.11;   /* gli strati dietro restano indietro */
-    const cover=layer===1?.74:layer===2?.66:.58; /* quanto schermo deve coprire da solo */
-    masses.push({el:l,dir:-1,lift,lag,cover,w:0,ph:masses.length*1.13});
-    masses.push({el:rr,dir:1,lift,lag,cover,w:0,ph:masses.length*1.13});
-  });
-}
-buildJungle();
-
-/* Ogni massa deve coprire da sola almeno `cover` della larghezza schermo, altrimenti
-   su monitor larghi il sipario non si chiude. La larghezza naturale dell'SVG dipende
-   dall'altezza della finestra, quindi la misuro e, se non basta, cresco la massa in
-   altezza: l'aspetto resta, e restando una modifica di layout (non un transform) il
-   blur degli strati dietro non va rifatto a ogni frame. */
-function sizeMasses(){
-  masses.forEach(m=>{
-    m.el.style.height="152%";m.el.style.top="-26%";
-    const nat=m.el.offsetWidth||1;
-    const k=Math.max(1,innerWidth*m.cover/nat);
-    const h=152*k;
-    m.el.style.height=h+"%";m.el.style.top=((100-h)/2)+"%";
-    m.w=nat*k;
-  });
-}
-sizeMasses();
-
-/* La traversata: p=0 tutte fuori campo dal proprio lato, p=.5 chiuse al centro,
-   p=1 uscite dal lato OPPOSTO. Monotòna — nessun rimbalzo. */
-function massX(m,p){
-  const V=innerWidth,W=m.w,L=m.dir<0;
-  const k0=L?-W:V;                   /* fuori campo dal proprio lato */
-  const k1=L?V*.72-W:V*.28;          /* chiuso: sconfina abbondantemente oltre il centro */
-  const k2=L?V:-W;                   /* uscita dal lato opposto */
-  return p<=.5?k0+(k1-k0)*(p/.5):k1+(k2-k1)*((p-.5)/.5);
-}
-
-/* ══════════ il sipario: una animazione sola, non legata allo scroll ══════════
-   Lo scroll la fa partire, poi si svolge per intero da sé: chiude sulla scena 1
-   (che viene coperta dalle foglie, non fatta sparire), scambia la scena dietro
-   al buio, e riapre. Durante quei secondi lo scroll è fermo. */
-const CURT={DUR:3000,playing:false,armed:true,t0:0,e:0,p0:0,swapped:false,shown:false,
-            holdY:0,back:0};
-const easeIO=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
-/* frangia permanente ai lati: disattivata. Per riattivarla, .05 / .5 */
-const IDLE=0,IDLE_OP=0;
-function curtainPA(e,p0){              /* progressione della traversata nel tempo */
-  if(e<.40)return p0+(.5-p0)*easeIO(e/.40);      /* chiude, riprendendo da dov'era */
-  if(e<.56)return .5+.03*((e-.40)/.16);          /* tiene, con un filo di deriva */
-  return .53+.47*easeIO((e-.56)/.44);            /* riapre ed esce */
-}
-function curtainVeil(e){               /* il velo entra solo a foglie quasi chiuse */
-  return sstep(clamp((e-.30)/.10,0,1))*(1-sstep(clamp((e-.58)/.10,0,1)));
-}
-function startCurtain(p0){
-  if(RED||CURT.playing){document.body.classList.add("scene2");return;}
-  CURT.playing=true;CURT.t0=performance.now();CURT.e=0;CURT.p0=p0||0;
-  CURT.swapped=false;CURT.holdY=SS.on?SS.c:scrollY;
-  sfx("whoosh",true);
-}
-/* durante l'animazione lo scroll non deve muovere niente */
-addEventListener("wheel",e=>{if(CURT.playing)e.preventDefault();},{passive:false});
-addEventListener("touchmove",e=>{if(CURT.playing)e.preventDefault();},{passive:false});
-addEventListener("keydown",e=>{
-  if(CURT.playing&&/^(Arrow|Page|Home|End|Space| )/.test(e.key))e.preventDefault();
-},{passive:false});
-
 /* ══════════ smooth scroll ══════════ */
 const SS={t:scrollY,c:scrollY,on:!TOUCH&&!RED&&!SAFARI};
 const limit=()=>document.documentElement.scrollHeight-innerHeight;
@@ -1578,9 +1344,6 @@ if(SS.on){
 function goTo(el){
   const y=clamp(el.getBoundingClientRect().top+(SS.on?SS.c:scrollY)-64,0,limit());
   /* un salto da menu non deve innescare il sipario a metà navigazione */
-  CURT.armed=false;
-  const roomsY=roomsTrack.getBoundingClientRect().top+(SS.on?SS.c:scrollY);
-  if(y>roomsY-innerHeight){CURT.shown=true;document.body.classList.add("scene2");}
   if(SS.on){SS.t=y;}else{scrollTo({top:y,behavior:"smooth"});}
 }
 $$('a[href^="#"]').forEach(a=>a.addEventListener("click",e=>{
@@ -2480,9 +2243,7 @@ function tick(){
   /* rooms: vertical scroll drives a horizontal room tour */
   const rr=roomsTrack.getBoundingClientRect();
   if(rr.bottom>-200&&rr.top<innerHeight+200){
-    const lead=innerHeight*.5;                   /* respiro dopo il reveal */
-    if(rr.top<-innerHeight*.2&&!CURT.shown){     /* rete di sicurezza per la scena 2 */
-      CURT.shown=true;document.body.classList.add("scene2");}
+    const lead=0;
     const p=clamp((-rr.top-lead)/Math.max(1,rr.height-innerHeight-lead),0,1);
     const max=rail.scrollWidth-innerWidth;
     rail.style.transform=`translateX(${-p*max}px)`;
@@ -2501,73 +2262,6 @@ function tick(){
   if(rib.bottom>0&&rib.top<innerHeight){
     const p=clamp((innerHeight-rib.top)/(innerHeight+rib.height),0,1);
     ribbon.style.transform=`translateX(${(0.5-p)*Math.max(0,ribbon.scrollWidth-innerWidth)*1.6}px)`;
-  }
-
-  /* ══ il fogliame come sipario ══
-     Finita "la casa" il sipario si chiude sulla scena, poi si riapre sulla
-     camera 01 e svanisce del tutto: da lì in poi resta aperto. */
-  const fix=$("#canopyFix"),drape=$("#drape"),
-        house=$("#house"),creed=$("#common .rd");
-  if(fix&&masses.length){
-    const H=innerHeight,rt=roomsTrack.getBoundingClientRect();
-    const hr=house?house.getBoundingClientRect():null;
-
-    /* Innesco: si arma in alto, scatta quando finisce "01 — The house", cioè
-       quando spunta lo spazio sotto "Layan beach". Mai prima della fine del
-       loader, o un layout ancora acerbo lo brucerebbe. */
-    if(H<200||!hr){CURT.armed=true;}        /* finestra a zero: non bruciare l'innesco */
-    else if(hr.bottom>H*1.15)CURT.armed=true;
-    else if(CURT.armed&&!CURT.playing&&hr.bottom<=H&&document.body.classList.contains("ready")){
-      CURT.armed=false;
-      if(rt.top>H*.2)startCurtain(IDLE);
-      else document.body.classList.add("scene2");   /* passata di corsa: niente sipario */
-    }
-
-    let pA=-1,oA=0,veil=0;
-    if(CURT.playing){
-      CURT.e=clamp((performance.now()-CURT.t0)/CURT.DUR,0,1);
-      pA=curtainPA(CURT.e,CURT.p0);oA=1;veil=curtainVeil(CURT.e);
-      /* lo scambio di scena avviene al buio pieno, a foglie chiuse */
-      if(!CURT.swapped&&CURT.e>=.43){       /* dentro la finestra di sigillo pieno */
-        CURT.swapped=true;
-        CURT.holdY=clamp(rt.top+(SS.on?SS.c:scrollY)+H*.05,0,limit());
-        sfx("whoosh",false);
-      }
-      /* la scritta della scena 2 solo dopo il 60% di riapertura */
-      if(!CURT.shown&&pA>=.8){CURT.shown=true;document.body.classList.add("scene2");}
-      /* per tutta l'animazione la pagina non si muove */
-      if(SS.on){SS.t=SS.c=CURT.holdY;}
-      if(Math.abs(scrollY-CURT.holdY)>1)scrollTo(0,CURT.holdY);
-      if(CURT.e>=1){CURT.playing=false;CURT.back=performance.now();}
-    }
-    /* le scritte della casa non spariscono: sfumano, e più lentamente di quanto
-       il sipario si chiuda (foglie chiuse a e=.40, testo spento solo a e=.56) */
-    if(house){
-      if(CURT.playing)house.style.opacity=(1-sstep(clamp((CURT.e-.04)/.52,0,1))).toFixed(3);
-      else if(CURT.armed)house.style.opacity="";
-    }
-
-    /* fuori dall'animazione resta la frangia: dopo l'uscita rientra in dissolvenza,
-       così il salto dal lato opposto al proprio lato non si vede */
-    let p,op;
-    if(pA>=0){p=pA;op=oA;}
-    else{
-      const b=CURT.back?clamp((performance.now()-CURT.back)/900,0,1):1;
-      p=IDLE;op=IDLE_OP*b;
-    }
-    fix.style.opacity=op.toFixed(3);
-    const now=performance.now();
-    if(op>.003)masses.forEach(m=>{
-      const q=clamp(p+m.lag*Math.sin(p*Math.PI)*.5,0,1);   /* gli strati dietro sfilano dopo */
-      const brz=1-clamp((p-IDLE)/.12,0,1);                 /* l'ondeggio si spegne se si chiude */
-      const x=massX(m,q)-m.dir*Math.sin(now/2600+m.ph)*7*brz;
-      const y=Math.sin(q*Math.PI)*m.lift+Math.sin(now/3300+m.ph*1.3)*.55*brz;
-      m.el.style.transform=`translate3d(${x.toFixed(1)}px,${y.toFixed(2)}vh,0)`;
-    });
-    /* il velo entra solo a foglie ormai chiuse: la scena 1 va coperta dalle
-       foglie, non fatta sparire sotto una tinta piatta */
-    if(drape)drape.style.opacity=veil.toFixed(3);
-
   }
 
   /* gallery bands, opposite directions */
@@ -2590,7 +2284,7 @@ function tick(){
 }
 tick();
 
-addEventListener("resize",()=>{SS.t=clamp(SS.t,0,limit());frameBase();sizeMasses();});
+addEventListener("resize",()=>{SS.t=clamp(SS.t,0,limit());frameBase();misuraFrase();});
 const nl=(navigator.language||"en").slice(0,2).toLowerCase();
 applyLang(LANGS.indexOf(nl)>-1?nl:"en");
 })();
