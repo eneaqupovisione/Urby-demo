@@ -1,0 +1,24 @@
+/* URBY design tokens. Phone-first: every scene is one full screen; tablet and
+   desktop use the same scenes, wider. One deliberate look, no light/dark variants. */
+:root {
+  --ink: #1b1511;
+  --flour: #f7eddc;
+  --saffron: #f4b731;
+  --saffron-d: #e0a01c;
+  --chili: #c43b20;
+  --pin: #e8452a;
+  --clay: #7a2d17;
+  --flour-dim: #e2d5bf;
+  --display: 'Bricolage Grotesque', 'Helvetica Neue', Arial, sans-serif;
+  --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --mono: 'DM Mono', ui-monospace, Menlo, Consolas, monospace;
+  --gx: max(16px, env(safe-area-inset-left, 0px));
+  --gxr: max(16px, env(safe-area-inset-right, 0px));
+  color-scheme: light;
+}
+@media (min-width: 720px) {
+  :root { --gx: max(36px, env(safe-area-inset-left, 0px)); --gxr: max(36px, env(safe-area-inset-right, 0px)); }
+}
+@media (min-width: 1100px) {
+  :root { --gx: max(56px, env(safe-area-inset-left, 0px)); --gxr: max(56px, env(safe-area-inset-right, 0px)); }
+}

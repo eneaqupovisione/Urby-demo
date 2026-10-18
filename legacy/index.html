@@ -1,0 +1,2293 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="dinner">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>URBY — Neighbourhood hotel &amp; kitchen, Phuket</title>
+<meta name="description" content="A small hotel and an all-day kitchen in Thalang, Phuket. Casual refinement, house made, a neighbourhood escape — all in common.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Martian+Mono:wght@200;300;400&family=Inter+Tight:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   URBY — tokens
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --cream:#F2E3C3; --paper:#FBF3E2; --clay:#CBB19A;
+  --brick:#A85C38; --brick-deep:#7E4126; --terra:#C88055;
+  --sky:#BFD9E8; --pine:#243A2C; --cocoa:#4B3227; --ink:#241610;
+  --mono:"Martian Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --sans:"Inter Tight","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --gut:clamp(18px,4.6vw,68px);
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --slow:cubic-bezier(.16,1,.3,1);
+}
+html[data-mode="dinner"]{
+  --bg:#8F4C2C; --surface:#733C1E; --text:#FBF3E2;
+  --dim:rgba(248,236,211,.84); --faint:rgba(242,227,195,.66);
+  --line:rgba(242,227,195,.34); --veil:143,76,44;
+  --accent:#F2E3C3; --accent-on:#4B2A18; --spark:#FFC38A;
+  /* mappa */
+  --panel:rgba(31,17,10,.9); --sea:#1E120C; --land:#573C2C;
+  --coast:rgba(242,227,195,.62); --arc:#BFD9E8; --pin:#FFC38A;
+  --halo:rgba(24,14,9,.46);
+  /* dettagli chiari: il crema della modalità giorno usato come filo conduttore */
+  --detail:#F2E3C3; --hair:rgba(242,227,195,.5); --ghost:.22;
+}
+html[data-mode="daylight"]{
+  --bg:#F3E7D2; --surface:#E7D7BB; --text:#3A2115;
+  --dim:rgba(58,33,21,.68); --faint:rgba(58,33,21,.44);
+  --line:rgba(58,33,21,.2); --veil:243,231,210;
+  --accent:#8F4C2C; --accent-on:#FBF3E2; --spark:#7FB0CC;
+  /* mappa */
+  --panel:rgba(251,243,226,.94); --sea:#E2D2B4; --land:#C7AC91;
+  --coast:rgba(58,33,21,.46); --arc:#8F4C2C; --pin:#7E4126;
+  --halo:rgba(232,220,196,.62);
+  --detail:#8F4C2C; --hair:rgba(58,33,21,.34); --ghost:.13;
+}
+/* ── dettagli chiari: in modalità serale le finiture prendono il crema
+      della modalità giorno, così i filetti e le didascalie restano leggibili ── */
+html[data-mode="dinner"] .head{border-bottom-color:var(--hair)}
+html[data-mode="dinner"] .head .eyebrow,
+html[data-mode="dinner"] .head .mono,
+html[data-mode="dinner"] .slide .eyebrow,
+html[data-mode="dinner"] .rooms-hud .mono,
+html[data-mode="dinner"] .slide .visual .no,
+html[data-mode="dinner"] .gt figcaption,
+html[data-mode="dinner"] .dish .p{color:var(--detail)}
+html[data-mode="dinner"] .dish{border-top-color:var(--hair)}
+html[data-mode="dinner"] .slide .buy,
+html[data-mode="dinner"] .links a{border-color:var(--hair)}
+html[data-mode="dinner"] .slide .info li::before{background:var(--detail);opacity:.75}
+html[data-mode="dinner"] .rooms-hud .track{background:var(--hair)}
+html[data-mode="dinner"] .btn-pill{border-color:var(--hair)}
+html[data-mode="dinner"] .marq{border-color:var(--hair)}
+html[data-mode="dinner"] .ribbon{border-top-color:var(--hair)}
+html[data-mode="dinner"] .sc{color:var(--paper)}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--sans);font-weight:300;
+  font-size:16px;line-height:1.5;overflow-x:clip;
+  transition:background .8s var(--ease),color .8s var(--ease);
+}
+body.lock{overflow:hidden}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit;background:none;border:0}
+::selection{background:var(--accent);color:var(--accent-on)}
+:focus-visible{outline:1.5px solid var(--accent);outline-offset:4px}
+canvas{display:block}
+
+/* ── type ─────────────────────────────────────────────── */
+.eyebrow{font-family:var(--mono);font-size:9.5px;font-weight:300;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--faint)}
+.mono{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+.display{font-family:var(--sans);font-weight:200;letter-spacing:-.03em;line-height:.95;
+  font-size:clamp(40px,8.4vw,132px);text-transform:uppercase}
+.h2{font-family:var(--sans);font-weight:200;letter-spacing:-.025em;line-height:1.02;
+  font-size:clamp(30px,5.4vw,74px)}
+.h3{font-family:var(--sans);font-weight:300;font-size:clamp(20px,2.3vw,28px);
+  letter-spacing:-.01em;line-height:1.2}
+.body{font-size:15px;line-height:1.62;color:var(--dim)}
+.small{font-size:13px;line-height:1.6;color:var(--faint)}
+em.i{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:0}
+
+/* the wordmark: one letter, one typeface — "In Common" */
+.mark{display:inline-flex;align-items:baseline;line-height:.86;white-space:nowrap}
+.mark i{font-style:normal;display:inline-block;will-change:transform}
+.mark .l1{font-family:"Instrument Serif",Georgia,"Times New Roman",serif;letter-spacing:.05em}
+.mark .l2{font-family:"Inter Tight","Helvetica Neue",Arial,sans-serif;font-weight:400;letter-spacing:.09em}
+.mark .l3{font-family:"Martian Mono",ui-monospace,Menlo,monospace;font-weight:300;letter-spacing:.01em}
+.mark .l4{font-family:"Inter Tight","Helvetica Neue",Arial,sans-serif;font-weight:200}
+
+/* ── scripts: cirillico e CJK usano stack di sistema ──── */
+html[lang="ru"]{--mono:"Inter Tight",ui-monospace,Menlo,monospace;
+  --serif:Georgia,"Times New Roman",serif}
+html[lang="ko"]{--sans:"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  --mono:var(--sans);--serif:var(--sans)}
+html[lang="ja"]{--sans:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",system-ui,sans-serif;
+  --mono:var(--sans);--serif:var(--sans)}
+html[lang="zh"]{--sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+  --mono:var(--sans);--serif:var(--sans)}
+html[lang="ko"] .eyebrow,html[lang="ja"] .eyebrow,html[lang="zh"] .eyebrow,
+html[lang="ko"] .mono,html[lang="ja"] .mono,html[lang="zh"] .mono,
+html[lang="ko"] .f span,html[lang="ja"] .f span,html[lang="zh"] .f span,
+html[lang="ko"] .steps b,html[lang="ja"] .steps b,html[lang="zh"] .steps b{letter-spacing:.05em}
+html[lang="ru"] .eyebrow,html[lang="ru"] .mono{letter-spacing:.14em}
+html[lang="ko"] .display,html[lang="ja"] .display,html[lang="zh"] .display{letter-spacing:0;line-height:1.06}
+html[lang="ko"] .h2,html[lang="ja"] .h2,html[lang="zh"] .h2{letter-spacing:0;line-height:1.24}
+html[lang="ko"] .hero-lines p,html[lang="ja"] .hero-lines p,html[lang="zh"] .hero-lines p{letter-spacing:.1em}
+
+/* ── language switch ─────────────────────────────────── */
+.lang{position:relative}
+.langmenu{position:absolute;right:0;top:calc(100% + 8px);min-width:150px;
+  background:var(--bg);border:1px solid var(--line);padding:6px;
+  opacity:0;visibility:hidden;transform:translateY(-6px);
+  transition:opacity .35s var(--ease),transform .35s var(--slow),visibility .35s}
+.langmenu.on{opacity:1;visibility:visible;transform:none}
+.langmenu button{display:block;width:100%;text-align:left;padding:9px 12px;cursor:pointer;
+  font-size:13px;color:var(--dim);transition:background .3s,color .3s}
+.langmenu button:hover,.langmenu button[aria-current="true"]{background:var(--surface);color:var(--text)}
+.clock{color:var(--faint);margin-left:14px}
+@media(max-width:980px){.clock{display:none}}
+#sheet .langrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+#sheet .langrow button{font-size:13px;padding:8px 14px;border:1px solid var(--line);
+  border-radius:99px;cursor:pointer;color:var(--dim)}
+#sheet .langrow button[aria-current="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+
+/* ── film grain + global overlays ─────────────────────── */
+.grain{position:fixed;inset:-60%;z-index:400;pointer-events:none;opacity:.17;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:gr 5s steps(5) infinite}
+@keyframes gr{0%{transform:translate(0,0)}25%{transform:translate(-2%,3%)}
+  50%{transform:translate(3%,-2%)}75%{transform:translate(-3%,-3%)}100%{transform:translate(0,0)}}
+
+/* ── loader ───────────────────────────────────────────── */
+#load{position:fixed;inset:0;z-index:900;background:#6E3820;color:var(--paper);
+  display:grid;place-items:center;overflow:hidden}
+#load .words{position:relative;height:1.2em;font-family:var(--mono);font-size:clamp(11px,1.6vw,15px);
+  letter-spacing:.28em;text-transform:uppercase;text-align:center}
+#load .words span{position:absolute;inset:0;opacity:0;white-space:nowrap;
+  transform:translateY(8px);transition:opacity .5s,transform .5s}
+#load .words span.on{opacity:1;transform:none}
+#load .count{position:absolute;right:var(--gut);bottom:calc(var(--gut) - 6px);
+  font-family:var(--mono);font-size:clamp(38px,9vw,96px);font-weight:200;letter-spacing:-.04em;
+  line-height:1;color:rgba(252,248,236,.9)}
+#load .bar{position:absolute;left:var(--gut);right:var(--gut);bottom:var(--gut);height:1px;
+  background:rgba(252,248,236,.18)}
+#load .bar i{display:block;height:100%;width:0;background:var(--cream)}
+#load.out{transform:translateY(-101%);transition:transform 1.15s var(--slow)}
+
+/* ── cursor ───────────────────────────────────────────── */
+#cur{position:fixed;left:0;top:0;z-index:500;width:12px;height:12px;margin:-6px 0 0 -6px;
+  border-radius:50%;border:1px solid var(--text);pointer-events:none;
+  display:grid;place-items:center;transition:width .4s var(--slow),height .4s var(--slow),
+  margin .4s var(--slow),background .4s,border-color .4s,opacity .3s}
+#cur span{font-family:var(--mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--bg);opacity:0;transition:opacity .3s;white-space:nowrap}
+#cur.on{width:78px;height:78px;margin:-39px 0 0 -39px;background:var(--text);border-color:var(--text)}
+#cur.on span{opacity:1}
+@media(hover:none),(max-width:860px){#cur{display:none}}
+
+/* ── nav ──────────────────────────────────────────────── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;
+  justify-content:space-between;gap:14px;padding:12px var(--gut);
+  transform:translateY(-110%);transition:transform .7s var(--slow),background .6s,border-color .6s;
+  border-bottom:1px solid transparent}
+.nav.show{transform:none}
+.nav.solid{background:rgba(var(--veil),.72);backdrop-filter:blur(16px) saturate(1.2);
+  border-bottom-color:var(--line)}
+.nav .mark{font-size:18px}
+.nav .links{display:flex;gap:24px}
+.nav .links a{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--dim);position:relative;padding:3px 0}
+.nav .links a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;
+  background:var(--text);transform:scaleX(0);transform-origin:100% 50%;transition:transform .5s var(--slow)}
+.nav .links a:hover{color:var(--text)}
+.nav .links a:hover::after{transform:scaleX(1);transform-origin:0 50%}
+.nav .right{display:flex;align-items:center;gap:10px}
+.btn-pill{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  border:1px solid var(--line);border-radius:99px;padding:10px 17px;cursor:pointer;
+  transition:background .45s var(--ease),color .45s var(--ease),border-color .45s}
+.btn-pill:hover{background:var(--text);color:var(--bg);border-color:var(--text)}
+.btn-pill.solid{background:var(--accent);border-color:var(--accent);color:var(--accent-on)}
+.btn-pill.solid:hover{background:var(--text);border-color:var(--text);color:var(--bg)}
+/* pill del suono: tre barrette che si muovono solo quando l'audio è acceso */
+[data-sound] .eq{display:inline-flex;align-items:flex-end;gap:2px;height:9px;
+  margin-right:8px;vertical-align:-1px}
+[data-sound] .eq i{display:block;width:1.5px;height:2px;background:currentColor;
+  transition:height .35s var(--ease)}
+[data-sound][aria-pressed="true"] .eq i{animation:eqb .95s var(--ease) infinite}
+[data-sound][aria-pressed="true"] .eq i:nth-child(2){animation-delay:.16s}
+[data-sound][aria-pressed="true"] .eq i:nth-child(3){animation-delay:.32s}
+@keyframes eqb{0%,100%{height:2px}50%{height:9px}}
+/* comando fisso: la nav è nascosta per tutto l'hero, e senza un gesto
+   dell'utente il browser non fa partire nessun suono. Deve stare sempre lì. */
+.snd-dock{position:fixed;z-index:305;right:var(--gut);bottom:clamp(64px,11vh,96px);
+  background:rgba(var(--veil),.6);backdrop-filter:blur(12px) saturate(1.2);
+  opacity:0;transform:translateY(10px);pointer-events:none;
+  transition:opacity .8s var(--ease),transform .8s var(--slow),
+    background .5s,color .45s,border-color .45s}
+body.ready .snd-dock{opacity:1;transform:none;pointer-events:auto}
+body.lock .snd-dock{opacity:0;pointer-events:none}
+#mode .d{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:7px;
+  background:var(--spark);box-shadow:0 0 9px var(--spark);vertical-align:middle}
+
+.burger{display:none;width:36px;height:36px;border:1px solid var(--line);border-radius:99px;
+  position:relative;cursor:pointer}
+.burger i{position:absolute;left:10px;right:10px;height:1px;background:currentColor;transition:.4s var(--slow)}
+.burger i:nth-child(1){top:15px}.burger i:nth-child(2){top:20px}
+body.menu .burger i:nth-child(1){top:17.5px;transform:rotate(45deg)}
+body.menu .burger i:nth-child(2){top:17.5px;transform:rotate(-45deg)}
+@media(max-width:980px){.nav .links{display:none}.burger{display:block}.nav .right .hide-s{display:none}}
+
+#sheet{position:fixed;inset:0;z-index:290;background:var(--bg);padding:0 var(--gut);
+  display:flex;flex-direction:column;justify-content:center;gap:2px;
+  clip-path:inset(0 0 100% 0);pointer-events:none;transition:clip-path .8s var(--slow)}
+body.menu #sheet{clip-path:inset(0 0 0 0);pointer-events:auto}
+#sheet a{font-family:var(--sans);font-weight:200;font-size:clamp(32px,10vw,58px);
+  letter-spacing:-.03em;padding:5px 0;opacity:0;transform:translateY(20px);
+  transition:opacity .6s var(--slow),transform .6s var(--slow)}
+body.menu #sheet a{opacity:1;transform:none}
+body.menu #sheet a:nth-child(2){transition-delay:.06s}
+body.menu #sheet a:nth-child(3){transition-delay:.12s}
+body.menu #sheet a:nth-child(4){transition-delay:.18s}
+body.menu #sheet a:nth-child(5){transition-delay:.24s}
+#sheet .sf{margin-top:30px;display:flex;gap:10px;flex-wrap:wrap}
+
+/* ═══════════════ HERO ═══════════════ */
+.hero-track{height:280vh;position:relative}
+.stage{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center;
+  background:
+   radial-gradient(70% 45% at 18% 12%,rgba(255,214,168,.14),transparent 70%),
+   radial-gradient(60% 55% at 88% 82%,rgba(58,24,10,.28),transparent 72%)}
+.frame{position:absolute;width:min(46vw,520px);height:min(62vh,600px);overflow:hidden;
+  will-change:width,height;background:#6FB2E4;box-shadow:0 0 0 1px rgba(60,30,16,.35),
+  0 30px 80px rgba(50,22,10,.45)}
+@media(max-width:860px){.frame{width:74vw;height:56vh}}
+.frame .inner{position:absolute;inset:0;background-size:cover;background-position:center}
+.frame .tint{position:absolute;inset:0;pointer-events:none;background:
+  radial-gradient(120% 90% at 50% 40%,transparent 46%,rgba(78,38,18,.4) 100%)}
+.frame .clouds{position:absolute;left:0;right:0;background-repeat:repeat-x;
+  will-change:background-position;pointer-events:none}
+.frame .c1{top:8%;height:42%;background-size:auto 100%;opacity:.62}
+.frame .c2{top:47%;height:26%;background-size:auto 100%;opacity:.34}
+.frame .panes{position:absolute;inset:0;pointer-events:none}
+.frame .panes i{position:absolute;background:rgba(62,32,16,.5);
+  box-shadow:0 1px 0 rgba(255,235,205,.25)}
+.frame .panes i:nth-child(1){left:33.3%;top:0;bottom:0;width:2px}
+.frame .panes i:nth-child(2){left:66.6%;top:0;bottom:0;width:2px}
+.frame .panes i:nth-child(3){top:47%;left:0;right:0;height:2px}
+.hero-mark{position:relative;z-index:3;font-size:clamp(52px,15.5vw,220px);
+  color:var(--paper);mix-blend-mode:difference;will-change:transform;pointer-events:none}
+.hero-lines{position:absolute;z-index:4;bottom:clamp(90px,16vh,150px);left:0;right:0;
+  text-align:center;color:var(--paper);mix-blend-mode:difference;pointer-events:none}
+.hero-lines p{font-family:var(--mono);font-size:clamp(8.5px,1.05vw,11px);letter-spacing:.34em;
+  text-transform:uppercase;overflow:hidden}
+.hero-lines p span{display:inline-block;transform:translateY(110%)}
+.hero-foot{position:absolute;z-index:5;left:var(--gut);right:var(--gut);
+  bottom:clamp(20px,4vh,38px);display:flex;justify-content:space-between;align-items:flex-end;
+  gap:18px;color:var(--paper);mix-blend-mode:difference}
+.hero-foot .body{color:rgba(252,248,236,.75);max-width:30ch;font-size:13.5px}
+.sc{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:9px;
+  letter-spacing:.2em;text-transform:uppercase}
+.sc .r{width:40px;height:1px;background:currentColor;opacity:.35;overflow:hidden;position:relative}
+.sc .r::after{content:"";position:absolute;inset:0;background:currentColor;animation:rail 2.2s var(--ease) infinite}
+@keyframes rail{0%{transform:translateX(-100%)}55%,100%{transform:translateX(100%)}}
+@media(max-width:700px){.hero-foot .body{display:none}}
+
+/* ═══════════════ marquee ═══════════════ */
+.marq{overflow:hidden;padding:26px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:var(--bg);position:relative;z-index:2}
+.marq .row{display:flex;gap:34px;width:max-content;will-change:transform}
+.marq span{font-family:var(--sans);font-weight:200;font-size:clamp(26px,4.4vw,58px);
+  letter-spacing:-.02em;text-transform:uppercase;white-space:nowrap;display:flex;align-items:center;gap:34px}
+.marq span::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--accent);display:block}
+
+/* ═══════════════ sections ═══════════════ */
+.sec{position:relative;z-index:2;background:var(--bg)}
+.sec.tint{background:var(--surface)}
+.pad{padding:clamp(70px,12vh,150px) var(--gut)}
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:20px;
+  padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:clamp(34px,6vh,70px)}
+
+/* word-by-word reveal */
+.rd{display:inline-block}
+.rd b{font-weight:inherit;display:inline-block;opacity:var(--ghost,.13);transition:opacity .35s linear;will-change:opacity}
+.rd b.lit{opacity:1}
+
+/* line reveal */
+.up{overflow:hidden;display:block}
+.up>*{display:block;transform:translateY(105%);transition:transform 1.05s var(--slow)}
+.in .up>*,.up.in>*{transform:none}
+
+/* floating parallax cards around the manifesto */
+.manifesto{position:relative;padding-block:clamp(60px,14vh,170px)}
+.manifesto .txt{position:relative;z-index:3;max-width:17ch;margin:0 auto;text-align:center}
+.float{position:absolute;width:clamp(110px,15vw,230px);aspect-ratio:3/4;background-size:cover;
+  background-position:center;will-change:transform;z-index:1;filter:saturate(1.05)}
+.float.f1{left:2%;top:6%}
+.float.f2{right:4%;top:22%;aspect-ratio:1/1;width:clamp(90px,11vw,180px)}
+.float.f3{left:9%;bottom:4%;aspect-ratio:4/5;width:clamp(100px,13vw,200px)}
+.float.f4{right:9%;bottom:10%;aspect-ratio:3/4}
+@media(max-width:860px){.float{opacity:.5}.float.f2,.float.f4{display:none}}
+
+/* ═══════════════ rooms — horizontal takeover ═══════════════ */
+.rooms-track{height:520vh;position:relative}
+.rooms-stage{position:sticky;top:0;height:100svh;overflow:hidden;background:var(--surface)}
+.rooms-rail{display:flex;height:100%;width:max-content;will-change:transform}
+.slide{width:100vw;height:100svh;position:relative;display:grid;
+  grid-template-columns:1fr 1fr;align-items:center;gap:clamp(20px,5vw,70px);
+  padding:clamp(70px,11vh,130px) var(--gut) clamp(60px,10vh,110px)}
+.slide .visual{position:relative;height:100%;overflow:hidden}
+.slide .visual .ph{position:absolute;inset:-8% -12%;background-size:cover;background-position:center;
+  will-change:transform}
+.slide .visual .no{position:absolute;left:16px;bottom:12px;z-index:2;font-family:var(--mono);
+  font-size:10px;letter-spacing:.2em;color:var(--paper);mix-blend-mode:difference}
+.slide .info{display:flex;flex-direction:column;gap:clamp(12px,2vh,22px);max-width:44ch}
+.slide .info ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.slide .info li{font-size:14px;color:var(--dim);display:flex;gap:11px;align-items:flex-start}
+.slide .info li::before{content:"";width:14px;height:1px;background:var(--faint);margin-top:11px;flex:0 0 auto}
+.slide .buy{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;
+  border-top:1px solid var(--line);padding-top:16px;margin-top:6px}
+.slide .buy b{font-family:var(--sans);font-weight:200;font-size:clamp(26px,3.4vw,42px);letter-spacing:-.02em}
+.slide.intro{grid-template-columns:1fr;place-items:center;text-align:center}
+@media(max-width:900px){
+  .slide{grid-template-columns:1fr;grid-template-rows:1fr auto;padding-top:clamp(60px,9vh,90px)}
+  .slide .visual{min-height:26vh}
+  .slide .info{max-width:none;gap:10px}
+  .slide .info ul{display:none}
+}
+.rooms-hud{position:absolute;left:var(--gut);right:var(--gut);bottom:clamp(16px,3vh,28px);
+  z-index:5;display:flex;align-items:center;gap:16px;pointer-events:none}
+.rooms-hud .track{flex:1;height:1px;background:var(--line);position:relative;overflow:hidden}
+.rooms-hud .track i{position:absolute;inset:0;background:var(--text);transform-origin:0 50%;transform:scaleX(0)}
+
+/* ═══════════════ kitchen ═══════════════ */
+.kit{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(24px,5vw,80px);align-items:start}
+@media(max-width:900px){.kit{grid-template-columns:1fr}}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.tabs button{border:1px solid var(--line);border-radius:99px;padding:9px 15px;cursor:pointer;
+  font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);
+  transition:.4s var(--ease)}
+.tabs button[aria-selected="true"]{background:var(--text);border-color:var(--text);color:var(--bg)}
+.dish{display:grid;grid-template-columns:1fr auto;gap:4px 20px;padding:16px 2px;
+  border-top:1px solid var(--line);align-items:baseline;cursor:default;position:relative;
+  transition:padding-left .5s var(--slow),color .4s}
+.dish:hover{padding-left:14px}
+.dish h4{font-family:var(--sans);font-weight:300;font-size:clamp(16px,1.7vw,21px);letter-spacing:-.01em}
+.dish .p{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--dim)}
+.dish p{grid-column:1/2;font-size:12.5px;color:var(--faint);line-height:1.5}
+.dish .tg{font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--faint);display:block;margin-bottom:4px}
+#peek{position:fixed;z-index:250;width:min(26vw,300px);aspect-ratio:4/5;pointer-events:none;
+  background-size:cover;background-position:center;opacity:0;transform:scale(.85);
+  transition:opacity .45s var(--ease),transform .7s var(--slow);will-change:transform;left:0;top:0}
+#peek.on{opacity:1;transform:scale(1)}
+@media(max-width:900px){#peek{display:none}}
+
+/* booking card */
+.card{border:1px solid var(--line);padding:clamp(20px,2.6vw,30px);background:var(--bg)}
+.f{display:flex;flex-direction:column;gap:5px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.f span{font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+.f input,.f select,.f textarea{width:100%;font-size:15px;font-weight:300}
+.f textarea{resize:none;font-family:var(--sans);min-height:34px}
+.f input::-webkit-calendar-picker-indicator{opacity:.45;cursor:pointer}
+html[data-mode="dinner"] .f input::-webkit-calendar-picker-indicator{filter:invert(1)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.btn{width:100%;padding:15px;background:var(--accent);color:var(--accent-on);cursor:pointer;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  transition:background .45s var(--ease),color .45s}
+.btn:hover{background:var(--text);color:var(--bg)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+.btn.ghost:hover{background:var(--text);color:var(--bg)}
+.msg{font-size:12px;color:var(--faint);margin-top:12px;line-height:1.5}
+.msg.err{color:#E58C6E}.msg.ok{color:var(--accent)}
+
+/* ═══════════════ hours ribbon ═══════════════ */
+.ribbon{overflow:hidden;padding:clamp(50px,8vh,90px) 0;border-top:1px solid var(--line)}
+.ribbon .r{display:flex;gap:clamp(30px,5vw,80px);width:max-content;will-change:transform;
+  padding:0 var(--gut)}
+.hour{min-width:min(72vw,300px);display:flex;flex-direction:column;gap:10px}
+.hour b{font-family:var(--mono);font-size:clamp(20px,2.6vw,34px);font-weight:200;letter-spacing:-.02em;
+  color:var(--accent)}
+
+.hour strong{font-family:var(--sans);font-weight:300;font-size:19px}
+.hour p{font-size:13px;color:var(--faint);line-height:1.55;max-width:30ch}
+
+
+/* ═══════════════ gallery bands ═══════════════ */
+.bands{padding:clamp(50px,9vh,110px) 0;overflow:hidden}
+.band{display:flex;gap:clamp(10px,1.4vw,20px);width:max-content;will-change:transform;
+  margin-bottom:clamp(10px,1.4vw,20px)}
+.gt{width:clamp(180px,25vw,380px);aspect-ratio:4/5;background-size:cover;background-position:center;
+  position:relative;cursor:pointer;overflow:hidden;flex:0 0 auto}
+.gt:nth-child(even){aspect-ratio:1/1;width:clamp(150px,20vw,300px);align-self:center}
+.gt figcaption{position:absolute;left:12px;bottom:10px;font-family:var(--mono);font-size:8.5px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--paper);mix-blend-mode:difference;z-index:2}
+
+/* lightbox */
+#lb{position:fixed;inset:0;z-index:600;display:none;background:rgba(var(--veil),.9);
+  backdrop-filter:blur(10px)}
+#lb.on{display:block}
+#lb .img{position:absolute;background-size:cover;background-position:center;will-change:transform}
+#lb .cap{position:absolute;left:var(--gut);bottom:calc(var(--gut) + 4px);z-index:2}
+#lb .x{position:absolute;right:var(--gut);top:var(--gut);z-index:2}
+
+/* ═══════════════ visit + footer ═══════════════ */
+.visit{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(26px,5vw,80px)}
+@media(max-width:900px){.visit{grid-template-columns:1fr}}
+.addr{font-family:var(--sans);font-weight:200;font-size:clamp(22px,2.9vw,36px);line-height:1.24;
+  letter-spacing:-.02em}
+.links{display:flex;flex-direction:column;margin-top:26px}
+.links a{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 0;
+  border-top:1px solid var(--line);position:relative;overflow:hidden;transition:padding-left .55s var(--slow)}
+.links a:hover{padding-left:12px}
+.links a .s2{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--faint)}
+footer{background:var(--surface);padding:clamp(50px,8vh,90px) var(--gut) 26px;position:relative;z-index:2;
+  border-top:1px solid var(--line);overflow:hidden}
+.fmark{font-size:clamp(64px,19vw,300px);line-height:.8;opacity:.94;display:block}
+.fbot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:34px;
+  padding-top:16px;border-top:1px solid var(--line)}
+
+/* ═══════════════ booking overlay ═══════════════ */
+#book{position:fixed;inset:0;z-index:700;background:var(--bg);overflow-y:auto;
+  clip-path:inset(0 0 100% 0);pointer-events:none;transition:clip-path .9s var(--slow)}
+#book.on{clip-path:inset(0 0 0 0);pointer-events:auto}
+.bin{max-width:980px;margin:0 auto;padding:clamp(64px,10vh,110px) var(--gut) 80px}
+.steps{display:flex;gap:20px;flex-wrap:wrap;margin:22px 0 30px}
+.steps b{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:300;color:var(--faint);display:flex;align-items:center;gap:7px}
+.steps b.on{color:var(--text)}
+.steps b i{font-style:normal;width:17px;height:17px;border-radius:50%;border:1px solid currentColor;
+  display:grid;place-items:center;font-size:7.5px}
+.step{display:none}.step.on{display:block;animation:fadeUp .6s var(--slow)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin-top:8px}
+.opt{border:1px solid var(--line);padding:17px;text-align:left;cursor:pointer;display:flex;
+  flex-direction:column;gap:7px;transition:.4s var(--ease)}
+.opt:hover{border-color:var(--dim)}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:rgba(255,255,255,.09)}
+.opt strong{font-family:var(--sans);font-weight:300;font-size:18px}
+.opt small{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:var(--faint)}
+.sum{border:1px solid var(--line);padding:clamp(18px,2.6vw,28px);margin-top:10px}
+.sum .l{display:flex;justify-content:space-between;gap:14px;padding:10px 0;
+  border-bottom:1px solid var(--line);font-size:14px}
+.sum .l:last-child{border-bottom:0}
+.tot{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;
+  padding-top:14px;border-top:1px solid var(--text)}
+.tot b{font-family:var(--sans);font-weight:200;font-size:clamp(26px,3vw,36px);letter-spacing:-.02em}
+.acts{display:flex;gap:11px;margin-top:24px;flex-wrap:wrap}
+.acts .btn{width:auto;padding:15px 28px}
+
+/* ══════════ MAPPA — 05 Find us ══════════ */
+/* ══════════ la mappa ══════════ */
+.map-track{height:310vh;position:relative}
+.map-stage{position:sticky;top:0;height:100svh;overflow:hidden;background:var(--sea);
+  display:grid;grid-template-columns:minmax(290px,32%) 1fr;align-items:center;
+  gap:clamp(20px,4vw,60px);padding:0 var(--gut)}
+@media(max-width:900px){
+  .map-stage{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);
+    padding-top:clamp(56px,8vh,84px);gap:12px}
+}
+
+/* scheda: tutte le mete insieme, ciascuna con la propria barra */
+/* niente backdrop-filter: Safari lo ricalcola a ogni fotogramma perché sotto
+   la mappa si muove. Compenso con un fondo piu opaco. */
+.map-card{background:var(--panel);border:1px solid var(--line);
+  padding:clamp(20px,2.4vw,30px);position:relative;z-index:3}
+.map-card>.eyebrow{display:block;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.dest{padding:clamp(14px,2.1vh,20px) 0;border-bottom:1px solid var(--line);
+  opacity:.34;transition:opacity .8s var(--ease)}
+.dest:last-child{border-bottom:0;padding-bottom:0}
+.dest.moving{opacity:.72}
+.dest.there{opacity:1}
+.dest .top{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+.dest .nm{font-weight:300;font-size:clamp(16px,1.7vw,21px);letter-spacing:-.01em}
+.dest .tm{font-weight:200;font-size:clamp(19px,2.2vw,28px);letter-spacing:-.03em;
+  white-space:nowrap;font-variant-numeric:tabular-nums;display:inline-block}
+.dest.there .tm{animation:tmpop .7s var(--slow)}
+@keyframes tmpop{0%{transform:scale(1)}34%{transform:scale(1.16)}100%{transform:scale(1)}}
+.dest .km{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--faint);
+  margin-top:5px;display:block}
+/* la barretta è il tragitto di quella meta, coerente con l'arco sulla mappa */
+.dest .prog{height:1px;background:var(--line);margin-top:11px;position:relative;overflow:hidden}
+.dest .prog i{position:absolute;inset:0;background:var(--arc);transform-origin:0 50%;transform:scaleX(0)}
+.dest.there .prog i{background:var(--text)}
+@media(max-width:900px){
+  .map-card{padding:12px 16px}
+  .map-card>.eyebrow{padding-bottom:9px}
+  .dest{padding:9px 0}
+  .dest .km,.dest .prog{display:none}
+  .dest .nm{font-size:14px}.dest .tm{font-size:16px}
+}
+
+/* La cella va stirata (con align-items:center non lo sarebbe), e l'SVG viene
+   posizionato in assoluto sui quattro lati: così ha un riquadro definito senza
+   dipendere da altezze in percentuale, che qui non si risolvono e lo facevano
+   ricadere sul proprio rapporto d'aspetto sfondando la cella. */
+.map-wrap{position:relative;align-self:stretch;min-height:0}
+/* width/height in percentuale esplicita: su un elemento rimpiazzato posizionato
+   in assoluto, `auto` coi lati vincolati ricade sulle dimensioni intrinseche e
+   l'SVG sfonda la cella. Il respiro attorno all'isola sta nel viewBox (VB.pad),
+   non nel CSS, così preserveAspectRatio centra da solo. */
+/* overflow:hidden ora è necessario: con la camera ravvicinata l'isola
+   deborda dal viewBox e senza taglio invaderebbe il resto della sezione */
+#map{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:hidden}
+/* i tratti non devono ingrassare quando la camera stringe */
+/* solo tratti continui: quelli tratteggiati si correggono nel loop */
+/* Solo due elementi con non-scaling-stroke. Le 177 righe del reticolo l'avevano
+   anch'esse, e a ogni fotogramma Safari ne ricalcolava la geometria una per una:
+   ora lo spessore glielo passo dal gruppo, diviso per la scala della camera. */
+#coast,.isle{vector-effect:non-scaling-stroke}
+
+#coast{fill:var(--land);stroke:var(--coast);stroke-width:1.1;stroke-linejoin:round}
+.isle{fill:var(--land);stroke:var(--coast);stroke-width:.8}
+
+/* il percorso c'è tutto fin dall'inizio, ma appena accennato: intero e continuo,
+   non tratteggiato — era il tratteggio a farlo sembrare percorso a metà.
+   Questi tre NON usano non-scaling-stroke: su un tracciato animato col
+   dasharray quella proprietà fa calcolare il passo in pixel di schermo, e a
+   forte zoom la linea si spezza in frammenti. Lo spessore lo correggo nel
+   loop dividendo per la scala della camera. */
+.leg-base{fill:none;stroke:var(--arc);opacity:.16}
+.leg-glow{fill:none;stroke:var(--arc);opacity:.22;stroke-linecap:round}
+.leg-line{fill:none;stroke:var(--arc);stroke-linecap:round}
+/* reticolo: dà terreno sotto i piedi quando la camera è addosso a URBY */
+#gGrid{opacity:0;stroke:var(--coast);stroke-opacity:.3}
+#gGrid line{stroke:inherit}
+
+/* la meta si vede quasi subito, ma in sordina: si accende quando ci si arriva */
+.pt{opacity:0;transition:opacity .9s var(--ease)}
+.pt.on{opacity:.4}
+.pt.reached{opacity:1}
+.pt .dot{fill:var(--arc)}
+.pt .ring{fill:none;stroke:var(--arc);stroke-width:1;opacity:.45}
+.pt .ring2{fill:none;stroke:var(--arc);stroke-width:1;opacity:0;
+  transition:opacity .9s var(--ease)}
+.pt.reached .ring2{opacity:.4}
+/* l'arrivo: un anello che esplode una volta sola, e il punto che sussulta.
+   scala via transform (non via r) perché è supportata ovunque, Safari incluso */
+.pt .burst,.pt .dot{transform-box:fill-box;transform-origin:center}
+.pt .burst{fill:none;stroke:var(--arc);stroke-width:1.6;opacity:0}
+.pt.reached .burst{animation:burst 1.15s var(--slow)}
+@keyframes burst{0%{transform:scale(.3);opacity:.9}100%{transform:scale(3.4);opacity:0}}
+.pt.reached .dot{animation:pop .65s var(--slow)}
+@keyframes pop{0%{transform:scale(1)}38%{transform:scale(2)}100%{transform:scale(1)}}
+/* i minuti compaiono sul posto, all'arrivo */
+.pt text.tm{font-family:var(--mono);font-size:26px;letter-spacing:.01em;fill:var(--pin);
+  opacity:0;transform:translateY(4px);transform-box:fill-box;
+  transition:opacity .55s var(--ease) .12s,transform .7s var(--slow) .12s}
+.pt text.tm .u{font-size:.55em;letter-spacing:.1em}    /* "min" piccolo e attaccato */
+.pt.reached text.tm{opacity:1;transform:none}
+
+/* URBY: all'inizio è il marchio, poi collassa nel pallino.
+   Le quattro lettere hanno quattro caratteri diversi, come nel sito. */
+.wm{transform-box:fill-box;transform-origin:center}
+/* `.pt text` vale 0-1-1: senza il selettore altrettanto specifico il marchio
+   eredita gli 11px delle etichette invece dei suoi */
+.pt text.wmt{font-size:76px;fill:var(--text);letter-spacing:.03em;text-transform:none}
+.wmt .l1{font-family:"Instrument Serif",Georgia,"Times New Roman",serif}
+.wmt .l2{font-family:"Inter Tight","Helvetica Neue",Arial,sans-serif;font-weight:400}
+.wmt .l3{font-family:"Martian Mono",ui-monospace,Menlo,monospace;font-weight:300}
+.wmt .l4{font-family:"Inter Tight","Helvetica Neue",Arial,sans-serif;font-weight:200}
+/* .lbl resta fuori: la scala gliela dà l'attributo SVG, che parte dall'origine
+   del segnaposto, così anche la distanza dal pallino cresce insieme al testo */
+.core{transform-box:fill-box;transform-origin:center}
+.pt.home .dot{fill:var(--pin)}
+.pt.home .ring{stroke:var(--pin)}
+/* L'alone è dipinto sotto le lettere, non è un filtro.
+   Con due drop-shadow su cinque gruppi erano dieci filtri ricalcolati a ogni
+   fotogramma, perché le etichette si spostano di continuo: su Safari è la voce
+   di costo più cara di tutte. Il paint-order fa parte del disegno del testo e
+   non costa niente; per non sembrare un contorno netto sta al 46%. */
+.pt text{font-family:var(--sans);font-weight:400;font-size:24px;letter-spacing:.07em;
+  text-transform:uppercase;fill:var(--text);
+  paint-order:stroke fill;stroke:var(--halo);stroke-width:5.5px;stroke-linejoin:round}
+.pt text.sub{font-family:var(--serif);font-style:italic;font-weight:400;font-size:19px;
+  letter-spacing:0;text-transform:none;fill:var(--faint)}
+@keyframes ping{0%{r:11;opacity:.5}70%,100%{r:36;opacity:0}}
+.pt.home .ping{fill:none;stroke:var(--pin);stroke-width:1;animation:ping 3s var(--ease) infinite}
+
+.trav{opacity:0;transition:opacity .3s}
+.trav.on{opacity:1}
+.trav .core{fill:var(--paper)}
+.trav .halo{fill:none;stroke:var(--arc);stroke-width:1;opacity:.5}
+
+/* il finale: la mappa si vela e resta la frase */
+.finale{position:absolute;inset:0;z-index:7;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  pointer-events:none;padding:0 var(--gut);
+  /* finché si vede solo "Relax." la seconda riga occupa comunque il suo spazio:
+     senza questo scarto la prima riga resterebbe nella metà alta */
+  transform:translateY(var(--half,0px));
+  transition:transform 1.2s var(--slow)}
+.finale.s2{transform:none}
+/* bordo sfocato del colore del fondo: le prime due copie, strette e ripetute,
+   fanno da stacco pieno; le altre sfumano, così il sotto non disturba il sopra */
+.finale p{opacity:0;max-width:18ch;
+  text-shadow:0 0 7px var(--sea),0 0 7px var(--sea),0 0 14px var(--sea),
+              0 0 28px var(--sea),0 0 56px var(--sea),0 0 96px var(--sea);
+  transition:opacity 1.2s var(--ease),transform 1.4s var(--slow)}
+.finale .a,.finale .b{transform:translateY(30px)}
+.finale .a{font-family:var(--serif);font-style:italic;font-weight:400;
+  font-size:clamp(38px,7vw,96px);letter-spacing:-.01em;color:var(--faint);line-height:1}
+.finale .b{font-weight:200;font-size:clamp(30px,5.6vw,76px);letter-spacing:-.035em;
+  line-height:1.04;margin-top:.1em;color:var(--text)}
+.finale.s1 .a{opacity:1;transform:none}
+.finale.s2 .b{opacity:1;transform:none}
+
+.hud{position:absolute;left:var(--gut);right:var(--gut);bottom:clamp(16px,3vh,28px);
+  z-index:4;display:flex;align-items:center;gap:14px;pointer-events:none}
+.hud .bar{flex:1;height:1px;background:var(--line);position:relative;overflow:hidden}
+.hud .bar i{position:absolute;inset:0;background:var(--text);transform-origin:0 50%;transform:scaleX(0)}
+.hud .mono{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--faint);transition:color .9s var(--ease)}
+.hud .mono.lit{color:var(--text)}
+
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .up>*{transform:none}.rd b{opacity:1}
+}
+</style>
+</head>
+<body>
+
+<div id="load">
+  <div class="words">
+    <span class="on">Casual refinement</span><span>House made</span>
+    <span>Neighbourhood escape</span><span>All in common</span>
+  </div>
+  <div class="count">00</div>
+  <div class="bar"><i></i></div>
+</div>
+
+<div class="grain" aria-hidden="true"></div>
+<div id="cur" aria-hidden="true"><span></span></div>
+<button class="btn-pill snd-dock" data-sound aria-pressed="false" aria-label="Sound on or off">
+  <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>Sound</button>
+<div id="peek" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <div style="display:flex;align-items:center">
+    <a href="#top" class="mark" data-cursor="Top" aria-label="URBY home"><i class="l1">U</i><i class="l2">R</i><i class="l3">B</i><i class="l4">Y</i></a>
+    <span class="clock mono" id="clock"></span>
+  </div>
+  <nav class="links" aria-label="Primary">
+    <a href="#common">In common</a><a href="#rooms">Rooms</a>
+    <a href="#kitchen">Kitchen</a><a href="#look">Look around</a><a href="#visit">Find us</a>
+  </nav>
+  <div class="right">
+    <button class="btn-pill hide-s" data-sound aria-pressed="false" aria-label="Sound on or off">
+      <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>Sound</button>
+    <div class="lang">
+      <button class="btn-pill" id="langBtn" aria-expanded="false" aria-haspopup="true">EN</button>
+      <div class="langmenu" id="langMenu" role="menu">
+        <button data-l="en" aria-current="true">English</button>
+        <button data-l="ru">Русский</button>
+        <button data-l="ko">한국어</button>
+        <button data-l="ja">日本語</button>
+        <button data-l="zh">中文</button>
+      </div>
+    </div>
+    <button class="btn-pill solid" data-book>Book a stay</button>
+    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i><i></i></button>
+  </div>
+</header>
+
+<div id="sheet" aria-hidden="true">
+  <a href="#common">In common</a><a href="#rooms">Rooms</a><a href="#kitchen">Kitchen</a>
+  <a href="#look">Look around</a><a href="#visit">Find us</a>
+  <div class="sf">
+    <button class="btn-pill" id="mode" aria-pressed="false"><span class="d"></span><span id="modeT">Terracotta</span></button>
+    <button class="btn-pill" data-sound aria-pressed="false" aria-label="Sound on or off">
+      <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>Sound</button>
+    <button class="btn-pill solid" data-book>Book a stay</button>
+  </div>
+  <div class="langrow" id="langRow">
+    <button data-l="en" aria-current="true">English</button><button data-l="ru">Русский</button>
+    <button data-l="ko">한국어</button><button data-l="ja">日本語</button><button data-l="zh">中文</button>
+  </div>
+</div>
+
+<main id="top">
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero-track" id="hero">
+  <div class="stage">
+    <div class="frame" id="frame">
+      <div class="inner" id="frameImg">
+        <div class="clouds c1" id="cl1"></div>
+        <div class="clouds c2" id="cl2"></div>
+        <div class="panes" id="panes"><i></i><i></i><i></i></div>
+      </div>
+      <div class="tint" id="tint"></div>
+    </div>
+    <div class="mark hero-mark" id="heroMark" aria-label="URBY">
+      <i class="l1">U</i><i class="l2">R</i><i class="l3">B</i><i class="l4">Y</i>
+    </div>
+    <div class="hero-lines" id="heroLines">
+      <p><span>Neighbourhood hotel &amp; kitchen — Thalang, Phuket</span></p>
+    </div>
+    <div class="hero-foot">
+      <p class="body">Eleven rooms upstairs, one long table downstairs, and a door that stays open from the first loaf to the last pour.</p>
+      <div class="sc"><span>Scroll</span><span class="r"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ MARQUEE ══════════ -->
+<div class="marq" id="marq">
+  <div class="row" id="marqRow"></div>
+</div>
+
+<!-- ══════════ MANIFESTO ══════════ -->
+<section class="sec manifesto pad" id="common">
+  <div class="float f1" data-sp="-.16"></div>
+  <div class="float f2" data-sp=".22"></div>
+  <div class="float f3" data-sp=".13"></div>
+  <div class="float f4" data-sp="-.2"></div>
+  <div class="txt">
+    <span class="eyebrow">In common</span>
+    <p class="h2 rd" data-read data-html="creed" style="margin-top:22px">Every element here is a blend of cultures and stories that live side by side. Different letters, one word. Different people, <em class="i">one table.</em></p>
+  </div>
+</section>
+
+<section class="sec pad" id="house" style="padding-top:0">
+  <div class="head"><span class="eyebrow">01 — The house</span><span class="mono">Est. 2025</span></div>
+  <div class="kit">
+    <div>
+      <h2 class="h2 up-w"><span class="up"><span>A bakery counter</span></span><span class="up"><span>that grew a roof.</span></span></h2>
+    </div>
+    <div>
+      <p class="body">URBY started with four stools, a record player and a sourdough starter someone carried over from Chiang Mai. It grew into a house: rooms above, a kitchen below, a courtyard where guests and neighbours end up on the same bench without planning to.</p>
+      <p class="body" style="margin-top:14px">We cook what the morning market gives us, bake everything in house, and keep the lights low enough that nobody checks the time. Stay a night or stay for a coffee — the welcome is identical.</p>
+      <div style="margin-top:30px;display:grid;gap:0">
+        <div class="dish" style="cursor:default"><h4>Eleven rooms</h4><span class="p">No two alike</span></div>
+        <div class="dish" style="cursor:default"><h4>Kitchen open 07:00 — 23:00</h4><span class="p">Seven days</span></div>
+        <div class="dish" style="cursor:default"><h4>Layan beach</h4><span class="p">9 min by scooter</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ MAPPA ══════════ -->
+<section class="map-track" id="mapTrack">
+  <div class="map-stage">
+
+    <div class="map-card">
+      <span class="eyebrow">02 — Find us</span>
+      <div id="dests"></div>
+    </div>
+
+    <div class="map-wrap">
+      <svg id="map" viewBox="0 0 560 940" fill="none" aria-label="Mappa di Phuket">
+        <!-- gView è la camera: scala e trasla. I punti stanno fuori, così
+             etichette e pallini non si ingrandiscono con lo zoom. -->
+        <g id="gView">
+          <g id="gLand"></g>
+          <g id="gGrid"></g>
+          <g id="gLegs"></g>
+        </g>
+        <!-- i segnaposto per ultimi: le etichette stanno sopra a tutto -->
+        <g id="gTrav"></g>
+        <g id="gPts"></g>
+      </svg>
+    </div>
+
+    <div class="finale" id="finale">
+      <p class="a">Relax.</p>
+      <p class="b">You can go anywhere.</p>
+    </div>
+
+    <div class="hud">
+      <span class="mono" id="hudA">URBY</span>
+      <div class="bar"><i id="hudBar"></i></div>
+      <span class="mono" id="hudB">Everywhere</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ROOMS — horizontal takeover ══════════ -->
+<section class="rooms-track" id="rooms">
+  <div class="rooms-stage">
+    <div class="rooms-rail" id="rail">
+
+      <article class="slide intro">
+        <div>
+          <span class="eyebrow">03 — Rooms</span>
+          <h2 class="display" data-html="roomsTitle" style="margin:18px 0 14px">Eleven<br>rooms,<br><em class="i" style="text-transform:none">no two alike</em></h2>
+          <p class="body" style="max-width:34ch;margin:0 auto">Keep scrolling — the rooms move sideways.</p>
+        </div>
+      </article>
+
+      <article class="slide" data-room="nook">
+        <div class="visual"><div class="ph"></div><span class="no">01 / The Nook</span></div>
+        <div class="info">
+          <span class="eyebrow">22 m² · courtyard side</span>
+          <h3 class="h2">The Nook</h3>
+          <ul><li>Queen bed and a window seat deep enough to sleep in</li>
+              <li>Rain shower, house soap, linen from the north</li>
+              <li>Quietest room in the house after 22:00</li></ul>
+          <div class="buy"><div><b>฿3,400</b><br><span class="eyebrow">per night · breakfast in</span></div>
+            <button class="btn-pill" data-book data-room="nook">Reserve</button></div>
+        </div>
+      </article>
+
+      <article class="slide" data-room="corner">
+        <div class="visual"><div class="ph"></div><span class="no">02 / Corner Room</span></div>
+        <div class="info">
+          <span class="eyebrow">32 m² · morning light</span>
+          <h3 class="h2">Corner Room</h3>
+          <ul><li>King bed, two windows, sun from 07:00</li>
+              <li>Reading chair, small desk, bath and shower</li>
+              <li>Looks over the mango tree and the bakery door</li></ul>
+          <div class="buy"><div><b>฿4,600</b><br><span class="eyebrow">per night · breakfast in</span></div>
+            <button class="btn-pill" data-book data-room="corner">Reserve</button></div>
+        </div>
+      </article>
+
+      <article class="slide" data-room="loft">
+        <div class="visual"><div class="ph"></div><span class="no">03 / The Loft</span></div>
+        <div class="info">
+          <span class="eyebrow">44 m² · under the roof</span>
+          <h3 class="h2">The Loft</h3>
+          <ul><li>Mezzanine, king bed and a daybed for a third</li>
+              <li>Record player, a crate of vinyl, a small bar</li>
+              <li>Rafters, skylight, rain you can hear</li></ul>
+          <div class="buy"><div><b>฿6,200</b><br><span class="eyebrow">per night · breakfast in</span></div>
+            <button class="btn-pill" data-book data-room="loft">Reserve</button></div>
+        </div>
+      </article>
+
+      <article class="slide" data-room="terrace">
+        <div class="visual"><div class="ph"></div><span class="no">04 / Terrace Suite</span></div>
+        <div class="info">
+          <span class="eyebrow">58 m² · private terrace</span>
+          <h3 class="h2">Terrace Suite</h3>
+          <ul><li>Outdoor bath, table for six, hammock corner</li>
+              <li>King bed, separate sitting room</li>
+              <li>The room people book the whole floor for</li></ul>
+          <div class="buy"><div><b>฿8,900</b><br><span class="eyebrow">per night · breakfast in</span></div>
+            <button class="btn-pill" data-book data-room="terrace">Reserve</button></div>
+        </div>
+      </article>
+
+    </div>
+    <div class="rooms-hud">
+      <span class="mono" id="roomNo">00</span>
+      <div class="track"><i id="roomBar"></i></div>
+      <span class="mono">04</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ KITCHEN ══════════ -->
+<section class="sec tint pad" id="kitchen">
+  <div class="head"><span class="eyebrow">04 — Kitchen</span><span class="mono">07:00 — 23:00, seven days</span></div>
+  <div class="kit">
+    <div>
+      <h2 class="h2"><span class="up"><span>Everyday plates,</span></span><span class="up"><span>cooked in house.</span></span></h2>
+      <p class="body" style="margin-top:16px;max-width:34ch">Sourdough started here, yoghurt cultured here, ice cream churned here. The menu moves with the market — this is where it stands today.</p>
+      <div class="card" style="margin-top:30px">
+        <span class="eyebrow">Book a table</span>
+        <div class="g2">
+          <label class="f"><span>Date</span><input type="date" id="tDate"></label>
+          <label class="f"><span>Time</span><select id="tTime">
+            <option>08:00</option><option>12:30</option><option>17:30</option>
+            <option selected>19:00</option><option>20:30</option><option>21:30</option></select></label>
+        </div>
+        <div class="g2">
+          <label class="f"><span>People</span><select id="tPeople">
+            <option>1</option><option selected>2</option><option>3</option><option>4</option>
+            <option>5</option><option>6</option></select></label>
+          <label class="f"><span>Name</span><input type="text" id="tName" placeholder="Who's coming?"></label>
+        </div>
+        <label class="f" style="margin-bottom:18px"><span>Anything we should know</span>
+          <textarea id="tNote" rows="1" placeholder="Allergies, birthdays, a quiet corner"></textarea></label>
+        <button class="btn" id="tSend">Request the table</button>
+        <p class="msg" id="tMsg">Counter seats are kept for walk-ins every night.</p>
+      </div>
+    </div>
+    <div>
+      <div class="tabs" role="tablist" aria-label="Menu">
+        <button role="tab" aria-selected="true" data-tab="morning">Morning</button>
+        <button role="tab" aria-selected="false" data-tab="snacks">Snacks &amp; sides</button>
+        <button role="tab" aria-selected="false" data-tab="cocktails">Cocktails</button>
+        <button role="tab" aria-selected="false" data-tab="today">Today only</button>
+      </div>
+      <div id="menu"></div>
+      <p class="msg">Prices in Thai baht, service included. Tell us about allergies — the kitchen keeps a full ingredient list.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ HOURS RIBBON ══════════ -->
+<section class="sec ribbon">
+  <div class="r" id="ribbon">
+    <div class="hour"><b>07:00</b><strong>Bakery opens</strong><p>Loaves out of the oven, first filter coffee on the counter.</p></div>
+    <div class="hour"><b>08 — 11</b><strong>Breakfast</strong><p>Yoghurt cream, eggs, navy beans on toast. Included if you're staying.</p></div>
+    <div class="hour"><b>12 — 16</b><strong>All-day plates</strong><p>The quiet hours. Long lunches, slow work, the fan on low.</p></div>
+    <div class="hour"><b>17:00</b><strong>Records &amp; aperitivo</strong><p>Someone picks a side, the bar starts pouring.</p></div>
+    <div class="hour"><b>18:30 — 23</b><strong>Dinner in common</strong><p>Small plates meant for the middle of the table.</p></div>
+    <div class="hour"><b>23:00</b><strong>Last pour</strong><p>Unless it's a good night. Then the counter stays open.</p></div>
+  </div>
+</section>
+
+<!-- ══════════ GALLERY BANDS ══════════ -->
+<section class="sec bands" id="look">
+  <div class="pad" style="padding-top:0;padding-bottom:clamp(30px,5vh,60px)">
+    <div class="head" style="margin-bottom:0">
+      <span class="eyebrow">05 — Look around</span>
+      <span class="mono">Crafted origins / Everyday plates / Life in motion</span>
+    </div>
+  </div>
+  <div class="band" id="bandA"></div>
+  <div class="band" id="bandB"></div>
+</section>
+
+<!-- ══════════ VISIT ══════════ -->
+<section class="sec tint pad" id="visit">
+  <div class="head"><span class="eyebrow">The address</span><span class="mono">8.03°N 98.30°E</span></div>
+  <div class="visit">
+    <div>
+      <p class="addr">Thepkrasatti–Chengtalay,<br>Tambon Thep Krasatti,<br>Thalang District, Phuket 83110</p>
+      <p class="body" style="margin-top:20px;max-width:38ch">Parking in the courtyard, scooters at the gate, dogs welcome on the terrace. The courtyard was planted before the kitchen was finished — on a hot afternoon it takes four degrees off the air.</p>
+    </div>
+    <div>
+      <div class="links">
+        <a href="#" data-book><span>Book a stay</span><span class="s2">Direct rate</span></a>
+        <a href="#kitchen"><span>Book a table</span><span class="s2">Dinner from 18:30</span></a>
+        <a href="mailto:hello@urby.com"><span>hello@urby.com</span><span class="s2">Email</span></a>
+        <a href="tel:+66760000000"><span>+66 76 000 000</span><span class="s2">Phone</span></a>
+        <a href="https://www.instagram.com/urbyphuket" target="_blank" rel="noopener"><span>@urbyphuket</span><span class="s2">Instagram</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="mark fmark" id="fmark" aria-hidden="true"><i class="l1">U</i><i class="l2">R</i><i class="l3">B</i><i class="l4">Y</i></div>
+  <div class="fbot mono">
+    <span>Neighbourhood hotel &amp; kitchen</span><span>Thalang · Phuket</span><span>© 2026 URBY</span>
+  </div>
+</footer>
+
+<!-- ══════════ LIGHTBOX ══════════ -->
+<div id="lb" aria-hidden="true">
+  <div class="img" id="lbImg"></div>
+  <span class="mono cap" id="lbCap"></span>
+  <button class="btn-pill x" id="lbX">Close</button>
+</div>
+
+<!-- ══════════ BOOKING ══════════ -->
+<div id="book" role="dialog" aria-modal="true" aria-label="Book a stay">
+  <div class="bin">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px">
+      <div><span class="eyebrow">Direct booking</span>
+        <h2 class="display" data-html="stay" style="margin-top:12px">Stay<br>with us</h2></div>
+      <button class="btn-pill" id="bookX">Close</button>
+    </div>
+    <div class="steps">
+      <b class="on" data-s="1"><i>1</i>Dates</b><b data-s="2"><i>2</i>Room</b>
+      <b data-s="3"><i>3</i>Details</b><b data-s="4"><i>4</i>Confirm</b>
+    </div>
+    <div class="step on" data-step="1">
+      <div class="grid3">
+        <label class="f"><span>Arrive</span><input type="date" id="bIn"></label>
+        <label class="f"><span>Leave</span><input type="date" id="bOut"></label>
+        <label class="f"><span>Guests</span><select id="bGuests">
+          <option>1</option><option selected>2</option><option>3</option><option>4</option></select></label>
+      </div>
+      <p class="msg" id="dMsg">Check-in from 14:00, check-out by 11:00. Late arrivals are fine — someone is always at the counter.</p>
+      <div class="acts"><button class="btn" data-next="2">Choose a room</button></div>
+    </div>
+    <div class="step" data-step="2"><div class="grid3" id="pick"></div>
+      <div class="acts"><button class="btn ghost" data-next="1">Back</button><button class="btn" data-next="3">Continue</button></div>
+    </div>
+    <div class="step" data-step="3">
+      <div class="grid3">
+        <label class="f"><span>Name</span><input type="text" id="bName" placeholder="First and last"></label>
+        <label class="f"><span>Email</span><input type="email" id="bMail" placeholder="you@email.com"></label>
+      </div>
+      <p class="eyebrow" style="margin:26px 0 10px">Add to the stay</p>
+      <div class="grid3">
+        <button class="opt" aria-pressed="false" data-extra data-price="900"><strong>Airport transfer</strong><small>฿900 · one way</small></button>
+        <button class="opt" aria-pressed="false" data-extra data-price="1200"><strong>Dinner in common</strong><small>฿1,200 · per person, first night</small></button>
+        <button class="opt" aria-pressed="false" data-extra data-price="350"><strong>Scooter</strong><small>฿350 · per day</small></button>
+      </div>
+      <div class="acts"><button class="btn ghost" data-next="2">Back</button><button class="btn" data-next="4">Review</button></div>
+    </div>
+    <div class="step" data-step="4">
+      <div class="sum" id="sum"></div>
+      <div class="acts"><button class="btn ghost" data-next="3">Back</button><button class="btn" id="confirm">Confirm request</button></div>
+      <p class="msg" id="bMsg">No card needed now. We reply within 12 hours to hold the room.</p>
+    </div>
+    <div class="step" data-step="5">
+      <h3 class="h2" style="margin-bottom:16px">See you soon.</h3>
+      <div class="sum" id="done"></div>
+      <div class="acts"><button class="btn ghost" id="bookX2">Back to the site</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(()=>{
+"use strict";
+const $=(s,c)=>(c||document).querySelector(s), $$=(s,c)=>[...(c||document).querySelectorAll(s)];
+const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+const sstep=p=>p*p*(3-2*p);                    /* smoothstep, per le tende */
+const lerp=(a,b,t)=>a+(b-a)*t;
+const TOUCH=matchMedia("(hover:none)").matches;
+const RED=matchMedia("(prefers-reduced-motion: reduce)").matches;
+/* Safari: se si fa preventDefault sulla rotella smette di generare la fase di
+   inerzia del trackpad, e ogni gesto copre molta meno strada. Lì lo scroll
+   morbido lo lasciamo fare al browser, che lo fa già bene di suo. */
+const SAFARI=/^((?!chrome|chromium|crios|fxios|android|edg).)*safari/i.test(navigator.userAgent);
+const baht=n=>"฿"+n.toLocaleString("en-US");
+
+/* ══════════ audio ══════════
+   Niente autoplay: i browser bloccano l'audio finché non c'è un gesto vero
+   dell'utente. Il pill SOUND è quel gesto. Tre livelli per la musica:
+   1) fetch + decode  → loop senza stacco (richiede http, non file://)
+   2) tag <audio>     → funziona anche in locale, con un micro-stacco al giro
+   3) pad sintetico   → se il file non c'è, così si sente comunque qualcosa.
+   Per sentire il tuo brano in locale: python3 -m http.server, poi localhost. */
+const SND={
+  MUSIC:"audio/urby-ambient.mp3",        /* ← metti qui il tuo loop */
+  MASTER:.55, MUS:.55, SFX:.9,
+  ac:null,master:null,music:null,sfx:null,el:null,on:false,booted:false,pa:0
+};
+const SKEY="urby.sound";
+
+function sndBoot(){
+  if(SND.booted)return;
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+  SND.booted=true;
+  SND.ac=new AC();
+  SND.master=SND.ac.createGain();SND.master.gain.value=0;
+  SND.music=SND.ac.createGain();SND.music.gain.value=SND.MUS;
+  SND.sfx=SND.ac.createGain();SND.sfx.gain.value=SND.SFX;
+  SND.music.connect(SND.master);SND.sfx.connect(SND.master);
+  SND.master.connect(SND.ac.destination);
+  fetch(SND.MUSIC).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer();})
+    .then(b=>SND.ac.decodeAudioData(b))
+    .then(buf=>{const s=SND.ac.createBufferSource();
+      s.buffer=buf;s.loop=true;s.connect(SND.music);s.start(0);})
+    .catch(musicTag);
+}
+function musicTag(){
+  const a=new Audio(SND.MUSIC);a.loop=true;a.preload="auto";a.volume=0;
+  a.addEventListener("error",synthPad,{once:true});
+  a.addEventListener("canplay",()=>{SND.el=a;a.play().then(()=>sndFade(SND.on?SND.MASTER:0,.8))
+    .catch(synthPad);},{once:true});
+  a.load();
+}
+/* pad ambient sintetizzato: quattro voci detunate sotto un filtro che respira */
+function synthPad(){
+  if(!SND.ac||SND.pad)return;
+  const t=SND.ac.currentTime,out=SND.ac.createGain();out.gain.value=0;
+  const flt=SND.ac.createBiquadFilter();flt.type="lowpass";flt.frequency.value=460;flt.Q.value=.8;
+  [110,164.81,220,329.63].forEach((f,i)=>{
+    const o=SND.ac.createOscillator();o.type=i%2?"sine":"triangle";
+    o.frequency.value=f;o.detune.value=(i-1.5)*8;
+    const g=SND.ac.createGain();g.gain.value=.26/(i+1.4);
+    o.connect(g).connect(flt);o.start(t);
+    const lfo=SND.ac.createOscillator(),lg=SND.ac.createGain();
+    lfo.frequency.value=.031+i*.013;lg.gain.value=.11/(i+1.4);
+    lfo.connect(lg).connect(g.gain);lfo.start(t);
+  });
+  const fl=SND.ac.createOscillator(),fg=SND.ac.createGain();
+  fl.frequency.value=.019;fg.gain.value=250;fl.connect(fg).connect(flt.frequency);fl.start(t);
+  flt.connect(out);out.connect(SND.music);
+  out.gain.linearRampToValueAtTime(.62,t+3.5);
+  SND.pad=out;
+}
+function sndFade(to,dur){
+  if(!SND.ac)return;
+  const t=SND.ac.currentTime,g=SND.master.gain;
+  g.cancelScheduledValues(t);g.setValueAtTime(g.value,t);g.linearRampToValueAtTime(to,t+dur);
+  if(SND.el){                                   /* il tag audio non passa dal gain node */
+    const from=SND.el.volume,tgt=to*SND.MUS,n=Math.max(1,Math.round(dur*30));let i=0;
+    clearInterval(SND._ei);
+    SND._ei=setInterval(()=>{i++;SND.el.volume=clamp(from+(tgt-from)*i/n,0,1);
+      if(i>=n)clearInterval(SND._ei);},dur*1000/n);
+  }
+}
+function noiseSrc(dur){
+  const n=Math.max(1,Math.floor(SND.ac.sampleRate*dur));
+  const b=SND.ac.createBuffer(1,n,SND.ac.sampleRate),d=b.getChannelData(0);
+  for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
+  const s=SND.ac.createBufferSource();s.buffer=b;return s;
+}
+const SFXS={
+  /* tocco secco sugli hover */
+  tick(){const t=SND.ac.currentTime,s=noiseSrc(.05);
+    const f=SND.ac.createBiquadFilter();f.type="bandpass";f.frequency.value=2300;f.Q.value=1.6;
+    const g=SND.ac.createGain();g.gain.setValueAtTime(.05,t);
+    g.gain.exponentialRampToValueAtTime(.0001,t+.045);
+    s.connect(f).connect(g).connect(SND.sfx);s.start(t);s.stop(t+.06);},
+  /* il fruscio del sipario: scende chiudendo, sale riaprendo */
+  whoosh(closing){const t=SND.ac.currentTime,dur=closing?1.5:1.15,s=noiseSrc(dur);
+    const f=SND.ac.createBiquadFilter();f.type="bandpass";f.Q.value=.85;
+    f.frequency.setValueAtTime(closing?1500:520,t);
+    f.frequency.exponentialRampToValueAtTime(closing?300:2300,t+dur);
+    const g=SND.ac.createGain();g.gain.setValueAtTime(.0001,t);
+    g.gain.exponentialRampToValueAtTime(closing?.2:.13,t+dur*.38);
+    g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    s.connect(f).connect(g).connect(SND.sfx);s.start(t);s.stop(t+dur+.05);},
+  /* cambio luce */
+  thunk(){const t=SND.ac.currentTime,o=SND.ac.createOscillator(),g=SND.ac.createGain();
+    o.type="sine";o.frequency.setValueAtTime(190,t);
+    o.frequency.exponentialRampToValueAtTime(48,t+.3);
+    g.gain.setValueAtTime(.26,t);g.gain.exponentialRampToValueAtTime(.0001,t+.36);
+    o.connect(g).connect(SND.sfx);o.start(t);o.stop(t+.38);},
+  /* prenotazione confermata */
+  chime(){const t=SND.ac.currentTime;
+    [880,1318.5,1760].forEach((fr,i)=>{
+      const o=SND.ac.createOscillator(),g=SND.ac.createGain(),s=t+i*.1;
+      o.type="sine";o.frequency.value=fr;
+      g.gain.setValueAtTime(.0001,s);
+      g.gain.exponentialRampToValueAtTime(.15/(i+1),s+.014);
+      g.gain.exponentialRampToValueAtTime(.0001,s+1.5);
+      o.connect(g).connect(SND.sfx);o.start(s);o.stop(s+1.6);});}
+};
+function sfx(k,a){if(SND.on&&SND.ac&&SFXS[k]){try{SFXS[k](a)}catch(e){}}}
+
+function sndSet(on){
+  SND.on=on;
+  $$("[data-sound]").forEach(b=>b.setAttribute("aria-pressed",String(on)));
+  try{localStorage.setItem(SKEY,on?"1":"0")}catch(e){}
+  if(on){
+    sndBoot();
+    if(SND.ac&&SND.ac.state==="suspended")SND.ac.resume();
+    sndFade(SND.MASTER,.9);
+    setTimeout(()=>sfx("tick"),400);            /* conferma: si sente subito qualcosa */
+  }else sndFade(0,.6);
+}
+$$("[data-sound]").forEach(b=>b.addEventListener("click",()=>sndSet(!SND.on)));
+/* chi lo aveva acceso lo ritrova acceso, ma solo dopo il primo gesto */
+let sndWant=false;try{sndWant=localStorage.getItem(SKEY)==="1"}catch(e){}
+if(sndWant&&!TOUCH&&!RED){
+  const arm=e=>{if(e.target&&e.target.closest&&e.target.closest("[data-sound]"))return;
+    removeEventListener("pointerdown",arm);removeEventListener("keydown",arm);sndSet(true);};
+  addEventListener("pointerdown",arm);addEventListener("keydown",arm);
+}
+addEventListener("visibilitychange",()=>{
+  if(!SND.on||!SND.ac)return;
+  sndFade(document.hidden?0:SND.MASTER,document.hidden?.3:.9);
+});
+let sndHov=null,sndLast=0;
+document.addEventListener("pointerover",e=>{
+  if(!SND.on||TOUCH)return;
+  const el=e.target.closest&&e.target.closest("a,button,.gt,.dish,.opt");
+  if(!el||el===sndHov)return;
+  sndHov=el;
+  const now=performance.now();if(now-sndLast<70)return;
+  sndLast=now;sfx("tick");
+},{passive:true});
+
+/* ══════════ procedural light fields (stand-ins for photography) ══════════ */
+const rng=s=>()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);
+  t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
+const PAL={
+  terra:["#8A4A2C","#C88055","#E0A87C","#6E3721","#F2E3C3"],
+  linen:["#E0D2B6","#F2E3C3","#FCF8EC","#CBB19A","#EFE2C6"],
+  sky:["#9CC4DC","#C7DFEE","#FFFFFF","#7FB0CC","#EAF3F8"],
+  pine:["#22341F","#3C5A3A","#6E8A5E","#C88055","#101A0F"],
+  wood:["#6B4429","#A9743F","#C99A62","#4A2C18","#E0C08A"]
+};
+function field(w,h,seed,palName,dark){
+  const p=PAL[palName],r=rng(seed*7919+13);
+  const sm=document.createElement("canvas");sm.width=28;sm.height=Math.round(28*h/w);
+  const a=sm.getContext("2d");
+  a.fillStyle=p[0];a.fillRect(0,0,sm.width,sm.height);
+  for(let i=0;i<11;i++){
+    a.globalAlpha=.35+r()*.5;
+    a.fillStyle=p[1+Math.floor(r()*(p.length-1))];
+    const rad=sm.width*(.16+r()*.4);
+    a.beginPath();a.ellipse(r()*sm.width,r()*sm.height,rad,rad*(.5+r()*.9),r()*6.283,0,6.283);a.fill();
+  }
+  const c=document.createElement("canvas");c.width=w;c.height=h;
+  const x=c.getContext("2d");
+  x.imageSmoothingEnabled=true;x.imageSmoothingQuality="high";
+  x.drawImage(sm,0,0,w,h);
+  const g=x.createRadialGradient(w*(.2+r()*.6),h*(.12+r()*.4),0,w*.5,h*.5,w*1.15);
+  g.addColorStop(0,"rgba(255,212,150,"+(dark?.42:.32)+")");
+  g.addColorStop(.45,"rgba(255,190,120,.08)");g.addColorStop(1,"rgba(0,0,0,0)");
+  x.fillStyle=g;x.fillRect(0,0,w,h);
+  const v=x.createRadialGradient(w/2,h*.46,w*.15,w/2,h/2,w*.92);
+  v.addColorStop(0,"rgba(0,0,0,0)");v.addColorStop(1,"rgba(58,26,12,"+(dark?.68:.36)+")");
+  x.fillStyle=v;x.fillRect(0,0,w,h);
+  return c.toDataURL("image/jpeg",.82);
+}
+function phuketHour(){const d=new Date();return (d.getUTCHours()+d.getUTCMinutes()/60+7)%24;}
+
+/* cielo: solo gradiente e luce. Le nuvole stanno su strati separati. */
+function sky(w,h){
+  const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d");
+  const g=x.createLinearGradient(0,0,0,h);
+  g.addColorStop(0,"#1C6BC4");g.addColorStop(.26,"#3B8ED6");
+  g.addColorStop(.54,"#6FB2E4");g.addColorStop(.78,"#A8D0EC");
+  g.addColorStop(.93,"#D6E7F2");g.addColorStop(1,"#E9E7DA");
+  x.fillStyle=g;x.fillRect(0,0,w,h);
+  const sx=w*.72,sy=h*.14;
+  const halo=x.createRadialGradient(sx,sy,0,sx,sy,w*.55);
+  halo.addColorStop(0,"rgba(255,252,238,.62)");
+  halo.addColorStop(.18,"rgba(255,248,226,.26)");
+  halo.addColorStop(.5,"rgba(255,246,224,.07)");
+  halo.addColorStop(1,"rgba(255,255,255,0)");
+  x.fillStyle=halo;x.fillRect(0,0,w,h);
+  const haze=x.createLinearGradient(0,h*.6,0,h);
+  haze.addColorStop(0,"rgba(255,250,238,0)");haze.addColorStop(1,"rgba(255,248,232,.3)");
+  x.fillStyle=haze;x.fillRect(0,h*.6,w,h*.4);
+  return c.toDataURL("image/jpeg",.92);
+}
+
+/* nuvole: rumore frattale a più ottave, soglia alta = poca nuvola, molto azzurro.
+   Il reticolo è periodico in x, così la ripetizione orizzontale non ha giunte. */
+function clouds(w,h,seed,thresh,soft){
+  const gw=190,gh=Math.max(40,Math.round(190*h/w));
+  const r=rng(seed*7717+31);
+  const octs=[[3,.52],[6,.26],[12,.14],[24,.08]];
+  const grids=octs.map(o=>{
+    const n=o[0],a=new Float32Array(n*(n+1));
+    for(let i=0;i<a.length;i++)a[i]=r();
+    return a;
+  });
+  const sm=t=>t*t*(3-2*t);
+  function samp(a,n,u,v){
+    const gx=u*n,gy=v*n;
+    const i0=Math.floor(gx)%n,i1=(i0+1)%n;
+    let j0=Math.floor(gy);if(j0>n-1)j0=n-1;const j1=Math.min(j0+1,n);
+    const fx=sm(gx-Math.floor(gx)),fy=sm(gy-Math.floor(gy));
+    const a00=a[j0*n+i0],a10=a[j0*n+i1],a01=a[j1*n+i0],a11=a[j1*n+i1];
+    return (a00*(1-fx)+a10*fx)*(1-fy)+(a01*(1-fx)+a11*fx)*fy;
+  }
+  const cv=document.createElement("canvas");cv.width=gw;cv.height=gh;
+  const cx=cv.getContext("2d"),img=cx.createImageData(gw,gh),d=img.data;
+  for(let j=0;j<gh;j++){
+    const v=j/gh;
+    const band=Math.min(1,Math.sin(Math.PI*Math.min(1,Math.max(0,v)))*1.35);
+    for(let i=0;i<gw;i++){
+      const u=i/gw;
+      let n=0;
+      for(let k=0;k<octs.length;k++)n+=octs[k][1]*samp(grids[k],octs[k][0],u,v*.85+.05);
+      const t=(n-thresh)/.26;
+      let al=t<=0?0:t>=1?1:sm(t);
+      al*=band*soft;
+      const p=(j*gw+i)*4;
+      d[p]=252;d[p+1]=253;d[p+2]=255;d[p+3]=Math.round(al*255);
+    }
+  }
+  cx.putImageData(img,0,0);
+  const c=document.createElement("canvas");c.width=w;c.height=h;
+  const x=c.getContext("2d");
+  x.imageSmoothingEnabled=true;x.imageSmoothingQuality="high";
+  x.drawImage(cv,0,0,w,h);
+  return c.toDataURL("image/png");
+}
+const F={};
+function buildFields(){
+  F.hero=sky(1500,1000);
+  F.cl1=clouds(1600,560,7,.56,.95);
+  F.cl2=clouds(1200,420,23,.52,.65);
+  F.floats=[field(420,560,11,"linen"),field(420,420,12,"sky"),
+            field(420,540,13,"terra",true),field(420,560,14,"pine",true)];
+  F.rooms={nook:field(760,980,21,"linen"),corner:field(760,980,22,"sky"),
+           loft:field(760,980,23,"wood",true),terrace:field(760,980,24,"terra",true)};
+  F.court=field(760,1000,55,"pine",true);
+  F.dish=[field(420,540,31,"terra",true),field(420,540,32,"linen"),field(420,540,33,"wood",true),
+          field(420,540,34,"pine",true),field(420,540,35,"sky")];
+  F.gal=Array.from({length:10},(_,i)=>field(560,700,41+i,
+        ["terra","linen","sky","pine","wood"][i%5],i%5===0||i%5===3||i%5===4));
+  paintFields();
+}
+
+/* ══════════ loader ══════════ */
+const load=$("#load"),cnt=$("#load .count"),barI=$("#load .bar i"),wordEls=$$("#load .words span");
+let wi=0;const wt=setInterval(()=>{wordEls[wi].classList.remove("on");
+  wi=(wi+1)%wordEls.length;wordEls[wi].classList.add("on");},640);
+requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(buildFields,40)));
+let n=0;const ct=setInterval(()=>{
+  n=Math.min(100,n+Math.random()*11+6);
+  cnt.textContent=String(Math.floor(n)).padStart(2,"0");barI.style.width=n+"%";
+  if(n>=100){clearInterval(ct);clearInterval(wt);
+    setTimeout(()=>{load.classList.add("out");document.body.classList.add("ready");
+      $("#heroLines").querySelectorAll("span").forEach((s,i)=>{
+        s.style.transition="transform 1.1s cubic-bezier(.16,1,.3,1) "+(i*.1+.15)+"s";s.style.transform="none";});
+    },260);}
+},130);
+
+/* ══════════ paint the fields ══════════ */
+const CAPS=["Crafted origins","Morning bake","Everyday plates","The courtyard","Life in motion",
+  "Room 04, late","Counter, 19:40","Sourdough day 3","The mango tree","Last pour"];
+function tiles(host,from,to){
+  const html=[];
+  for(let i=from;i<to;i++)
+    html.push(`<figure class="gt" data-cursor="View" data-i="${i}" style="background-image:url(${F.gal[i]})">
+      <figcaption>${CAPS[i]}</figcaption></figure>`);
+  host.innerHTML=html.join("")+html.join("");
+}
+function paintFields(){
+  $("#frameImg").style.backgroundImage=`url(${F.hero})`;
+  $("#cl1").style.backgroundImage=`url(${F.cl1})`;
+  $("#cl2").style.backgroundImage=`url(${F.cl2})`;
+  $$(".float").forEach((el,i)=>el.style.backgroundImage=`url(${F.floats[i%4]})`);
+  $$(".slide[data-room]").forEach(s2=>{
+    s2.querySelector(".ph").style.backgroundImage=`url(${F.rooms[s2.dataset.room]})`;});
+  tiles($("#bandA"),0,5);tiles($("#bandB"),5,10);
+}
+
+/* marquee content */
+const MQ=["In common","Casual refinement","House made","Neighbourhood escape"];
+$("#marqRow").innerHTML=[...MQ,...MQ,...MQ,...MQ].map(t=>`<span>${t}</span>`).join("");
+
+/* ══════════ smooth scroll ══════════ */
+const SS={t:scrollY,c:scrollY,on:!TOUCH&&!RED&&!SAFARI};
+const limit=()=>document.documentElement.scrollHeight-innerHeight;
+if(SS.on){
+  addEventListener("wheel",e=>{
+    if(document.body.classList.contains("lock"))return;
+    e.preventDefault();
+    SS.t=clamp(SS.t+e.deltaY*(e.deltaMode===1?26:1),0,limit());
+  },{passive:false});
+  addEventListener("scroll",()=>{
+    if(Math.abs(scrollY-SS.c)>3){SS.c=SS.t=scrollY;}
+  },{passive:true});
+}
+function goTo(el){
+  const y=clamp(el.getBoundingClientRect().top+(SS.on?SS.c:scrollY)-64,0,limit());
+  /* un salto da menu non deve innescare il sipario a metà navigazione */
+  if(SS.on){SS.t=y;}else{scrollTo({top:y,behavior:"smooth"});}
+}
+$$('a[href^="#"]').forEach(a=>a.addEventListener("click",e=>{
+  const h=a.getAttribute("href");if(!h||h.length<2)return;
+  const t=$(h);if(!t)return;e.preventDefault();
+  document.body.classList.remove("menu","lock");$("#burger").setAttribute("aria-expanded","false");
+  goTo(t);
+}));
+
+/* ══════════ word-by-word reader ══════════ */
+const READ=$$("[data-read]");
+function splitWords(){
+  READ.forEach(el=>{
+    const walk=node=>{
+      [...node.childNodes].forEach(ch=>{
+        if(ch.nodeType===3){
+          const frag=document.createDocumentFragment();
+          ch.textContent.split(/(\s+)/).forEach(w=>{
+            if(!w.trim()){frag.appendChild(document.createTextNode(w));return;}
+            const b=document.createElement("b");b.textContent=w;frag.appendChild(b);
+          });
+          node.replaceChild(frag,ch);
+        }else if(ch.nodeType===1&&ch.tagName!=="B")walk(ch);
+      });
+    };
+    walk(el);
+  });
+}
+let readers=[];
+function rebuildReaders(){readers=READ.map(el=>({el,w:$$("b",el)}));}
+splitWords();rebuildReaders();
+
+/* ══════════ reveals ══════════ */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}
+}),{threshold:.2});
+$$(".up").forEach(e=>io.observe(e));
+
+/* ══════════ cursor ══════════ */
+const cur=$("#cur"),curT=$("#cur span");
+let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my,px=mx,py=my;
+if(!TOUCH){
+  addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY;},{passive:true});
+  document.addEventListener("mouseover",e=>{
+    const t=e.target.closest("[data-cursor],a,button,.gt");
+    if(t){cur.classList.add("on");curT.textContent=t.dataset.cursor||(t.tagName==="A"||t.tagName==="BUTTON"?"Go":"");}
+    else cur.classList.remove("on");
+  });
+}
+
+
+/* ══════════ languages ══════════ */
+const T={
+"In common":["Вместе","함께","共に","共处"],
+"Rooms":["Номера","객실","客室","客房"],
+"Kitchen":["Кухня","주방","キッチン","厨房"],
+"Look around":["Осмотреться","둘러보기","見てまわる","随便看看"],
+"Find us":["Как добраться","오시는 길","アクセス","找到我们"],
+"Book a stay":["Забронировать","숙박 예약","宿泊を予約","预订客房"],
+"Book a table":["Забронировать стол","테이블 예약","テーブルを予約","预订餐位"],
+"Close":["Закрыть","닫기","閉じる","关闭"],
+"Back to the site":["Вернуться на сайт","사이트로 돌아가기","サイトに戻る","返回网站"],
+"Terracotta":["Терракота","테라코타","テラコッタ","赤陶"],
+"Daylight":["Дневной свет","데이라이트","デイライト","日光"],
+"Neighbourhood hotel & kitchen — Thalang, Phuket":["Отель и кухня по соседству — Тхаланг, Пхукет","동네의 호텔 & 키친 — 탈랑, 푸껫","街のホテル＆キッチン — タラン、プーケット","街区里的酒店与厨房 — 塔朗，普吉"],
+"Eleven rooms upstairs, one long table downstairs, and a door that stays open from the first loaf to the last pour.":["Одиннадцать номеров наверху, один длинный стол внизу и дверь, открытая от первой буханки до последнего бокала.","위층엔 열한 개의 객실, 아래층엔 하나의 긴 테이블, 그리고 첫 빵부터 마지막 잔까지 열려 있는 문.","上階に11の客室、下階にひとつの長いテーブル。最初のパンから最後の一杯まで、扉は開いています。","楼上十一间客房，楼下一张长桌，从第一炉面包到最后一杯酒，门始终敞开。"],
+"Scroll":["Листайте","스크롤","スクロール","向下滚动"],
+"01 — The house":["01 — Дом","01 — 집","01 — 家","01 — 这栋房子"],
+"Est. 2025":["Осн. 2025","2025년 시작","2025年創業","始于 2025"],
+"02 — Rooms":["02 — Номера","02 — 객실","02 — 客室","02 — 客房"],
+"03 — Kitchen":["03 — Кухня","03 — 주방","03 — キッチン","03 — 厨房"],
+"07:00 — 23:00, seven days":["07:00 — 23:00, семь дней","07:00 — 23:00, 연중무휴","07:00 — 23:00、年中無休","07:00 — 23:00，全周营业"],
+"04 — Look around":["04 — Осмотреться","04 — 둘러보기","04 — 見てまわる","04 — 随便看看"],
+"05 — Find us":["05 — Как добраться","05 — 오시는 길","05 — アクセス","05 — 找到我们"],
+"A bakery counter":["Пекарня на четырёх табуретах,","빵집 카운터 하나가","一台のベーカリーカウンターが","一个面包吧台，"],
+"that grew a roof.":["которая обрела крышу.","지붕을 갖게 되었습니다.","屋根を持つ家になった。","后来长出了屋顶。"],
+"URBY started with four stools, a record player and a sourdough starter someone carried over from Chiang Mai. It grew into a house: rooms above, a kitchen below, a courtyard where guests and neighbours end up on the same bench without planning to.":["URBY начинался с четырёх табуретов, проигрывателя и закваски, привезённой из Чиангмая. Он вырос в дом: номера наверху, кухня внизу и двор, где гости и соседи неожиданно оказываются на одной скамейке.","URBY는 스툴 네 개, 턴테이블 하나, 그리고 치앙마이에서 가져온 사워도우 스타터로 시작했습니다. 그것이 한 채의 집이 되었습니다. 위층엔 객실, 아래층엔 주방, 그리고 손님과 이웃이 어느새 같은 벤치에 앉게 되는 마당.","URBYは4脚のスツールとレコードプレーヤー、チェンマイから運ばれたサワードウ種から始まりました。やがて一軒の家になりました。上階に客室、下階にキッチン、そして客も近所の人も気づけば同じベンチに座っている中庭。","URBY 从四把凳子、一台唱机和一份从清迈带来的酸面团酵头开始。后来它长成了一栋房子：楼上是客房，楼下是厨房，中庭里客人和邻居不知不觉坐到了同一条长凳上。"],
+"We cook what the morning market gives us, bake everything in house, and keep the lights low enough that nobody checks the time. Stay a night or stay for a coffee — the welcome is identical.":["Мы готовим то, что даёт утренний рынок, печём всё сами и держим свет достаточно низким, чтобы никто не смотрел на часы. Останьтесь на ночь или на чашку кофе — приём одинаковый.","아침 시장이 주는 것으로 요리하고, 모든 것을 직접 굽고, 아무도 시계를 보지 않을 만큼 조명을 낮춥니다. 하룻밤을 묵든 커피 한 잔을 마시든 환대는 같습니다.","朝の市場が与えてくれるものを料理し、すべてを自家製で焼き、誰も時計を見ないくらいに灯りを落としています。一泊でも、コーヒー一杯でも、迎え方は同じです。","我们用早市给的食材做菜，所有东西都在店里做，灯光调得低到没人会看时间。住一晚，或只喝一杯咖啡 —— 招待完全一样。"],
+"Eleven rooms":["Одиннадцать номеров","열한 개의 객실","11の客室","十一间客房"],
+"No two alike":["Все разные","모두 다릅니다","どれも同じではない","没有两间相同"],
+"Kitchen open 07:00 — 23:00":["Кухня работает 07:00 — 23:00","주방 07:00 — 23:00","キッチン 07:00 — 23:00","厨房 07:00 — 23:00"],
+"Seven days":["Семь дней в неделю","연중무휴","年中無休","全周营业"],
+"Layan beach":["Пляж Лаян","라얀 비치","ラヤンビーチ","拉扬海滩"],
+"9 min by scooter":["9 минут на скутере","스쿠터로 9분","スクーターで9分","摩托车 9 分钟"],
+"Keep scrolling — the rooms move sideways.":["Листайте дальше — номера движутся вбок.","계속 스크롤하세요 — 객실이 옆으로 흘러갑니다.","スクロールを続けてください — 客室が横に流れます。","继续滚动 —— 客房会横向移动。"],
+"22 m² · courtyard side":["22 м² · окна во двор","22 m² · 안뜰 쪽","22 m² · 中庭側","22 m² · 面向中庭"],
+"32 m² · morning light":["32 м² · утренний свет","32 m² · 아침 햇살","32 m² · 朝の光","32 m² · 晨光"],
+"44 m² · under the roof":["44 м² · под крышей","44 m² · 지붕 아래","44 m² · 屋根の下","44 m² · 屋顶之下"],
+"58 m² · private terrace":["58 м² · своя терраса","58 m² · 프라이빗 테라스","58 m² · 専用テラス","58 m² · 私人露台"],
+"Queen bed and a window seat deep enough to sleep in":["Кровать queen и подоконник, на котором можно спать","퀸 침대와 잠들 수 있을 만큼 깊은 창가 좌석","クイーンベッドと、眠れるほど深い窓辺の席","一张大床，和深到能睡觉的窗台座"],
+"Rain shower, house soap, linen from the north":["Тропический душ, своё мыло, лён с севера","레인 샤워, 하우스 비누, 북부산 리넨","レインシャワー、自家製ソープ、北部のリネン","雨淋花洒、自制香皂、北部亚麻"],
+"Quietest room in the house after 22:00":["Самый тихий номер после 22:00","22시 이후 가장 조용한 방","22時以降、家で一番静かな部屋","22 点后全屋最安静的房间"],
+"King bed, two windows, sun from 07:00":["Кровать king, два окна, солнце с 07:00","킹 침대, 창 두 개, 7시부터 드는 햇살","キングベッド、二つの窓、7時からの陽射し","特大床、两扇窗、7 点开始的阳光"],
+"Reading chair, small desk, bath and shower":["Кресло для чтения, стол, ванна и душ","리딩 체어, 작은 책상, 욕조와 샤워","読書椅子、小さな机、バスタブとシャワー","阅读椅、小书桌、浴缸与淋浴"],
+"Looks over the mango tree and the bakery door":["Вид на манговое дерево и дверь пекарни","망고나무와 빵집 문이 내려다보입니다","マンゴーの木とベーカリーの扉を望む","望向芒果树和面包房的门"],
+"Mezzanine, king bed and a daybed for a third":["Мезонин, кровать king и кушетка для третьего","메자닌, 킹 침대와 한 사람을 위한 데이베드","メザニン、キングベッドと三人目のデイベッド","夹层、特大床和给第三人的日床"],
+"Record player, a crate of vinyl, a small bar":["Проигрыватель, ящик винила, маленький бар","턴테이블, 바이닐 한 상자, 작은 바","レコードプレーヤー、レコード一箱、小さなバー","唱机、一箱黑胶、一个小吧台"],
+"Rafters, skylight, rain you can hear":["Балки, световой люк, слышный дождь","서까래, 천창, 들리는 빗소리","梁、天窓、聞こえる雨音","露梁、天窗，听得见的雨"],
+"Outdoor bath, table for six, hammock corner":["Ванна под открытым небом, стол на шестерых, гамак","야외 욕조, 6인 테이블, 해먹 코너","屋外バス、6人のテーブル、ハンモックの一角","户外浴缸、六人餐桌、吊床角落"],
+"King bed, separate sitting room":["Кровать king, отдельная гостиная","킹 침대, 별도의 거실","キングベッド、独立したリビング","特大床、独立起居室"],
+"The room people book the whole floor for":["Ради него бронируют весь этаж","사람들이 층 전체를 예약하게 만드는 방","この部屋のためにフロアごと予約される","让人愿意包下整层的房间"],
+"per night · breakfast in":["за ночь · завтрак включён","1박 · 조식 포함","1泊 · 朝食込み","每晚 · 含早餐"],
+"Reserve":["Забронировать","예약","予約","预订"],
+"Everyday plates,":["Каждодневные блюда,","매일의 요리,","日々の一皿、","家常的菜，"],
+"cooked in house.":["приготовленные у нас.","모두 직접 만듭니다.","すべて自家製。","都在店里做。"],
+"Sourdough started here, yoghurt cultured here, ice cream churned here. The menu moves with the market — this is where it stands today.":["Закваска наша, йогурт наш, мороженое взбиваем сами. Меню меняется вместе с рынком — вот каким оно стало сегодня.","사워도우도, 요거트도, 아이스크림도 모두 이곳에서 만듭니다. 메뉴는 시장을 따라 바뀝니다 — 오늘은 이렇습니다.","サワードウも、ヨーグルトも、アイスクリームもここで作ります。メニューは市場とともに変わります — 今日はこの通りです。","酸面团、酸奶、冰淇淋都在这里做。菜单随市场变化 —— 这是今天的样子。"],
+"Date":["Дата","날짜","日付","日期"],
+"Time":["Время","시간","時間","时间"],
+"People":["Гостей","인원","人数","人数"],
+"Name":["Имя","이름","お名前","姓名"],
+"Anything we should know":["Что нам стоит знать","알아야 할 사항","何かご要望は","有什么需要我们知道的"],
+"Request the table":["Отправить запрос","테이블 요청하기","テーブルをリクエスト","提交订位请求"],
+"Counter seats are kept for walk-ins every night.":["Места у стойки каждый вечер оставляем для гостей без брони.","카운터 좌석은 매일 밤 워크인을 위해 남겨 둡니다.","カウンター席は毎晩、予約なしのお客様のために空けています。","每晚都会为无预约的客人留出吧台座位。"],
+"Morning":["Утро","모닝","モーニング","早餐"],
+"Snacks & sides":["Закуски и гарниры","스낵 & 사이드","スナック＆サイド","小食与配菜"],
+"Cocktails":["Коктейли","칵테일","カクテル","鸡尾酒"],
+"Today only":["Только сегодня","오늘의 메뉴","本日のみ","仅限今日"],
+"Prices in Thai baht, service included. Tell us about allergies — the kitchen keeps a full ingredient list.":["Цены в батах, обслуживание включено. Расскажите об аллергиях — на кухне есть полный список ингредиентов.","가격은 태국 바트, 서비스료 포함. 알레르기가 있다면 알려 주세요 — 주방에 전체 원재료 목록이 있습니다.","価格はタイバーツ、サービス料込み。アレルギーはお知らせください — 厨房に全原材料リストがあります。","价格为泰铢，已含服务费。有过敏请告诉我们 —— 厨房备有完整配料表。"],
+"Bakery opens":["Пекарня открывается","베이커리 오픈","ベーカリー開店","面包房开门"],
+"Loaves out of the oven, first filter coffee on the counter.":["Хлеб из печи, первый фильтр-кофе на стойке.","갓 구운 빵, 카운터 위 첫 필터 커피.","焼きたてのパン、カウンターに最初のフィルターコーヒー。","面包出炉，吧台上第一杯滤泡咖啡。"],
+"Breakfast":["Завтрак","조식","朝食","早餐"],
+"Yoghurt cream, eggs, navy beans on toast. Included if you're staying.":["Йогуртовый крем, яйца, фасоль на тосте. Для гостей отеля включено.","요거트 크림, 달걀, 콩 토스트. 투숙객은 포함입니다.","ヨーグルトクリーム、卵、豆のトースト。ご宿泊の方は込みです。","酸奶奶油、鸡蛋、白豆吐司。住店客人已含。"],
+"All-day plates":["Блюда весь день","올데이 플레이트","オールデイの一皿","全天供应"],
+"The quiet hours. Long lunches, slow work, the fan on low.":["Тихие часы. Долгие обеды, спокойная работа, вентилятор на минимуме.","조용한 시간. 긴 점심, 느린 작업, 낮게 도는 선풍기.","静かな時間。長い昼食、ゆっくりの仕事、弱く回る扇風機。","安静的时段。漫长的午餐、慢慢的工作、开到最小的风扇。"],
+"Records & aperitivo":["Пластинки и аперитив","레코드 & 아페리티보","レコードとアペリティーボ","黑胶与餐前酒"],
+"Someone picks a side, the bar starts pouring.":["Кто-то ставит сторону пластинки, бар начинает разливать.","누군가 한 면을 고르면, 바가 잔을 채우기 시작합니다.","誰かがA面を選び、バーが注ぎ始めます。","有人挑一面唱片，吧台开始倒酒。"],
+"Dinner in common":["Общий ужин","함께하는 저녁","みんなの夕食","共享晚餐"],
+"Small plates meant for the middle of the table.":["Небольшие блюда — для середины стола.","테이블 가운데 두고 나누는 작은 접시들.","テーブルの真ん中に置く小皿料理。","放在桌子中间分享的小盘菜。"],
+"Last pour":["Последний бокал","마지막 잔","ラストオーダー","最后一杯"],
+"Unless it's a good night. Then the counter stays open.":["Если вечер удался — стойка работает дольше.","좋은 밤이라면, 카운터는 계속 열려 있습니다.","いい夜なら、カウンターはまだ開いています。","如果夜色不错，吧台会继续开着。"],
+"Fifteen minutes from the airport, nine from Layan beach. Parking in the courtyard, scooters at the gate, dogs welcome on the terrace.":["Пятнадцать минут от аэропорта, девять — от пляжа Лаян. Парковка во дворе, скутеры у ворот, собакам рады на террасе.","공항에서 15분, 라얀 비치에서 9분. 안뜰 주차, 정문 앞 스쿠터, 테라스에는 반려견도 환영합니다.","空港から15分、ラヤンビーチから9分。中庭に駐車場、門にスクーター、テラスは犬も歓迎です。","距机场十五分钟，距拉扬海滩九分钟。中庭停车，门口有摩托车，露台欢迎带狗。"],
+"Direct rate":["Прямой тариф","다이렉트 요금","公式料金","官网直订价"],
+"Dinner from 18:30":["Ужин с 18:30","저녁 18:30부터","ディナー18:30から","晚餐 18:30 起"],
+"Email":["Почта","이메일","メール","邮件"],
+"Phone":["Телефон","전화","電話","电话"],
+"Neighbourhood hotel & kitchen":["Отель и кухня по соседству","동네의 호텔 & 키친","街のホテル＆キッチン","街区里的酒店与厨房"],
+"Thalang · Phuket":["Тхаланг · Пхукет","탈랑 · 푸껫","タラン · プーケット","塔朗 · 普吉"],
+"Direct booking":["Прямое бронирование","다이렉트 예약","公式予約","官网直订"],
+"Dates":["Даты","날짜","日程","日期"],
+"Room":["Номер","객실","客室","客房"],
+"Details":["Данные","정보","詳細","详情"],
+"Confirm":["Подтверждение","확인","確認","确认"],
+"Arrive":["Заезд","체크인","チェックイン","入住"],
+"Leave":["Выезд","체크아웃","チェックアウト","退房"],
+"Guests":["Гостей","인원","人数","人数"],
+"Check-in from 14:00, check-out by 11:00. Late arrivals are fine — someone is always at the counter.":["Заезд с 14:00, выезд до 11:00. Поздний приезд — не проблема, кто-то всегда на стойке.","체크인 14:00부터, 체크아웃 11:00까지. 늦은 도착도 괜찮습니다 — 카운터에는 늘 누군가 있습니다.","チェックインは14:00から、チェックアウトは11:00まで。遅いご到着も大丈夫です — カウンターには必ず誰かいます。","14:00 后入住，11:00 前退房。晚到也没关系 —— 吧台总有人在。"],
+"Choose a room":["Выбрать номер","객실 선택","客室を選ぶ","选择客房"],
+"Back":["Назад","이전","戻る","返回"],
+"Continue":["Дальше","계속","次へ","继续"],
+"Review":["Проверить","확인하기","内容を確認","查看明细"],
+"Add to the stay":["Добавить к проживанию","추가 옵션","滞在に追加","为住宿添加"],
+"Airport transfer":["Трансфер из аэропорта","공항 픽업","空港送迎","机场接送"],
+"Scooter":["Скутер","스쿠터","スクーター","摩托车"],
+"Confirm request":["Отправить запрос","예약 요청","リクエストを送信","提交预订请求"],
+"No card needed now. We reply within 12 hours to hold the room.":["Карта сейчас не нужна. Ответим в течение 12 часов и придержим номер.","지금은 카드가 필요 없습니다. 12시간 안에 답장드리고 객실을 잡아 둡니다.","今はカード不要です。12時間以内にお返事し、お部屋をお取りします。","现在无需信用卡。我们会在 12 小时内回复并为你保留房间。"],
+"See you soon.":["До скорой встречи.","곧 뵙겠습니다.","またお会いしましょう。","我们很快见。"],
+"Total, taxes in":["Итого, с налогами","총액, 세금 포함","合計（税込）","合计，含税"],
+"Nights":["Ночей","숙박","泊数","晚数"],
+"nights":["ноч.","박","泊","晚"],
+"guests":["гостей","명","名","位"],
+"Breakfast in common":["Общий завтрак","조식 포함","朝食付き","含早餐"],
+"included":["включено","포함","込み","已包含"],
+"Reference":["Номер брони","예약 번호","予約番号","预订编号"],
+"Confirmation to":["Подтверждение на","확인 메일","確認メール送信先","确认函送至"],
+"Who's coming?":["Кто придёт?","누가 오시나요?","どなたが来られますか","谁来用餐？"],
+"Allergies, birthdays, a quiet corner":["Аллергии, дни рождения, тихий угол","알레르기, 생일, 조용한 자리","アレルギー、誕生日、静かな席","过敏、生日、安静的角落"],
+"First and last":["Имя и фамилия","성과 이름","姓名","姓与名"],
+"We need a name and a working email to hold the room.":["Нужны имя и рабочая почта, чтобы придержать номер.","객실을 잡아 두려면 이름과 사용 중인 이메일이 필요합니다.","お部屋を確保するには、お名前と有効なメールアドレスが必要です。","为你保留房间需要姓名和有效邮箱。"],
+"Add a name so we know who to look for.":["Укажите имя, чтобы мы знали, кого встречать.","누구를 기다리면 되는지 이름을 알려 주세요.","お名前をご記入ください。","请留下姓名，我们好认人。"],
+"Pick a date for the table.":["Выберите дату.","날짜를 선택해 주세요.","日付を選んでください。","请选择日期。"],
+"The leaving date has to come after the arrival date.":["Дата выезда должна быть позже даты заезда.","체크아웃 날짜는 체크인 이후여야 합니다.","チェックアウトはチェックイン後の日付にしてください。","退房日期必须晚于入住日期。"],
+"Table requested. We confirm by email today.":["Запрос отправлен. Подтвердим по почте сегодня.","요청이 접수되었습니다. 오늘 이메일로 확인드립니다.","リクエストを受け付けました。本日メールでご連絡します。","已收到请求，我们今天会用邮件确认。"]
+};
+const HTMLS={
+ creed:{
+  ru:'Каждая деталь здесь — смесь культур и историй, живущих бок о бок. Разные буквы — одно слово. Разные люди — <em class="i">один стол.</em>',
+  ko:'이곳의 모든 것은 나란히 살아가는 문화와 이야기의 조합입니다. 다른 글자들, 하나의 단어. 다른 사람들, <em class="i">하나의 테이블.</em>',
+  ja:'ここにあるすべては、隣り合って生きる文化と物語の混ざり合いです。異なる文字で、ひとつの言葉。異なる人々で、<em class="i">ひとつのテーブル。</em>',
+  zh:'这里的每一处，都是并肩而居的文化与故事的交融。不同的字母，同一个词。不同的人，<em class="i">同一张桌子。</em>'},
+ roomsTitle:{
+  ru:'Одиннадцать<br>номеров,<br><em class="i" style="text-transform:none">все разные</em>',
+  ko:'열한 개의<br>객실,<br><em class="i" style="text-transform:none">같은 방은 없습니다</em>',
+  ja:'11の<br>客室、<br><em class="i" style="text-transform:none">どれも同じではない</em>',
+  zh:'十一间<br>客房，<br><em class="i" style="text-transform:none">没有两间相同</em>'},
+ stay:{ru:'Оставайтесь<br>у нас',ko:'저희 집에<br>머무세요',ja:'泊まりに<br>来てください',zh:'住下来<br>吧'}
+};
+const LANGS=["en","ru","ko","ja","zh"],CODE={en:"EN",ru:"RU",ko:"KO",ja:"JA",zh:"ZH"};
+const I18N={en:{},ru:{},ko:{},ja:{},zh:{}};
+Object.keys(T).forEach(k=>["ru","ko","ja","zh"].forEach((l,i)=>{I18N[l][k]=T[k][i];}));
+let lang="en";
+const tr=s2=>(I18N[lang]&&I18N[lang][s2])||s2;
+const SNAP=[],PH=[];
+document.querySelectorAll("a,button,p,span,h1,h2,h3,h4,li,strong,small,option,dt,dd,label,figcaption")
+ .forEach(el=>{
+   if(el.closest("#load"))return;
+   if(el.children.length===0){
+     const t=el.textContent.trim();
+     if(t&&t.length<400)SNAP.push({el,en:t});
+   }
+   if(el.placeholder)PH.push({el,en:el.placeholder});
+ });
+$$("[data-html]").forEach(el=>{HTMLS[el.dataset.html].en=el.innerHTML;});
+function applyLang(l){
+  lang=l;document.documentElement.lang=l;
+  SNAP.forEach(n=>{const v=I18N[l][n.en];n.el.textContent=v||n.en;});
+  PH.forEach(n=>{const v=I18N[l][n.en];n.el.placeholder=v||n.en;});
+  $$("[data-html]").forEach(el=>{el.innerHTML=HTMLS[el.dataset.html][l]||HTMLS[el.dataset.html].en;});
+  $("#langBtn").textContent=CODE[l];
+  $$("[data-l]").forEach(b=>b.setAttribute("aria-current",b.dataset.l===l));
+  if(typeof renderMenu==="function"){const t=$('.tabs button[aria-selected="true"]');if(t)renderMenu(t.dataset.tab);}
+  splitWords();rebuildReaders();clockTick();
+}
+$("#langBtn").addEventListener("click",e=>{
+  e.stopPropagation();$("#langMenu").classList.toggle("on");
+  $("#langBtn").setAttribute("aria-expanded",$("#langMenu").classList.contains("on"));
+});
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-l]");
+  if(b){applyLang(b.dataset.l);document.body.classList.remove("menu","lock");}
+  if(!e.target.closest(".lang"))$("#langMenu").classList.remove("on");
+});
+
+/* ══════════ the clock in Thalang ══════════ */
+function clockTick(){
+  const h=phuketHour(),hh=Math.floor(h),mm=Math.floor((h-hh)*60);
+  $("#clock").textContent=`Thalang ${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}`;
+}
+setInterval(clockTick,20000);
+
+/* ══════════ nav / menu / mode ══════════ */
+const nav=$("#nav"),burger=$("#burger");
+burger.addEventListener("click",()=>{
+  const o=document.body.classList.toggle("menu");
+  document.body.classList.toggle("lock",o);
+  burger.setAttribute("aria-expanded",o);
+});
+let mode="dinner";
+const setMode=m=>{mode=m;document.documentElement.setAttribute("data-mode",m);
+  const t=$("#modeT");if(t)t.textContent=(I18N[lang]&&I18N[lang][m==="dinner"?"Terracotta":"Daylight"])||(m==="dinner"?"Terracotta":"Daylight");
+  $("#mode").setAttribute("aria-pressed",m==="daylight");};
+$("#mode").addEventListener("click",()=>{setMode(mode==="dinner"?"daylight":"dinner");sfx("thunk");});
+
+/* ══════════ menu + peek ══════════ */
+const MENU={
+ morning:[
+  {n:"House-made yoghurt cream, pistachio &amp; peanut",d:"Recipe N°01. Cultured overnight, honey from the mainland.",p:180},
+  {n:"Sourdough, cultured butter, sea salt",d:"Cut thick. The reason the bakery opens at seven.",p:140},
+  {n:"Braised navy beans on toast, poached egg",d:"Slow tomato, smoked paprika, a lot of olive oil.",p:190},
+  {n:"Buckwheat pancakes, burnt honey",d:"Ricotta whipped to order.",p:210},
+  {n:"Filter coffee",d:"Roasted in Bangkok, ground per cup. Refills on the house.",p:90}],
+ snacks:[
+  {n:"Charred tenderstem broccoli",d:"Anchovy butter, toasted almond.",p:220},
+  {n:"Cauliflower bites",d:"Smoked paprika, lemon aioli.",p:195},
+  {n:"Coal-roasted beets",d:"Whipped feta, dill oil.",p:210},
+  {n:"Wild mushroom arancini",d:"Aged parmesan, black pepper.",p:260},
+  {n:"Crispy brussel sprouts",d:"Fish sauce caramel, crushed peanut.",p:195},
+  {n:"Grilled flatbread",d:"Garlic oil, thyme, made to order.",p:150},
+  {n:"Charred pizzetta",d:"Nduja, hot honey, oregano.",p:290}],
+ cocktails:[
+  {n:"Smoke Signal",d:"Mezcal, burnt pineapple, lime, salt.",p:320},
+  {n:"Black Velvet Old Fashioned",d:"Rye, cacao husk, stout reduction.",p:380},
+  {n:"The Last Word on Fire",d:"Gin, chartreuse, roasted chilli.",p:350},
+  {n:"Coconut Negroni",d:"Fat-washed gin, campari, sweet vermouth.",p:340}],
+ today:[
+  {t:"Drink",n:"The Last Word on Fire",d:"Poured until the chilli batch runs out.",p:350},
+  {t:"Side",n:"Charred corn ribs",d:"Lime salt, cultured butter.",p:240},
+  {t:"Dessert",n:"Burnt honey custard",d:"Torched to order, sea salt on top.",p:220},
+  {t:"Bread",n:"Focaccia, new-season olive oil",d:"Baked at 16:00, gone by 20:00.",p:160}]
+};
+const menuBox=$("#menu"),peek=$("#peek");
+function renderMenu(k){
+  menuBox.innerHTML=MENU[k].map((it,i)=>
+   `<div class="dish" data-peek="${i%5}"><h4>${it.t?`<span class="tg">${it.t}</span>`:""}${it.n}</h4>
+    <span class="p">${baht(it.p)}</span><p>${it.d}</p></div>`).join("");
+}
+renderMenu("morning");
+$$(".tabs button").forEach(b=>b.addEventListener("click",()=>{
+  $$(".tabs button").forEach(x=>x.setAttribute("aria-selected","false"));
+  b.setAttribute("aria-selected","true");renderMenu(b.dataset.tab);
+}));
+if(!TOUCH){
+  menuBox.addEventListener("mouseover",e=>{
+    const d=e.target.closest("[data-peek]");if(!d)return;
+    peek.style.backgroundImage=`url(${F.dish[+d.dataset.peek]})`;peek.classList.add("on");
+  });
+  menuBox.addEventListener("mouseleave",()=>peek.classList.remove("on"));
+}
+
+/* ══════════ lightbox (FLIP) ══════════ */
+const lb=$("#lb"),lbImg=$("#lbImg"),lbCap=$("#lbCap");
+let lbFrom=null;
+document.addEventListener("click",e=>{
+  const t=e.target.closest(".gt");if(!t)return;
+  const i=+t.dataset.i,r=t.getBoundingClientRect();lbFrom=r;
+  lbImg.style.backgroundImage=`url(${F.gal[i]})`;lbCap.textContent=CAPS[i];
+  lb.classList.add("on");document.body.classList.add("lock");
+  const W=Math.min(innerWidth*.86,innerHeight*.78*.8),H=Math.min(innerHeight*.78,W/.8);
+  Object.assign(lbImg.style,{transition:"none",left:(innerWidth-W)/2+"px",top:(innerHeight-H)/2+"px",
+    width:W+"px",height:H+"px",transform:
+    `translate(${r.left-(innerWidth-W)/2}px,${r.top-(innerHeight-H)/2}px) scale(${r.width/W},${r.height/H})`});
+  requestAnimationFrame(()=>{
+    lbImg.style.transition="transform 1s cubic-bezier(.16,1,.3,1)";
+    lbImg.style.transform="none";});
+});
+function closeLb(){
+  if(!lb.classList.contains("on"))return;
+  const r=lbFrom,box=lbImg.getBoundingClientRect();
+  lbImg.style.transform=`translate(${r.left-box.left}px,${r.top-box.top}px) scale(${r.width/box.width},${r.height/box.height})`;
+  setTimeout(()=>{lb.classList.remove("on");document.body.classList.remove("lock");},650);
+}
+$("#lbX").addEventListener("click",closeLb);
+lb.addEventListener("click",e=>{if(e.target===lb)closeLb();});
+addEventListener("keydown",e=>{if(e.key==="Escape"){closeLb();closeBook();}});
+
+/* ══════════ table request ══════════ */
+const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const now=new Date();
+$("#tDate").value=iso(now);$("#tDate").min=iso(now);
+$("#bIn").value=iso(new Date(now.getTime()+6048e5));
+$("#bOut").value=iso(new Date(now.getTime()+864e6));
+$("#bIn").min=iso(now);
+$("#tSend").addEventListener("click",()=>{
+  const m=$("#tMsg");m.className="msg";
+  if(!$("#tName").value.trim()){m.classList.add("err");m.textContent=tr("Add a name so we know who to look for.");return;}
+  if(!$("#tDate").value){m.classList.add("err");m.textContent=tr("Pick a date for the table.");return;}
+  const d=new Date($("#tDate").value).toLocaleDateString("en-GB",{day:"numeric",month:"long"});
+  m.classList.add("ok");
+  m.textContent=`${$("#tPeople").value} · ${d} · ${$("#tTime").value} — ${tr("Table requested. We confirm by email today.")}`;
+});
+
+/* ══════════ booking ══════════ */
+const ROOMS={nook:{name:"The Nook",price:3400,note:"22 m² · courtyard side"},
+  corner:{name:"Corner Room",price:4600,note:"32 m² · morning light"},
+  loft:{name:"The Loft",price:6200,note:"44 m² · mezzanine"},
+  terrace:{name:"Terrace Suite",price:8900,note:"58 m² · private terrace"}};
+const st={room:"corner",extras:[]};
+const book=$("#book");
+$("#pick").innerHTML=Object.entries(ROOMS).map(([k,r])=>
+ `<button class="opt" aria-pressed="${k===st.room}" data-r="${k}"><strong>${r.name}</strong>
+   <small>${r.note}</small><small>${baht(r.price)} per night</small></button>`).join("");
+$$("#pick .opt").forEach(b=>b.addEventListener("click",()=>{
+  st.room=b.dataset.r;$$("#pick .opt").forEach(x=>x.setAttribute("aria-pressed",x===b));}));
+$$("[data-extra]").forEach(b=>b.addEventListener("click",()=>{
+  const on=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",on);
+  const label=b.querySelector("strong").textContent,price=+b.dataset.price;
+  st.extras=st.extras.filter(x=>x.label!==label);
+  if(on)st.extras.push({label,price});
+}));
+const nights=()=>{const a=new Date($("#bIn").value),b=new Date($("#bOut").value);
+  const n=Math.round((b-a)/864e5);return isNaN(n)?0:n;};
+function step(k){
+  if(k===2&&nights()<1){const m=$("#dMsg");m.className="msg err";
+    m.textContent=tr("The leaving date has to come after the arrival date.");return;}
+  if(k===4)sum();
+  $$(".step").forEach(s=>s.classList.toggle("on",s.dataset.step==String(k)));
+  $$(".steps b").forEach(s=>s.classList.toggle("on",+s.dataset.s<=k));
+  book.scrollTop=0;
+}
+$$("[data-next]").forEach(b=>b.addEventListener("click",()=>step(+b.dataset.next)));
+function sum(){
+  const r=ROOMS[st.room],nN=nights(),g=$("#bGuests").value;
+  const f=s=>new Date(s).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});
+  let total=r.price*nN;
+  const rows=[[tr("Room"),r.name],[tr("Dates"),`${f($("#bIn").value)} → ${f($("#bOut").value)}`],
+    [tr("Nights"),`${nN} · ${g} ${tr("guests")}`],[`${baht(r.price)} × ${nN} ${tr("nights")}`,baht(r.price*nN)]];
+  st.extras.forEach(e=>{total+=e.price;rows.push([e.label,baht(e.price)]);});
+  rows.push([tr("Breakfast in common"),tr("included")]);
+  $("#sum").innerHTML=rows.map(r2=>`<div class="l"><span>${r2[0]}</span><span>${r2[1]}</span></div>`).join("")
+    +`<div class="tot"><span class="eyebrow">${tr("Total, taxes in")}</span><b>${baht(total)}</b></div>`;
+}
+$("#confirm").addEventListener("click",()=>{
+  const m=$("#bMsg");m.className="msg";
+  if(!$("#bName").value.trim()||!$("#bMail").value.includes("@")){
+    m.classList.add("err");m.textContent=tr("We need a name and a working email to hold the room.");step(3);return;}
+  const ref="URBY-"+Math.random().toString(36).slice(2,6).toUpperCase();
+  $("#done").innerHTML=$("#sum").innerHTML+
+    `<div class="l" style="margin-top:12px"><span>${tr("Reference")}</span><span>${ref}</span></div>
+     <div class="l"><span>${tr("Confirmation to")}</span><span>${$("#bMail").value}</span></div>`;
+  step(5);sfx("chime");
+});
+function openBook(room){
+  if(room&&ROOMS[room]){st.room=room;
+    $$("#pick .opt").forEach(x=>x.setAttribute("aria-pressed",x.dataset.r===room));}
+  book.classList.add("on");document.body.classList.add("lock");step(room?2:1);
+}
+function closeBook(){book.classList.remove("on");document.body.classList.remove("lock");}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-book]");if(!b)return;e.preventDefault();
+  document.body.classList.remove("menu");openBook(b.dataset.room);});
+$("#bookX").addEventListener("click",closeBook);$("#bookX2").addEventListener("click",closeBook);
+
+/* ══════════ scroll choreography ══════════ */
+const frame=$("#frame"),frameImg=$("#frameImg"),heroMark=$("#heroMark"),
+  cl1=$("#cl1"),cl2=$("#cl2"),panes=$("#panes"),tint=$("#tint"),
+  letters=$$("#heroMark i"),heroTrack=$("#hero"),lines=$("#heroLines"),
+  marqRow=$("#marqRow"),roomsTrack=$("#rooms"),rail=$("#rail"),
+  roomBar=$("#roomBar"),roomNo=$("#roomNo"),ribbon=$("#ribbon"),
+  bandA=$("#bandA"),bandB=$("#bandB"),fmark=$("#fmark");
+let y=scrollY,ly=y,vel=0,mq=0,mqDir=1;
+
+
+function frameOf(el){
+  const r=el.getBoundingClientRect();
+  return {top:r.top,h:r.height,center:r.top+r.height/2};
+}
+let navAcc=0,navLast=0,navIdle=0,navOn=false;
+let fw0=0,fh0=0;
+function frameBase(){
+  fw0=innerWidth<=860?innerWidth*.74:Math.min(innerWidth*.46,520);
+  fh0=innerHeight*(innerWidth<=860?.56:.62);
+  if(innerWidth>860)fh0=Math.min(fh0,600);
+}
+frameBase();
+
+/* ══════════ MAPPA di Phuket ══════════ */
+/* ══════════ geografia ══════════
+   Punti in coordinate reali; il profilo dell'isola è una semplificazione
+   disegnata a mano sugli stessi assi lat/lon — riconoscibile, non catastale. */
+/* Profilo ricalcato sulla carta di riferimento, in senso orario dal ponte di
+   Sarasin. Tenuto solo il contorno: niente strade, distretti, nomi di spiaggia.
+   I punti notevoli (capo Panwa, Promthep, Patong, Layan, Nai Thon, Ao Po) sono
+   agganciati alle loro coordinate vere, il resto è interpolato fra quelli. */
+const COAST=[
+  /* costa orientale, da nord a sud */
+  [98.2960,8.2050],[98.3040,8.2030],[98.3120,8.1990],[98.3200,8.1940],
+  [98.3280,8.1870],[98.3350,8.1790],[98.3420,8.1710],[98.3470,8.1620],
+  [98.3520,8.1530],[98.3580,8.1440],[98.3630,8.1350],[98.3690,8.1270],
+  [98.3760,8.1200],[98.3830,8.1130],[98.3900,8.1070],[98.3980,8.1010],
+  [98.4060,8.0960],[98.4110,8.0890],[98.4130,8.0810],[98.4100,8.0740],
+  [98.4080,8.0680],[98.4120,8.0620],[98.4160,8.0560],[98.4180,8.0480],
+  [98.4170,8.0400],[98.4130,8.0340],[98.4150,8.0270],[98.4190,8.0200],
+  [98.4220,8.0120],[98.4230,8.0040],[98.4190,7.9980],[98.4150,7.9930],
+  [98.4180,7.9870],[98.4230,7.9800],[98.4270,7.9730],[98.4300,7.9660],
+  [98.4280,7.9590],[98.4240,7.9540],[98.4190,7.9490],[98.4150,7.9440],
+  [98.4180,7.9370],[98.4220,7.9300],[98.4260,7.9230],[98.4280,7.9160],
+  [98.4250,7.9090],[98.4210,7.9030],[98.4170,7.8990],[98.4130,7.8950],
+  [98.4160,7.8890],[98.4200,7.8840],[98.4240,7.8780],[98.4220,7.8720],
+  [98.4160,7.8690],[98.4100,7.8700],[98.4040,7.8720],[98.4010,7.8660],
+  [98.4020,7.8590],[98.4040,7.8510],[98.4070,7.8430],[98.4090,7.8350],
+  [98.4100,7.8280],[98.4080,7.8200],[98.4060,7.8130],[98.4040,7.8060],
+  /* capo Panwa, baia di Makham, Ao Yon */
+  [98.4030,7.7990],[98.3980,7.7970],[98.3940,7.8020],[98.3920,7.8090],
+  [98.3910,7.8160],[98.3870,7.8210],[98.3820,7.8250],[98.3760,7.8240],
+  [98.3710,7.8190],[98.3660,7.8140],[98.3610,7.8080],[98.3560,7.8020],
+  [98.3500,7.7970],[98.3440,7.7920],[98.3380,7.7870],
+  /* Rawai e capo Promthep */
+  [98.3320,7.7830],[98.3270,7.7800],[98.3220,7.7760],[98.3160,7.7700],
+  [98.3110,7.7660],[98.3050,7.7620],
+  /* costa occidentale, da sud a nord */
+  [98.3020,7.7660],[98.3030,7.7730],[98.3010,7.7810],[98.2990,7.7890],
+  [98.2990,7.7960],[98.2960,7.8020],[98.2950,7.8090],[98.2970,7.8150],
+  [98.2970,7.8220],[98.2930,7.8280],[98.2900,7.8340],[98.2920,7.8400],
+  [98.2930,7.8470],[98.2910,7.8540],[98.2890,7.8610],[98.2900,7.8670],
+  [98.2870,7.8730],[98.2850,7.8800],[98.2870,7.8880],[98.2890,7.8960],
+  [98.2860,7.9040],[98.2820,7.9120],[98.2790,7.9200],[98.2770,7.9280],
+  [98.2760,7.9370],[98.2780,7.9450],[98.2810,7.9540],[98.2790,7.9610],
+  [98.2760,7.9670],[98.2770,7.9730],[98.2790,7.9780],[98.2810,7.9840],
+  [98.2850,7.9900],[98.2900,7.9950],[98.2920,8.0020],[98.2920,8.0080],
+  [98.2890,8.0140],[98.2830,8.0190],[98.2760,8.0260],[98.2690,8.0330],
+  [98.2700,8.0410],[98.2740,8.0490],[98.2800,8.0570],[98.2860,8.0650],
+  [98.2920,8.0730],[98.2950,8.0810],[98.2960,8.0890],[98.2950,8.0970],
+  [98.2960,8.1060],[98.2970,8.1160],[98.2970,8.1270],[98.2965,8.1380],
+  [98.2960,8.1490],[98.2955,8.1600],[98.2950,8.1710],[98.2945,8.1820],
+  [98.2950,8.1930]
+];
+/* solo le isole che si notano, e tutte staccate dalla terraferma:
+   le posizioni sono verificate, non messe a occhio */
+const ISLES=[
+  [[98.4460,8.0500],[98.4570,8.0450],[98.4530,8.0340],[98.4420,8.0390]],  /* Naka Yai */
+  [[98.4400,7.9280],[98.4500,7.9230],[98.4460,7.9140],[98.4360,7.9190]],  /* Coconut  */
+  [[98.4640,7.9340],[98.4740,7.9290],[98.4700,7.9200],[98.4600,7.9250]],  /* Rang Yai */
+  [[98.3800,7.7900],[98.3900,7.7860],[98.3860,7.7780],[98.3760,7.7820]],  /* Lon      */
+  [[98.2980,7.7420],[98.3070,7.7380],[98.3030,7.7310],[98.2940,7.7350]]   /* Kaeo     */
+];
+/* name è un elenco di righe: con le etichette grandi i nomi lunghi vanno a capo.
+   Ora che la costa è ricalcata sul vero, i punti stanno alle loro coordinate
+   reali: nessuno è più spostato per farlo cadere sulla riva giusta. */
+const P={
+  urby :{ll:[98.3150,8.0230],name:["URBY"],sub:"Thalang",anchor:"start",home:1},
+  hkt  :{ll:[98.3169,8.1132],name:["Phuket","Airport"],anchor:"end"},
+  layan:{ll:[98.2925,8.0080],name:["Layan","Beach"],anchor:"end"},
+  patong:{ll:[98.2900,7.8960],name:["Patong"],anchor:"end"},
+  town :{ll:[98.3923,7.8804],name:["Phuket","Old Town"],anchor:"start"}
+};
+/* km = distanza su strada, ed è lei a dettare l'andatura: stessa velocità per
+   tutti, quindi il tempo di arrivo è proporzionale ai chilometri.
+   bow = di quanto l'arco si inarca, con segno: positivo a sinistra del verso. */
+/* `card` è il nome che compare solo nella legenda: sulla mappa restano i toponimi */
+const LEGS=[
+  {to:"layan", card:"The beach",   km:3.4, mi:"2,1 mi", time:"9 min",  bow: .22},
+  {to:"hkt",   card:"The airport", km:10,  mi:"6 mi",   time:"15 min", bow: .20},
+  {to:"town",  card:"The city",    km:18,  mi:"11 mi",  time:"30 min", bow:-.24},
+  {to:"patong",card:"The fun",     km:24,  mi:"15 mi",  time:"40 min", bow: .20}
+].sort((a,b)=>a.km-b.km);
+const KMAX=Math.max(...LEGS.map(L=>L.km));
+LEGS.forEach(L=>L.min=parseInt(L.time,10));   /* i minuti come numero, per il conto alla rovescia */
+
+/* ── andatura ──
+   Di base tutti viaggiano insieme alla stessa velocità. Ma quando restano in
+   pochi lo scroll non deve consumarsi a guardare un solo cursore: ogni tratta
+   fra un arrivo e il successivo riceve una fetta di scroll pesata anche su
+   quanti percorsi sono ancora in movimento. Chi resta ultimo accelera. */
+const ARR=LEGS.map(L=>L.km/KMAX);                  /* a che frazione arriva ciascuno */
+const UB=(()=>{
+  let prev=0;const w=ARR.map((a,i)=>{
+    const d=a-prev;prev=a;return d*Math.pow(LEGS.length-i,.8);});
+  const s=w.reduce((x,y)=>x+y,0);let acc=0;
+  return w.map(x=>(acc+=x/s));                     /* punti di scroll degli arrivi */
+})();
+function covered(u){                               /* scroll → frazione di strada */
+  let pu=0,pa=0;
+  for(let i=0;i<UB.length;i++){
+    if(u<=UB[i]||i===UB.length-1)
+      return pa+clamp((u-pu)/Math.max(1e-6,UB[i]-pu),0,1)*(ARR[i]-pa);
+    pu=UB[i];pa=ARR[i];
+  }
+  return 1;
+}
+
+/* ══════════ proiezione ══════════ */
+/* più larga dell'isola di proposito: il margine laterale serve alle etichette,
+   che escono dai punti e verrebbero tagliate dall'overflow del riquadro */
+const VB={w:560,h:940,pad:54};
+const all=COAST.concat(...ISLES,Object.values(P).map(p=>p.ll));
+const k=Math.cos(8.0*Math.PI/180);
+const xs=all.map(c=>c[0]*k),ys=all.map(c=>c[1]);
+const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+const S=Math.min((VB.w-VB.pad*2)/(x1-x0),(VB.h-VB.pad*2)/(y1-y0));
+const ox=(VB.w-(x1-x0)*S)/2, oy=(VB.h-(y1-y0)*S)/2;
+const proj=([lon,lat])=>[ox+(lon*k-x0)*S, oy+(y1-lat)*S];
+
+/* t = tensione: più alto, meno la curva si allontana dai punti. Sulla costa,
+   che ora ha punti fitti, serve alta o le insenature si arrotondano via. */
+function smooth(pts,close,t){
+  t=t||6;
+  const q=pts.map(proj);
+  const at=i=>q[(i%q.length+q.length)%q.length];
+  let d=`M${at(0)[0].toFixed(1)},${at(0)[1].toFixed(1)}`;
+  const last=close?q.length:q.length-1;
+  for(let i=0;i<last;i++){
+    const p0=close?at(i-1):at(Math.max(0,i-1)),p1=at(i),p2=at(i+1),
+          p3=close?at(i+2):at(Math.min(q.length-1,i+2));
+    d+=`C${(p1[0]+(p2[0]-p0[0])/t).toFixed(1)},${(p1[1]+(p2[1]-p0[1])/t).toFixed(1)}`+
+       ` ${(p2[0]-(p3[0]-p1[0])/t).toFixed(1)},${(p2[1]-(p3[1]-p1[1])/t).toFixed(1)}`+
+       ` ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+  }
+  return d+(close?"Z":"");
+}
+
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a)=>{const n=document.createElementNS(NS,t);
+  for(const key in a)n.setAttribute(key,a[key]);return n;};
+
+const gLand=$("#gLand");
+gLand.appendChild(el("path",{id:"coast",d:smooth(COAST,1,10)}));   /* costa: poco addolcita */
+ISLES.forEach(i=>gLand.appendChild(el("path",{class:"isle",d:smooth(i,1)})));
+
+/* tutti gli archi nascono da URBY */
+function arc(to,bow){
+  const A=proj(P.urby.ll),B=proj(P[to].ll);
+  const dx=B[0]-A[0],dy=B[1]-A[1],len=Math.hypot(dx,dy);
+  const cx=(A[0]+B[0])/2+(-dy/len)*len*bow;
+  const cy=(A[1]+B[1])/2+( dx/len)*len*bow;
+  return `M${A[0].toFixed(1)},${A[1].toFixed(1)} Q${cx.toFixed(1)},${cy.toFixed(1)} ${B[0].toFixed(1)},${B[1].toFixed(1)}`;
+}
+
+/* reticolo di supporto ogni 0,005° ≈ 550 m: alla massima chiusura lo schermo è
+   tutto terra, e senza questo sarebbe una campitura vuota. Passo fine perché a
+   12x il campo visivo è largo appena 2,7 km. */
+const gGrid=$("#gGrid");
+const GS=.005;
+for(let lat=7.70;lat<=8.27;lat+=GS){
+  const a=proj([98.19,lat]),b=proj([98.51,lat]);
+  gGrid.appendChild(el("line",{x1:a[0].toFixed(1),y1:a[1].toFixed(1),x2:b[0].toFixed(1),y2:b[1].toFixed(1)}));
+}
+for(let lon=98.20;lon<=98.51;lon+=GS){
+  const a=proj([lon,7.69]),b=proj([lon,8.27]);
+  gGrid.appendChild(el("line",{x1:a[0].toFixed(1),y1:a[1].toFixed(1),x2:b[0].toFixed(1),y2:b[1].toFixed(1)}));
+}
+
+const gLegs=$("#gLegs"),gPts=$("#gPts"),gTrav=$("#gTrav"),dests=$("#dests");
+const R=LEGS.map(L=>{
+  const d=arc(L.to,L.bow);
+  const base=el("path",{class:"leg-base",d});           /* il tragitto per intero, tenue */
+  const glow=el("path",{class:"leg-glow",d});           /* alone, al posto del filtro */
+  const p=el("path",{class:"leg-line",d});
+  gLegs.appendChild(base);gLegs.appendChild(glow);gLegs.appendChild(p);
+  const len=p.getTotalLength();
+  [glow,p].forEach(q=>{q.style.strokeDasharray=`${len} ${len}`;q.style.strokeDashoffset=len;});
+
+  const t=el("g",{class:"trav"});
+  t.appendChild(el("circle",{class:"halo",r:11}));
+  t.appendChild(el("circle",{class:"core",r:3.5}));
+  gTrav.appendChild(t);
+
+  const row=document.createElement("div");
+  row.className="dest";
+  row.innerHTML=`<div class="top"><span class="nm">${L.card||P[L.to].name.join(" ")}</span>`+
+                `<span class="tm">${L.time}</span></div>`+
+                `<span class="km">${String(L.km).replace(".",",")} km / ${L.mi}</span>`+
+                `<div class="prog"><i></i></div>`;
+  dests.appendChild(row);
+
+  return {L,p,base,glow,len,trav:t,row,bar:row.querySelector(".prog i"),
+          tmCard:row.querySelector(".tm")};
+});
+
+const timeOf={};LEGS.forEach(L=>timeOf[L.to]=L.time);   /* "9 min", diviso poi in due */
+
+const pins={},pinXY={};
+Object.keys(P).forEach(key=>{
+  const pt=P[key],[x,y]=proj(pt.ll);
+  pinXY[key]=[x,y];                      /* posizione sulla mappa, prima della camera */
+  const g=el("g",{class:"pt"+(pt.home?" home":"")});
+
+  /* segnaposto cresciuti in proporzione alle etichette */
+  const core=el("g",{class:"core"});
+  if(pt.home)core.appendChild(el("circle",{class:"ping",r:11}));
+  core.appendChild(el("circle",{class:"burst",r:14}));
+  core.appendChild(el("circle",{class:"ring2",r:20}));
+  core.appendChild(el("circle",{class:"ring",r:pt.home?14:9}));
+  core.appendChild(el("circle",{class:"dot",r:pt.home?7:4.5}));
+
+  /* nome per primo su una o più righe, categoria sotto, minuti in fondo */
+  const lbl=el("g",{class:"lbl"});
+  const end=pt.anchor==="end", tx=end?-24:24, ta=end?"end":"start";
+  const LH=27;                                   /* interlinea del nome */
+  let ly=-((pt.name.length-1)*LH)/2-2, base=ly;
+  const nameEls=[];
+  pt.name.forEach(riga=>{
+    const t=el("text",{x:tx,y:ly.toFixed(0),"text-anchor":ta});
+    t.textContent=riga;lbl.appendChild(t);nameEls.push(t);base=ly;ly+=LH;
+  });
+  if(pt.sub){                            /* solo URBY tiene un sottotitolo */
+    base+=22;
+    const t1=el("text",{class:"sub",x:tx,y:base,"text-anchor":ta});
+    t1.textContent=pt.sub;lbl.appendChild(t1);g.sub=t1;nameEls.push(t1);
+  }
+  if(timeOf[key]){                       /* i minuti, che sbucano all'arrivo */
+    const t3=el("text",{class:"tm",x:tx,y:base+32,"text-anchor":ta});
+    const [n,u]=timeOf[key].split(" ");
+    const sn=el("tspan");sn.textContent=n;
+    const su=el("tspan",{class:"u",dx:"3"});su.textContent=u.toUpperCase();
+    t3.appendChild(sn);t3.appendChild(su);
+    lbl.appendChild(t3);
+    g.tmNum=sn;g.tmEl=t3;                /* servono al conto alla rovescia del finale */
+  }
+
+  g.appendChild(core);g.appendChild(lbl);
+
+  if(pt.home){                           /* il marchio, che poi collassa nel pallino */
+    const wm=el("g",{class:"wm"});
+    const t=el("text",{class:"wmt",x:0,y:0,"text-anchor":"middle","dominant-baseline":"central"});
+    [["U","l1"],["R","l2"],["B","l3"],["Y","l4"]].forEach(([ch,cl])=>{
+      const s=el("tspan",{class:cl});s.textContent=ch;t.appendChild(s);
+    });
+    wm.appendChild(t);g.appendChild(wm);
+    g.wm=wm;
+  }
+  g.core=core;g.lbl=lbl;g.nameEls=nameEls;
+
+  gPts.appendChild(g);
+  pins[key]=g;
+});
+pins.urby.classList.add("on","reached");   /* casa è sempre accesa */
+
+/* ══════════ lo scroll fa partire tutti insieme ══════════ */
+const track=$("#mapTrack"),hudBar=$("#hudBar"),hudA=$("#hudA"),hudB=$("#hudB"),gView=$("#gView");
+const finale=$("#finale"),hudEl=$(".hud"),cardEl=$(".map-card");
+/* metà altezza della seconda riga: è lo scarto che tiene "Relax." al centro
+   finché è sola. Rimisurata quando i caratteri arrivano e a ogni resize. */
+function misuraFrase(){
+  finale.style.setProperty("--half",
+    (finale.querySelector(".b").getBoundingClientRect().height/2).toFixed(1)+"px");
+}
+misuraFrase();
+addEventListener("resize",misuraFrase);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(misuraFrase);
+let sfoc=-1,sfocP=-1;              /* ultimi valori di sfocatura scritti */
+hudEl.style.transition=cardEl.style.transition="opacity .5s var(--ease)";
+const RUN=.64;    /* si viaggia fino al 64%, il resto e' il finale */
+const VIA=.12;    /* prima di questo punto solo apertura: marchio e camera stretta */
+let introT0=0;
+
+/* ── la camera ──
+   Parte addosso a URBY e si allarga tenendo dentro la strada già percorsa:
+   non è uno zoom a tempo, è la mappa che si apre quanto serve. */
+const UPK=S/111.32;            /* unità di viewBox per chilometro di latitudine */
+const K0=12;                   /* così stretta che la costa resta ben fuori campo:
+                                  si vede solo terreno, come un piano infinito */
+const MARGINE=1;               /* km di respiro oltre il punto più lontano raggiunto */
+const INTRO=2000;              /* durata dell'apertura, marchio → pallino */
+const HOME=proj(P.urby.ll);
+function camera(done){
+  const need=(done+MARGINE)*UPK;
+  const k=clamp(Math.min(VB.w*.42,VB.h*.42)/need,1,K0);
+  const wide=clamp((K0-k)/(K0-1),0,1);          /* 0 = stretta su URBY, 1 = isola intera */
+  const cx=HOME[0]+(VB.w/2-HOME[0])*wide, cy=HOME[1]+(VB.h/2-HOME[1])*wide;
+  return {k,tx:VB.w/2-cx*k,ty:VB.h/2-cy*k};
+}
+
+function mapTick(){
+  const r=track.getBoundingClientRect(),H=innerHeight;
+  if(r.bottom<0||r.top>H||H<200){R.forEach(o=>o.trav.classList.remove("on"));return;}
+
+  const P0=clamp(-r.top/Math.max(1,r.height-H),0,1);
+  hudBar.style.transform=`scaleX(${P0})`;
+
+  /* ── apertura: il marchio si posa, poi collassa nel pallino ──
+     Va a tempo (2s) perché la prima parte deve respirare, ma se si scorre
+     di corsa la chiude lo scroll, così non resta mai indietro. */
+  if(!introT0&&r.top<=0)introT0=performance.now();
+  const intro=Math.max(introT0?clamp((performance.now()-introT0)/INTRO,0,1):0,
+                       clamp(P0/VIA,0,1));
+  const home=pins.urby;
+  const collasso=sstep(clamp((intro-.45)/.4,0,1));    /* fermo per quasi metà, poi cede */
+  home.wm.style.opacity=(1-collasso).toFixed(3);
+  home.wm.style.transform=`scale(${(1-.6*collasso).toFixed(3)})`;
+  const nato=sstep(clamp((intro-.6)/.4,0,1));
+  home.core.style.opacity=nato.toFixed(3);
+  home.core.style.transform=`scale(${(.3+.7*nato).toFixed(3)})`;
+  home.lbl.style.opacity=sstep(clamp((intro-.72)/.28,0,1)).toFixed(3);
+
+  /* I percorsi partono dopo l'apertura: il primo 10% dello scroll è tutto
+     per il marchio e per la camera che resta addosso. Poi stessa andatura
+     per tutti, quindi il tempo d'arrivo è proporzionale ai chilometri. */
+  const done=covered(sstep(clamp((P0-VIA)/(RUN-VIA),0,1)))*KMAX;
+
+  /* ── FINALE ──
+     I numeri restano quelli che sono. L'isola arretra appena — resta grande e
+     riconoscibile — e a portarla sullo sfondo è l'opacità, non la distanza. */
+  const fin=clamp((P0-RUN)/(1-RUN),0,1);
+  const ritira=sstep(clamp(fin/.58,0,1));
+
+  /* la camera si allarga con la strada percorsa, poi arretra di poco */
+  let C=camera(done);
+  if(fin>0){
+    const k2=1-.08*ritira;                       /* da 1x a 0,92x: appena un respiro */
+    C={k:k2,tx:VB.w/2*(1-k2),ty:VB.h/2*(1-k2)};
+  }
+  /* il reticolo: spessore compensato una volta sola sul gruppo, e fuori dal DOM
+     quando è invisibile — altrimenti resta comunque dentro l'input della
+     sfocatura del finale, che dovrebbe filtrare 177 righe per niente */
+  const gop=clamp((C.k-2)/4,0,1)*.26;
+  gGrid.style.display=gop<.004?"none":"";
+  if(gop>=.004){
+    gGrid.style.opacity=gop.toFixed(3);
+    gGrid.style.strokeWidth=(.6/C.k).toFixed(3);
+  }
+  gView.setAttribute("transform",
+    `translate(${C.tx.toFixed(2)},${C.ty.toFixed(2)}) scale(${C.k.toFixed(4)})`);
+  /* i punti seguono la camera nella posizione ma non nella scala */
+  for(const key in pinXY)pins[key].setAttribute("transform",
+    `translate(${(pinXY[key][0]*C.k+C.tx).toFixed(1)},${(pinXY[key][1]*C.k+C.ty).toFixed(1)})`);
+  /* le scritte invece crescono a camera stretta: quando c'è solo URBY è grande,
+     e torna alla misura normale quando l'isola è tutta in campo */
+  const LS=(1+1.1*clamp((C.k-1)/(K0-1),0,1)).toFixed(3);
+  for(const key in pins)pins[key].lbl.setAttribute("transform",`scale(${LS})`);
+  /* "Thalang" serve solo finché siamo addosso: appena la camera si allarga
+     svanisce e lascia il campo al solo nome */
+  if(home.sub)home.sub.style.opacity=sstep(clamp((C.k-3)/(K0-3),0,1)).toFixed(3);
+
+  let arrivi=0;
+  R.forEach(o=>{
+    const f=clamp(done/o.L.km,0,1);
+    /* spessori divisi per la scala: costanti a schermo, e il dasharray resta
+       nelle unità della mappa, quindi niente linea spezzata */
+    o.base.style.strokeWidth=(1/C.k).toFixed(3);
+    o.glow.style.strokeWidth=(6/C.k).toFixed(3);
+    o.p.style.strokeWidth=(1.6/C.k).toFixed(3);
+    const off=o.len*(1-f);
+    o.p.style.strokeDashoffset=off;o.glow.style.strokeDashoffset=off;
+    const vis=f<=.0005?0:1;              /* a zero nemmeno il puntino del capolinea */
+    o.p.style.opacity=vis;o.glow.style.opacity=vis?.22:0;
+    o.bar.style.transform=`scaleX(${f})`;
+    if(f>=1)arrivi++;
+
+    if(f>.001&&f<.999){
+      const pt=o.p.getPointAtLength(o.len*f);
+      o.trav.setAttribute("transform",
+        `translate(${(pt.x*C.k+C.tx).toFixed(1)},${(pt.y*C.k+C.ty).toFixed(1)})`);
+      o.trav.classList.add("on");
+    }else o.trav.classList.remove("on");
+
+    o.row.classList.toggle("moving",f>.001&&f<1);
+    o.row.classList.toggle("there",f>=1);
+    /* appena la tratta si muove la meta compare, anche se è la più lontana:
+       partendo tutti insieme lo scarto fra la prima e l'ultima è di pochi punti */
+    pins[o.L.to].classList.toggle("on",f>.02);
+    pins[o.L.to].classList.toggle("reached",f>=1);
+  });
+
+  /* "URBY —— Everywhere": la meta si accende quando ci si è arrivati ovunque */
+  hudA.classList.toggle("lit",P0>.02);
+  hudB.classList.toggle("lit",arrivi===R.length);
+
+  /* Nel finale restano solo i tempi: i nomi si spengono presto, le cifre
+     tengono duro fino a un attimo prima della frase — e non cambiano mai. */
+  /* Nomi, tempi e segnaposti restano nitidi: il finale non toglie informazione.
+     Il fondo invece si ritira davvero — scende di opacità e va fuori fuoco,
+     come una messa a fuoco che si sposta dalla carta al dato. */
+  const sfondo=sstep(clamp((fin-.24)/.36,0,1));
+  gView.style.opacity=fin>0?(1-.86*sfondo).toFixed(3):"";
+  /* anche etichette e segnaposti si ritirano, ma meno: restano leggibili
+     accanto alla frase invece di contenderle il primo piano */
+  gPts.style.opacity=fin>0?(1-.58*sfondo).toFixed(3):"";
+  /* la sfocatura a scatti di mezzo pixel: rifare il blur di 300 elementi a
+     ogni fotogramma sarebbe carissimo, così i passi distinti sono pochi.
+     Anche le etichette si ammorbidiscono, ma molto meno del fondo: restano
+     davanti, solo non più a fuoco come prima. */
+  const bl=Math.round(4*sfondo*2)/2;
+  if(bl!==sfoc){sfoc=bl;gView.style.filter=bl?`blur(${bl}px)`:"";}
+  const bp=Math.round(1.4*sfondo*2)/2;
+  if(bp!==sfocP){sfocP=bp;gPts.style.filter=bp?`blur(${bp}px)`:"";}
+  finale.classList.toggle("s1",fin>.54);
+  finale.classList.toggle("s2",fin>.7);
+  const spegni=(1-sstep(clamp((fin-.2)/.28,0,1))).toFixed(3);
+  hudEl.style.opacity=spegni;cardEl.style.opacity=spegni;
+
+}
+
+function tick(){
+  requestAnimationFrame(tick);
+
+  if(SS.on&&!document.body.classList.contains("lock")){
+    SS.c=lerp(SS.c,SS.t,.14);   /* inerzia della rotella: più alto = più reattivo */
+    if(Math.abs(SS.t-SS.c)<.1)SS.c=SS.t;
+    scrollTo(0,SS.c);y=SS.c;
+  }else y=scrollY;
+  vel=y-ly;ly=y;
+  const v=clamp(vel,-90,90);
+
+  /* cursor */
+  if(!TOUCH){cx=lerp(cx,mx,.18);cy=lerp(cy,my,.18);
+    cur.style.transform=`translate(${cx}px,${cy}px)`;
+    px=lerp(px,mx,.09);py=lerp(py,my,.09);
+    peek.style.transform=`translate(${px-peek.offsetWidth/2}px,${py-peek.offsetHeight/2}px) rotate(${(mx-px)*.03}deg)`;
+  }
+
+  /* hero: you fall through the word into the room */
+  const hr=heroTrack.getBoundingClientRect();
+  if(hr.bottom>0&&hr.top<innerHeight){
+    const p=clamp(-hr.top/(hr.height-innerHeight),0,1);
+    const e=p*p;
+    const W=fw0+(innerWidth-fw0)*e, H=fh0+(innerHeight-fh0)*e;
+    frame.style.width=W+"px";frame.style.height=H+"px";
+    frame.style.transform=`translateY(${-p*34}px)`;
+    tint.style.opacity=String(clamp(1-p*1.5,0,1));
+    panes.style.opacity=String(clamp(1-p*2.6,0,1));
+    cl1.style.backgroundPositionX=(-p*300)+"px";
+    cl2.style.backgroundPositionX=(-p*620)+"px";
+    cl1.style.opacity=String(.62-p*.14);
+    const spread=innerWidth*.13;
+    letters.forEach((L,i)=>{L.style.transform=`translateX(${(i-1.5)*p*spread}px)`;});
+    heroMark.style.transform=`scale(${1+p*.85})`;
+    heroMark.style.opacity=String(clamp(1-p*1.25,0,1));
+    lines.style.opacity=String(clamp(1-p*2.4,0,1));
+    lines.style.transform=`translateY(${-p*60}px)`;
+  }
+  /* nav: entra a hero finito, si ritira scendendo, torna salendo o da fermi */
+  const dy=y-navLast;navLast=y;
+  if(dy*navAcc<0)navAcc=0;
+  navAcc+=dy;
+  navIdle=Math.abs(dy)<.3?navIdle+1:0;
+  const heroDone=y>heroTrack.offsetHeight-innerHeight*.45;
+  if(!heroDone){navOn=false;navAcc=0;}
+  else{
+    if(navAcc<-60)navOn=true;
+    else if(navAcc>120)navOn=false;
+    if(navIdle>36||(!TOUCH&&my<92))navOn=true;
+  }
+  nav.classList.toggle("show",navOn);
+  nav.classList.toggle("solid",heroDone);
+
+  /* marquee: speed and direction follow the scroll */
+  mqDir=vel>1?1:vel<-1?-1:mqDir;
+  mq-=(.35+Math.abs(v)*.14)*mqDir;
+  const half=marqRow.scrollWidth/2||1;
+  if(mq<=-half)mq+=half;if(mq>0)mq-=half;
+  marqRow.style.transform=`translateX(${mq}px) skewX(${clamp(-v*.06,-4,4)}deg)`;
+
+  /* floating cards */
+  $$(".float").forEach(el=>{
+    const f=frameOf(el),d=(innerHeight/2-f.center)/innerHeight;
+    el.style.transform=`translateY(${d*parseFloat(el.dataset.sp)*520}px) rotate(${d*parseFloat(el.dataset.sp)*8}deg)`;
+  });
+
+  /* word-by-word reading */
+  readers.forEach(r=>{
+    const f=frameOf(r.el);
+    if(f.top>innerHeight||f.top+f.h<0)return;
+    const p=clamp((innerHeight*.8-f.top)/(innerHeight*.55+f.h*.5),0,1);
+    const lit=Math.round(p*r.w.length);
+    r.w.forEach((b,i)=>b.classList.toggle("lit",i<lit));
+  });
+
+  /* rooms: vertical scroll drives a horizontal room tour */
+  const rr=roomsTrack.getBoundingClientRect();
+  if(rr.bottom>-200&&rr.top<innerHeight+200){
+    const lead=0;
+    const p=clamp((-rr.top-lead)/Math.max(1,rr.height-innerHeight-lead),0,1);
+    const max=rail.scrollWidth-innerWidth;
+    rail.style.transform=`translateX(${-p*max}px)`;
+    roomBar.style.transform=`scaleX(${p})`;
+    const idx=clamp(Math.round(p*max/innerWidth),0,4);
+    roomNo.textContent=String(idx).padStart(2,"0");
+    $$(".slide .ph").forEach(ph=>{
+      const c=ph.parentElement.getBoundingClientRect();
+      const off=(c.left+c.width/2-innerWidth/2)/innerWidth;
+      ph.style.transform=`translateX(${off*-16}%) scale(1.06)`;
+    });
+  }
+
+  /* hours ribbon */
+  const rib=ribbon.parentElement.getBoundingClientRect();
+  if(rib.bottom>0&&rib.top<innerHeight){
+    const p=clamp((innerHeight-rib.top)/(innerHeight+rib.height),0,1);
+    ribbon.style.transform=`translateX(${(0.5-p)*Math.max(0,ribbon.scrollWidth-innerWidth)*1.6}px)`;
+  }
+
+  /* gallery bands, opposite directions */
+  const bs=bandA.parentElement.getBoundingClientRect();
+  if(bs.bottom>0&&bs.top<innerHeight){
+    const p=clamp((innerHeight-bs.top)/(innerHeight+bs.height),0,1);
+    const sp=(bandA.scrollWidth-innerWidth)/2;
+    bandA.style.transform=`translateX(${-p*sp*.9}px) skewX(${clamp(-v*.04,-3,3)}deg)`;
+    bandB.style.transform=`translateX(${-sp*.9+p*sp*.9}px) skewX(${clamp(-v*.04,-3,3)}deg)`;
+  }
+
+  mapTick();
+
+  /* footer mark rises */
+  const fr=fmark.getBoundingClientRect();
+  if(fr.top<innerHeight){
+    const p=clamp((innerHeight-fr.top)/(innerHeight*.9),0,1);
+    fmark.style.transform=`translateY(${(1-p)*40}px)`;fmark.style.opacity=String(clamp(p*1.3,0,1));
+  }
+}
+tick();
+
+addEventListener("resize",()=>{SS.t=clamp(SS.t,0,limit());frameBase();misuraFrase();});
+const nl=(navigator.language||"en").slice(0,2).toLowerCase();
+applyLang(LANGS.indexOf(nl)>-1?nl:"en");
+})();
+</script>
+</body>
+</html>
